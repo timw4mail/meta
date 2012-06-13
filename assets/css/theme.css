@@ -1,0 +1,28 @@
+/* ---------------- */
+/* ! General Styles */
+/* ---------------- */
+html, body {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight:200;
+	max-width:800px;
+	margin: 0 auto;
+}
+
+/* form styles */
+form dt, form dd {
+	display:inline-block;
+	padding:0.25em 0;
+}
+
+form dt {
+	width:40%;
+	text-align:right;
+}
+
+form dd {
+	width:59%;
+	text-align:left;
+	margin-left:0;
+	padding-left:.25em;
+}
+
