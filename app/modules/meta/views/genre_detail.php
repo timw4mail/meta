@@ -4,7 +4,7 @@
 <h4>Genre Categories</h4>
 <ul class="list">
 <?php foreach($categories as $id => $cat): ?>
-	<li><a href="<?= miniMVC\site_url("category/{$id}") ?>"><?= $cat ?></a></li>
+	<li><a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a></li>
 <?php endforeach ?>
 </ul>
 

@@ -35,6 +35,9 @@ return array(
 	'default_module' 	 => 'meta',
 	'genre'	=> 'meta/genre/index',
 	'genre/add' => 'meta/genre/add',
+	'category' => 'meta/category/index',
+	'category/add' => 'meta/category/add',
+	'category/detail' => 'meta/category/detail',
 	'404_route'			 => '',
 );
 

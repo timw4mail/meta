@@ -8,7 +8,7 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
@@ -21,7 +21,7 @@ namespace miniMVC;
  * @package miniMVC
  * @subpackage System
  */
-class Model extends miniMVC {
+class Model extends \ArrayObject {
 
 	/**
 	 * Initialize the model class
@@ -31,7 +31,7 @@ class Model extends miniMVC {
 	 */
 	public function __construct(array $args = array())
 	{
-		parent::__construct($args);
+		parent::__construct($args, \ArrayObject::STD_PROP_LIST | \ArrayObject::ARRAY_AS_PROPS);
 	}
 }
 

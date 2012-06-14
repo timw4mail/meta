@@ -50,6 +50,9 @@ class Welcome extends miniMVC\Controller {
 
 	// --------------------------------------------------------------------------
 
+	/**
+	 * Authenticate a user
+	 */
 	public function login()
 	{
 

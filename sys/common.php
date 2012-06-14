@@ -79,7 +79,7 @@ function shutdown()
     $error = error_get_last();
 
     // types of errors that are fatal
-    $fatal = [E_ERROR, E_PARSE, E_RECOVERABLE_ERROR];
+    $fatal = array(E_ERROR, E_PARSE, E_RECOVERABLE_ERROR);
 
     // Display pretty error page
     if (in_array($error['type'], $fatal))
@@ -308,6 +308,9 @@ function init()
 	// Load Database classes
 	require_once(MM_SYS_PATH . 'db/autoload.php');
 
+	// Load the page class
+	$GLOBALS['page'] = new \miniMVC\Page();
+
 	// Map to the appropriate module/controller/function
 	route();
 }
@@ -323,6 +326,40 @@ function get_last_segment()
 {
 	$array = get_segments();
 	return end($array);
+}
+
+// --------------------------------------------------------------------------
+
+/**
+ * Call a method in another controller
+ *
+ * @param string
+ * @param string
+ * @param args
+ */
+function call_controller_method($controller, $method="index", $args=array())
+{
+	// Load the routes config file
+	$routes = include(MM_APP_PATH . 'config/routes.php');
+
+	// Set the default route
+	$module = $routes['default_module'];
+	$class = $routes['default_controller'];
+
+	// Split the controller into module/controller if possible
+	$parts = explode('/', $controller);
+
+	if (count($parts) === 2)
+	{
+		list($module, $class) = $parts;
+	}
+	else
+	{
+		$class = $parts[0];
+	}
+
+	// Call the method
+	run($module, $class, $method, $args);
 }
 
 // --------------------------------------------------------------------------
@@ -463,14 +500,17 @@ function route()
 	return;
 }
 
+// --------------------------------------------------------------------------
+
 /**
  * Instantiate the appropriate controller
  *
  * @param string
  * @param string
  * @param string
+ * @param array
  */
-function run($module, $controller, $func)
+function run($module, $controller, $func, $args = array())
 {
 	$path = MM_MOD_PATH . "{$module}/controllers/{$controller}.php";
 
@@ -484,16 +524,18 @@ function run($module, $controller, $func)
 		if (in_array($func, $methods))
 		{
 			// Define the name of the current module for file loading
-			define('MM_MOD', $module);
+			if ( ! defined('MM_MOD'))
+			{
+				define('MM_MOD', $module);
+			}
 
 			$class = new $controller();
-			return call_user_func([&$class, $func]);
+			return call_user_func_array(array(&$class, $func), $args);
 		}
 	}
 
 	// Function doesn't exist...404
 	show_404();
 }
-
 
 // End of common.php

@@ -21,7 +21,7 @@ namespace miniMVC;
  * @package miniMVC
  * @subpackage System
  */
-class Controller extends miniMVC {
+class Controller {
 
 	/**
 	 * Instance of Page class
@@ -37,10 +37,8 @@ class Controller extends miniMVC {
 	 */
 	public function __construct()
 	{
-		parent::__construct();
-
 		// Create the page object
-		$this->page = new Page($this);
+		$this->page = $GLOBALS['page'];
 	}
 
 	// --------------------------------------------------------------------------
@@ -52,7 +50,7 @@ class Controller extends miniMVC {
 	 * @param array $args
 	 * @return void
 	 */
-	public function load_model($file, $args=[])
+	public function load_model($file, $args=array())
 	{
 		$segments = explode('\\', $file);
 		$file_name = end($segments);
@@ -87,41 +85,9 @@ class Controller extends miniMVC {
 	 * @param bool $return
 	 * @return mixed
 	 */
-	public function load_view($file, array $data=[], $return=FALSE)
+	public function load_view($file, array $data=array(), $return=FALSE)
 	{
-		$path = "";
-
-		// The module is set via the router
-		$module = strtolower(MM_MOD);
-		$path = MM_MOD_PATH . "{$module}/views/{$file}.php";
-
-		// If it's not a module, or doesn't exist in the module view folder
-		// look in the app view folder
-		if ( ! is_file($path))
-		{
-			$path = MM_APP_PATH . "views/{$file}.php";
-		}
-
-		// Contain the content for buffering
-		ob_start();
-
-		// Extract the data array
-		extract($data);
-
-		// Include the file
-		include($path);
-
-		$buffer = ob_get_contents();
-		ob_end_clean();
-
-		if ($return == TRUE)
-		{
-			return $buffer;
-		}
-		else
-		{
-			$this->page->append_output($buffer);
-		}
+		return $this->page->load_view($file, $data, $return);
 	}
 }
 

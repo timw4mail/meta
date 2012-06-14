@@ -2,7 +2,7 @@
 /**
  * meta
  *
- * Simple hierarchial data management
+ * Hierarchial data tool
  *
  * @package		meta
  * @author 		Timothy J. Warren
@@ -13,23 +13,18 @@
 
 // --------------------------------------------------------------------------
 
-namespace meta;
-
 /**
- * Model for dealing with user logins / permissions
- *
- * @package meta
+ * Section Controller
  */
-class User_model extends \miniMVC\Model {
+class Section extends \miniMVC\Controller {
 
 	/**
-	 * Initialize the User model
+	 * Constructor
 	 */
 	public function __construct()
 	{
-		parent::__construct();
-	}
 
+	}
 }
 
-// End of user_model.php
+// End of section.php

@@ -138,12 +138,30 @@ class Model extends \miniMVC\Model {
 	 *
 	 * @param string
 	 * @param int
+	 * @return bool
 	 */
 	public function add_category($cat, $genre_id)
 	{
-		$this->db->set('category', $cat)
-			->set('genre_id', $genre_id)
-			->insert('category');
+		// Check for duplicates
+		$query = $this->db->from('category')
+			->where('genre_id', $genre_id)
+			->where('category', $cat)
+			->get();
+
+		// Fetch the data as a workaround
+		// for databases that do not support
+		// grabbing result counts (SQLite / Firebird)
+		$array = $query->fetchAll();
+		if (count($array) === 0)
+		{
+			$this->db->set('category', $cat)
+				->set('genre_id', $genre_id)
+				->insert('category');
+
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	// --------------------------------------------------------------------------
@@ -253,6 +271,8 @@ class Model extends \miniMVC\Model {
 		return $genres;
 	}
 
+	// --------------------------------------------------------------------------
+
 	/**
 	 * Gets the name of the genre from its id
 	 *
@@ -269,6 +289,46 @@ class Model extends \miniMVC\Model {
 		$row = $query->fetch(\PDO::FETCH_ASSOC);
 
 		return $row['genre'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Gets the name of the category from its id
+	 *
+	 * @param int
+	 * @return string
+	 */
+	public function get_category_by_id($id)
+	{
+		$query = $this->db->select('category')
+			->from('category')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row['category'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Gets the name of the section from its id
+	 *
+	 * @param int
+	 * @return string
+	 */
+	public function get_section_by_id($id)
+	{
+		$query = $this->db->select('section')
+			->from('section')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row['section'];
 	}
 
 	// --------------------------------------------------------------------------

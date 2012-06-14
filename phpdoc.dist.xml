@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-	<title>miniMVC</title>
+	<title>meta</title>
 	<parser>
 		<target>docs</target>
 	</parser>
@@ -16,11 +16,12 @@
 		<directory>assets</directory>
 		<directory>app/config</directory>
 		<directory>app/views</directory>
-		<directory>sys/db/tests</directory>
+		<directory>sys/db</directory>
 		<ignore>tests/*</ignore>
 		<ignore>assets/*</ignore>
-		<ignore>sys/db/tests/*</ignore>
+		<ignore>sys/db/*</ignore>
 		<ignore>app/config/*</ignore>
 		<ignore>app/views/*</ignore>
+		<ignore>*/views/*</ignore>
 	</files>
 </phpdoc>

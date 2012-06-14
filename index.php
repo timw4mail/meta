@@ -8,7 +8,7 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
@@ -19,24 +19,12 @@
  * @package miniMVC
  * @subpackage App
  */
- 
+
 // --------------------------------------------------------------------------
 
 namespace miniMVC;
- 
-// Set as either DEVELOPMENT or PRODUCTION
-// DEVELOPMENT enables error reporting
-// PRODUCTION disables error reporting
-define('ENVIRONMENT', 'DEVELOPMENT');
 
-if(ENVIRONMENT == 'DEVELOPMENT')
-{
-	error_reporting(-1);
-}
-else if(ENVIRONMENT == 'PRODUCTION')
-{
-	error_reporting(0);
-}
+error_reporting(-1);
 
 // Set the default paths
 define('MM_BASE_PATH', __DIR__);
@@ -53,4 +41,4 @@ require(MM_SYS_PATH . 'common.php');
 // And away we go!
 init();
 
-// End of index.php 
+// End of index.php
