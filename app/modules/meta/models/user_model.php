@@ -20,7 +20,14 @@ namespace meta;
  *
  * @package meta
  */
-class User_model extends \miniMVC\Model {
+class user_model extends \miniMVC\Model {
+
+	/**
+	 * Reference to bcrypt object
+	 *
+	 * @var Bcrypt
+	 */
+	protected $bcrypt;
 
 	/**
 	 * Initialize the User model
@@ -28,6 +35,34 @@ class User_model extends \miniMVC\Model {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->bcrypt = new \Bcrypt(15);
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Check and see if the login is valid
+	 *
+	 * @param string
+	 * @param string
+	 * @return bool
+	 */
+	public function check_login($username, $pass)
+	{
+		$query = $this->db->from('user')
+			->where('username', $username)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		// The user does not exist
+		if (empty($row))
+		{
+			return FALSE;
+		}
+
+		return $this->bcrypt->verify($pass, $row['hash']);
 	}
 
 }

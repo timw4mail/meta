@@ -20,7 +20,7 @@ namespace meta;
  *
  * @package meta
  */
-class Model extends \miniMVC\Model {
+class model extends \miniMVC\Model {
 
 	/**
 	 * Reference to database connection

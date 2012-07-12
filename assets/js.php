@@ -8,7 +8,7 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
@@ -21,7 +21,7 @@
  */
 
 //Get config files
-require('./config/config.php');
+require './config/config.php';
 
 //Include the js groups
 $groups_file = "./config/js_groups.php";
@@ -34,7 +34,7 @@ $this_file = __FILE__;
 
 /**
  * Get Files
- * 
+ *
  * Concatenates the javascript files for the current
  * group as a string
  * @return string
@@ -44,13 +44,13 @@ function get_files()
 	global $groups, $js_root;
 
 	$js = '';
-	
+
 	foreach ($groups[$_GET['g']] as &$file)
 	{
 		$new_file = realpath($js_root.$file);
 		$js .= file_get_contents($new_file);
 	}
-	
+
 	return $js;
 }
 
@@ -71,7 +71,7 @@ function google_min($new_file)
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, 'output_info=compiled_code&output_format=text&compilation_level=SIMPLE_OPTIMIZATIONS&js_code=' . urlencode($new_file));
 	$output = curl_exec($ch);
-	curl_close($ch);	
+	curl_close($ch);
 	return $output;
 }
 
@@ -88,9 +88,9 @@ while ($i < $pia_len)
 {
 	$j = $i+1;
 	$j = (isset($pia[$j])) ? $j : $i;
-	
+
 	$_GET[$pia[$i]] = $pia[$j];
-	
+
 	$i = $j + 1;
 };
 
@@ -103,19 +103,19 @@ $modified = [];
 if (isset($groups[$_GET['g']]))
 {
 	$cache_file = $js_root.'cache/'.$_GET['g'];
-	
+
 	foreach ($groups[$_GET['g']] as &$file)
 	{
 		$new_file = realpath($js_root.$file);
 		$modified[] = filemtime($new_file);
 	}
-	
+
 	//Add this page too, as well as the groups file
 	$modified[] = filemtime($this_file);
 	$modified[] = filemtime($groups_file);
-	
+
 	$cache_modified = 0;
-	
+
 	//Add the cache file
 	if (is_file($cache_file))
 	{
@@ -133,11 +133,11 @@ else //Nothing to display? Just exit
 rsort($modified);
 $last_modified = $modified[0];
 
-$requested_time=(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) 
-	? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) 
+$requested_time=(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+	? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])
 	: time();
 
-// If the browser's cached version is up to date, 
+// If the browser's cached version is up to date,
 // don't resend the file
 if ($last_modified === $requested_time)
 {
@@ -152,7 +152,7 @@ if ($cache_modified < $last_modified)
 {
 	$js = google_min(get_files());
 	$cs = file_put_contents($cache_file, $js);
-	
+
 	//Make sure cache file gets created/updated
 	if ($cs === FALSE)
 	{
@@ -164,7 +164,7 @@ elseif (isset($_GET['debug']))
 	$js = get_files();
 }
 else
-{	
+{
 	$len = filesize($cache_file);
 	header("Content-Length: {$len}");
 	$js = file_get_contents($cache_file);

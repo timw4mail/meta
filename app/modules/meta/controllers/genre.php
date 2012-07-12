@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class Genre extends miniMVC\Controller {
+class genre extends meta\controller {
 
 	/**
 	 * Initialize the Controller
@@ -26,10 +26,6 @@ class Genre extends miniMVC\Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load_model('meta\model');
-
-		$this->page->build_header();
 	}
 
 	/**
@@ -51,7 +47,6 @@ class Genre extends miniMVC\Controller {
 		$data['genres'] = $this->model->get_genres();
 
 		$this->load_view('genres', $data);
-		$this->page->build_footer();
 	}
 
 	/**
@@ -95,7 +90,6 @@ class Genre extends miniMVC\Controller {
 		);
 
 		$this->load_view('genre_detail', $data);
-		$this->page->build_footer();
 	}
 }
 

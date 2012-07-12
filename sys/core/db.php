@@ -8,20 +8,20 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
- 
+
 // --------------------------------------------------------------------------
 
 namespace miniMVC;
- 
+
 /**
  * Extend PHP's PDO class to add some more functionality
  *
  * @package miniMVC
  * @subpackage System
  */
-class DB extends \Query_Builder {
+class db extends \Query_Builder {
 
 	/**
 	 * DB connection instances
@@ -29,9 +29,9 @@ class DB extends \Query_Builder {
 	 * @var array
 	 */
 	private static $instance = array();
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Indexed singleton method
 	 *
@@ -45,7 +45,7 @@ class DB extends \Query_Builder {
 		{
 			// Include the database config file
 			require_once(MM_APP_PATH.'config/db.php');
-			
+
 			// Get the correct database in the config file
 			if ( ! is_like_array($db_conf[$dbname]))
 			{
@@ -54,16 +54,16 @@ class DB extends \Query_Builder {
 				trigger_error("Database does not exist", E_USER_ERROR);
 				die();
 			}
-		
+
 			//echo 'Creating new instance of db class.';
 			self::$instance[$dbname] = new DB($db_conf[$dbname]);
 		}
 
 		return self::$instance[$dbname];
 	}
-	
+
 	// --------------------------------------------------------------------------
-    
+
 	/**
 	 * Returns the last error from the database
 	 *

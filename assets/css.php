@@ -8,12 +8,12 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-/** 
+/**
  * CSS Minifier and Cacher
  *
  * @package miniMVC
@@ -21,10 +21,10 @@
  */
 
 //Get config files
-require('./config/config.php');
+require './config/config.php';
 
 //Include the css groups
-$groups = require("./config/css_groups.php");
+$groups = require './config/css_groups.php';
 
 //The name of this file
 $this_file = __FILE__;
@@ -38,10 +38,10 @@ $this_file = __FILE__;
  * @return string
  */
 function compress($buffer) {
-    
+
     //Remove CSS comments
     $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
-    
+
     //Remove tabs, spaces, newlines, etc.
     $buffer = preg_replace('`\s+`', ' ', $buffer);
     $replace = [
@@ -55,12 +55,12 @@ function compress($buffer) {
     	': ' => ':',
     	'; ' => ';',
     ];
-    
+
     //Eradicate every last space!
     $buffer = trim(strtr($buffer, $replace));
     $buffer = str_replace('{ ', '{', $buffer);
     $buffer = str_replace('} ', '}', $buffer);
-    
+
     return $buffer;
 }
 
@@ -77,9 +77,9 @@ while($i < $pia_len)
 {
 	$j = $i+1;
 	$j = (isset($pia[$j])) ? $j : $i;
-	
+
 	$_GET[$pia[$i]] = $pia[$j];
-	
+
 	$i = $j + 1;
 };
 
@@ -103,8 +103,8 @@ $modified[] = filemtime($this_file);
 rsort($modified);
 $last_modified = $modified[0];
 
-$requested_time= (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) 
-	? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) 
+$requested_time= (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']))
+	? strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])
 	: time();
 
 if ($last_modified === $requested_time)

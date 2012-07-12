@@ -13,31 +13,31 @@
 
 // --------------------------------------------------------------------------
 
+namespace meta;
+
 /**
- * Section Controller
+ * Base controller class to hold common functionality
+ *
+ * @param package meta
  */
-class section extends meta\controller {
+abstract class Controller extends \miniMVC\Controller {
 
 	/**
-	 * Constructor
+	 * Create the controller and build page header
 	 */
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	public function index()
-	{
-
+		$this->load_model('meta\model');
+		$this->page->build_header();
 	}
 
 	/**
-	 * Adds a new section to the current category
+	 * Destruct controller and build page footer
 	 */
-	public function add()
+	public function __destruct()
 	{
-
+		$this->page->build_footer();
 	}
-}
 
-// End of section.php
+}

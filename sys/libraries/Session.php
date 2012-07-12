@@ -29,7 +29,7 @@ class Session {
 	 * @var array
 	 */
 	protected $sess = array();
-	
+
 	/**
 	 * Reference to current instance
 	 *

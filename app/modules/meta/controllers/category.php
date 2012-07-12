@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class Category extends miniMVC\Controller {
+class category extends meta\controller {
 
 	/**
 	 * Initialize the Controller
@@ -26,10 +26,6 @@ class Category extends miniMVC\Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load_model('meta\model');
-
-		$this->page->build_header();
 	}
 
 	/**
@@ -37,13 +33,6 @@ class Category extends miniMVC\Controller {
 	 */
 	public function index()
 	{
-		$id = (int) miniMVC\get_last_segment();
-
-		if ($id === 0)
-		{
-			return miniMVC\show_404();
-		}
-
 		$this->detail();
 	}
 
@@ -69,15 +58,23 @@ class Category extends miniMVC\Controller {
 		}
 
 		// Render the basic page
-		$this->index();
+		$this->detail(-1);
 	}
 
 	/**
 	 * Returns the sections / editing options for a category
 	 */
-	public function detail()
+	public function detail($id = 0)
 	{
-		$id = (int) miniMVC\get_last_segment();
+		if ($id === 0)
+		{
+			$id = (int) miniMVC\get_last_segment();
+		}
+
+		if ($id === 0)
+		{
+			miniMVC\show_404();
+		}
 
 		$data = array(
 			'category' => $this->model->get_category_by_id($id),
@@ -86,7 +83,6 @@ class Category extends miniMVC\Controller {
 		);
 
 		$this->load_view('category_detail', $data);
-		$this->page->build_footer();
 	}
 }
 

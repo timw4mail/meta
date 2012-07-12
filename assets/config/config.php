@@ -8,7 +8,7 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
@@ -25,11 +25,11 @@
 | Document Root
 |--------------------------------------------------------------------------
 |
-| The folder where the index of the website exists. In most situations, 
-| this will not need to be changed. 
+| The folder where the index of the website exists. In most situations,
+| this will not need to be changed.
 |
 | If the website is in a folder off of the domain name, like:
-|	http://example.com/website/ 
+|	http://example.com/website/
 | you will need to add that folder to the document root.
 |
 */

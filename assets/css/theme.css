@@ -18,6 +18,7 @@ a:hover {
 
 /* form styles */
 form dt, form dd {
+	display:-moz-inline-box; /* For older versions of Mozilla/Firefox */
 	display:inline-block;
 	padding:0.25em 0;
 }

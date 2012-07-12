@@ -151,22 +151,14 @@ class Page {
 
 		if ( ! empty($this->buffer))
 		{
-			$errors = error_get_last();
-			if (empty($errors))
-			{
-				// Compression is good!
-				ob_start("ob_gzhandler");
-			}
-			else
-			{
-				ob_start();
-			}
+			// @todo Figure out how to adjust content compression for 5.4.4
+			ob_start();
 
 			echo $this->buffer;
 
 			// Check if a buffer exists
 			// so that it doesn't throw a notice
-			if (ob_get_level > 0)
+			if (ob_get_level() > 0)
 			{
 				ob_end_flush();
 			}

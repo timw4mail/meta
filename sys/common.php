@@ -298,7 +298,6 @@ if ( ! function_exists('do_include'))
 function init()
 {
 	// Catch fatal errors, don't show them
-	error_reporting((-1) & ~(E_ERROR | E_PARSE));
 	register_shutdown_function('miniMVC\shutdown');
 
 	//Set error handlers
@@ -326,40 +325,6 @@ function get_last_segment()
 {
 	$array = get_segments();
 	return end($array);
-}
-
-// --------------------------------------------------------------------------
-
-/**
- * Call a method in another controller
- *
- * @param string
- * @param string
- * @param args
- */
-function call_controller_method($controller, $method="index", $args=array())
-{
-	// Load the routes config file
-	$routes = include(MM_APP_PATH . 'config/routes.php');
-
-	// Set the default route
-	$module = $routes['default_module'];
-	$class = $routes['default_controller'];
-
-	// Split the controller into module/controller if possible
-	$parts = explode('/', $controller);
-
-	if (count($parts) === 2)
-	{
-		list($module, $class) = $parts;
-	}
-	else
-	{
-		$class = $parts[0];
-	}
-
-	// Call the method
-	run($module, $class, $method, $args);
 }
 
 // --------------------------------------------------------------------------
@@ -397,13 +362,11 @@ function get_segments()
  */
 function route()
 {
-	$sn = $_SERVER['SCRIPT_NAME'];
-	$ru = $_SERVER['REQUEST_URI'];
 
-	// Get the equivalent to path info
-	$pi = (isset($_SERVER['PATH_INFO']))
-		? str_replace($sn, '', $ru)
-		: '/';
+	// Get the path info
+	$pi = $_SERVER['PATH_INFO'];
+	$ru = $_SERVER['REQUEST_URI'];
+	$sn = $_SERVER['SCRIPT_NAME'];
 
 	// Make sure the home page works when in a sub_directory
 	if (strlen($sn) > strlen($ru))

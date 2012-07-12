@@ -8,7 +8,7 @@
  * @author 		Timothy J. Warren
  * @copyright	Copyright (c) 2011 - 2012
  * @link 		https://github.com/aviat4ion/miniMVC
- * @license 	http://philsturgeon.co.uk/code/dbad-license 
+ * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
@@ -22,24 +22,24 @@ namespace miniMVC;
  * @subpackage Libraries
  */
 class Data_Store {
-	
+
 	/**
 	 * Settings object represented by the currently loaded JSON file
 	 */
 	private $current;
-	
+
 	/**
 	 * Singleton instance
 	 */
 	private static $instance;
-	
+
 	/**
 	 * Create and/or load json file
 	 */
 	protected function __construct()
 	{
 		$path = MM_APP_PATH .'config/data_store.json';
-		
+
 		if ( ! is_file($path))
 		{
 			touch($path);
@@ -49,12 +49,12 @@ class Data_Store {
 		{
 			// Load the file
 			$json = file_get_contents($path);
-		
+
 			// Load the object into the class
 			$this->current = json_decode($json);
 		}
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -66,9 +66,9 @@ class Data_Store {
 
 		file_put_contents(MM_APP_PATH . 'config/data_store.json', $file_string);
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Magic function called when cloning an object
 	 */
@@ -76,7 +76,7 @@ class Data_Store {
 	{
 		trigger_error('Clone is not allowed.', E_USER_ERROR);
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -104,9 +104,9 @@ class Data_Store {
 	{
 		return $this->current->{$key} = $val;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Static method to retreive current instance
 	 * of the singleton
@@ -123,9 +123,9 @@ class Data_Store {
 
 		return self::$instance;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Removes a key from the data store
 	 *
@@ -136,9 +136,9 @@ class Data_Store {
 	{
 		unset($this->current->{$key});
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Return the entire data store object
 	 *

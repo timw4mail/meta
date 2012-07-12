@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class Welcome extends miniMVC\Controller {
+class welcome extends miniMVC\Controller {
 
 	/**
 	 * Initialize the constructor
@@ -30,6 +30,7 @@ class Welcome extends miniMVC\Controller {
 		parent::__construct();
 
 		$this->load_model('meta\model');
+		$this->load_model('meta\user_model');
 
 	}
 
