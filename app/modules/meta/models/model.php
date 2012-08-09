@@ -20,7 +20,7 @@ namespace meta;
  *
  * @package meta
  */
-class model extends \miniMVC\Model {
+class Model extends \miniMVC\Model {
 
 	/**
 	 * Reference to database connection
@@ -43,7 +43,7 @@ class model extends \miniMVC\Model {
 	{
 		parent::__construct();
 
-		$this->session =& \miniMVC\Session::get_instance();
+		//$this->session =& \miniMVC\Session::get_instance();
 		$this->db =& \miniMVC\db::get_instance();
 	}
 

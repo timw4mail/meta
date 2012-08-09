@@ -151,8 +151,7 @@ class Page {
 
 		if ( ! empty($this->buffer))
 		{
-			// @todo Figure out how to adjust content compression for 5.4.4
-			ob_start();
+			ob_start('ob_gzhandler');
 
 			echo $this->buffer;
 
@@ -695,15 +694,15 @@ class Page {
 	public function flush_headers()
 	{
 		// Set headers
-		foreach ($this->headers as $key => &$val)
+		foreach ($this->headers as $key => $val)
 		{
 			if ( ! isset($val))
 			{
-				@header($key);
+				header($key);
 			}
 			else
 			{
-				@header("{$key}: {$val}");
+				header("{$key}: {$val}");
 			}
 		}
 

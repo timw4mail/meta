@@ -1,5 +1,5 @@
 <div style="position:relative; margin:0.5em auto; padding:0.5em; width:95%; border:1px solid #924949; background: #f3e6e6;">
-	<h4>An uncaught exception was thrown.</h4>
+	<h4>An uncaught <?= get_class($exception) ?> was thrown.</h4>
 
 	<p>Message:  <?= $message; ?></p>
 

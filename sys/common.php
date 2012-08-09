@@ -31,7 +31,7 @@ namespace miniMVC;
  *
  * @param string
  */
-function _autoload($name)
+function autoload($name)
 {
 	if ($name == '') return;
 
@@ -60,7 +60,7 @@ function _autoload($name)
 }
 
 // Start the autoloader
-spl_autoload_register('miniMVC\_autoload');
+spl_autoload_register('miniMVC\autoload');
 
 // --------------------------------------------------------------------------
 // ! Error handling / messages
@@ -298,7 +298,10 @@ if ( ! function_exists('do_include'))
 function init()
 {
 	// Catch fatal errors, don't show them
-	register_shutdown_function('miniMVC\shutdown');
+	if (function_exists('error_get_last'))
+	{
+		register_shutdown_function('miniMVC\shutdown');
+	}
 
 	//Set error handlers
 	set_error_handler('miniMVC\on_error');
@@ -306,9 +309,6 @@ function init()
 
 	// Load Database classes
 	require_once(MM_SYS_PATH . 'db/autoload.php');
-
-	// Load the page class
-	$GLOBALS['page'] = new \miniMVC\Page();
 
 	// Map to the appropriate module/controller/function
 	route();
@@ -367,6 +367,7 @@ function route()
 	$pi = $_SERVER['PATH_INFO'];
 	$ru = $_SERVER['REQUEST_URI'];
 	$sn = $_SERVER['SCRIPT_NAME'];
+	$qs = $_SERVER['QUERY_STRING'];
 
 	// Make sure the home page works when in a sub_directory
 	if (strlen($sn) > strlen($ru))
@@ -460,6 +461,7 @@ function route()
 	}
 
 	run($module, $controller, $func);
+	
 	return;
 }
 
@@ -480,21 +482,29 @@ function run($module, $controller, $func, $args = array())
 	if (is_file($path))
 	{
 		require_once($path);
-
+		
 		// Get the list of valid methods for that controller
 		$methods = controller_methods($controller);
 
 		if (in_array($func, $methods))
 		{
+		
 			// Define the name of the current module for file loading
 			if ( ! defined('MM_MOD'))
 			{
 				define('MM_MOD', $module);
 			}
+			
+			if (class_exists($controller))
+			{
+				$class = new $controller();
+			}
 
-			$class = new $controller();
-			return call_user_func_array(array(&$class, $func), $args);
+			//show_error(to_string(get_declared_classes()));
+			return call_user_func_array(array($class, $func), $args);
 		}
+		
+		show_404();
 	}
 
 	// Function doesn't exist...404

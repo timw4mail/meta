@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class welcome extends miniMVC\Controller {
+class welcome extends \miniMVC\Controller {
 
 	/**
 	 * Initialize the constructor

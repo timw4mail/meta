@@ -38,7 +38,10 @@ class Controller {
 	public function __construct()
 	{
 		// Create the page object
-		$this->page = $GLOBALS['page'];
+		if (is_null($this->page))
+		{
+			$this->page = new Page();
+		}
 	}
 
 	// --------------------------------------------------------------------------
