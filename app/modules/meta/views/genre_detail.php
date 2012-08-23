@@ -1,4 +1,3 @@
-<h1>meta</h1>
 <h3><?= $genre ?></h3>
 
 <h4>Genre Categories</h4>

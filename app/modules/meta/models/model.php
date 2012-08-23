@@ -20,7 +20,7 @@ namespace meta;
  *
  * @package meta
  */
-class Model extends \miniMVC\Model {
+class model extends \miniMVC\Model {
 
 	/**
 	 * Reference to database connection
@@ -43,7 +43,7 @@ class Model extends \miniMVC\Model {
 	{
 		parent::__construct();
 
-		//$this->session =& \miniMVC\Session::get_instance();
+		$this->session =& \miniMVC\Session::get_instance();
 		$this->db =& \miniMVC\db::get_instance();
 	}
 
@@ -404,6 +404,77 @@ class Model extends \miniMVC\Model {
 		}
 
 		return $data;
+	}
+	
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Get data for a full outline
+	 *
+	 * @return array
+	 */
+	public function get_outline_data()
+	{
+		// Get the genres
+		$g_query = $this->db->from('genre')
+			->get();
+			
+		$genres = array();
+			
+		while ($row = $g_query->fetch(\PDO::FETCH_ASSOC))
+		{
+			$genres[$row['id']] = $row['genre'];
+		}
+		
+		// Get the categories
+		$c_query = $this->db->from('category')
+			->get();
+			
+		$categories = array();
+		
+		while($row = $c_query->fetch(\PDO::FETCH_ASSOC))
+		{
+			$categories[$row['genre_id']][$row['id']] = $row['category'];
+		}
+		
+		// Get the sections
+		$s_query = $this->db->from('section')
+			->get();
+			
+		$sections = array();
+		
+		while($row = $s_query->fetch(\PDO::FETCH_ASSOC))
+		{
+			$sections[$row['category_id']][$row['id']] = $row['section'];
+		}
+				
+		
+		// Organize into a nested array			
+		foreach($genres as $genre_id => $genre)
+		{
+			$return[$genre_id][$genre] = array();
+			$g =& $return[$genre_id][$genre];
+			
+			// Categories for this genre
+			if (isset($categories[$genre_id]))
+			{
+				$g = $categories[$genre_id];
+			
+				foreach($categories[$genre_id] as $category_id => $category)
+				{
+					$g[$category_id] = array($category => array());
+					$c =& $g[$category_id][$category];
+				
+					// Sections for this category
+					if (isset($sections[$category_id]))
+					{
+						$c = $sections[$category_id];
+					}
+				}
+			}
+		}
+	
+		return $return;
 	}
 
 }

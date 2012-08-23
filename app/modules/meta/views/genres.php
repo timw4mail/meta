@@ -1,4 +1,3 @@
-<h1>Meta</h1>
 <h3>Genres</h3>
 
 <ul class="list">

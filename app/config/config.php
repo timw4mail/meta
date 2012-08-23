@@ -107,7 +107,7 @@ define('DEFAULT_TITLE', "meta");
 | Default css group
 |--------------------------------------------------------------------------
 |
-| Default css group
+| Default css group to show if none explicity chose
 |
 */
 define('DEFAULT_CSS_GROUP', "css");
@@ -117,9 +117,21 @@ define('DEFAULT_CSS_GROUP', "css");
 | Default js group
 |--------------------------------------------------------------------------
 |
-| Default js group
+| Default js group to show if none explicitly chosen
 |
 */
 define('DEFAULT_JS_GROUP', "js");
+
+/*
+|--------------------------------------------------------------------------
+| Debug backtrace
+|--------------------------------------------------------------------------
+|
+| Whether or not to show a backtrace for php errors
+| 
+| Must be defined as TRUE for the backtrace to display.
+|
+*/
+define('SHOW_DEBUG_BACKTRACE', TRUE);
 
 // End of config.php

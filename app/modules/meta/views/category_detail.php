@@ -1,4 +1,3 @@
-<h1>meta</h1>
 <h3><?= $category ?></h3>
 
 <h4>Category Sections</h4>

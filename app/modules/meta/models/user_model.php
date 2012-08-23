@@ -23,11 +23,25 @@ namespace meta;
 class user_model extends \miniMVC\Model {
 
 	/**
+	 * Reference to database connection
+	 *
+	 * @var Query_Builder
+	 */
+	protected $db;
+
+	/**
 	 * Reference to bcrypt object
 	 *
 	 * @var Bcrypt
 	 */
 	protected $bcrypt;
+	
+	/**
+	 * Reference to session
+	 *
+	 * @var Session
+	 */
+	protected $session;
 
 	/**
 	 * Initialize the User model
@@ -37,8 +51,24 @@ class user_model extends \miniMVC\Model {
 		parent::__construct();
 
 		$this->bcrypt = new \Bcrypt(15);
+		$this->db =& \miniMVC\db::get_instance();
+		$this->session =& \miniMVC\Session::get_instance();
 	}
 
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Add a user for access
+	 *
+	 * @param string
+	 * @param string
+	 * @param string
+	 */
+	public function add_user($username, $pass1, $pass2)
+	{
+		
+	}
+	
 	// --------------------------------------------------------------------------
 
 	/**

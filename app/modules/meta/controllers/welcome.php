@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class welcome extends \miniMVC\Controller {
+class welcome extends \meta\controller {
 
 	/**
 	 * Initialize the constructor
@@ -28,10 +28,6 @@ class welcome extends \miniMVC\Controller {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load_model('meta\model');
-		$this->load_model('meta\user_model');
-
 	}
 
 	// --------------------------------------------------------------------------
@@ -56,7 +52,18 @@ class welcome extends \miniMVC\Controller {
 	 */
 	public function login()
 	{
-
+		$this->page->render('login');
+	}
+	
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Display an outline of the data for a table of contents
+	 */
+	public function outline()
+	{
+		$outline_data = $this->model->get_outline_data();
+		$this->page->render('outline', array('outline' => $outline_data));
 	}
 }
 

@@ -38,6 +38,9 @@ return array(
 	'category' => 'meta/category/index',
 	'category/add' => 'meta/category/add',
 	'category/detail' => 'meta/category/detail',
+	'section' => 'meta/section/index',
+	'section/add' => 'meta/section/add',
+	'section/detail' => 'meta/section/detail',
 	'404_route'			 => '',
 );
 

@@ -28,7 +28,8 @@ abstract class Controller extends \miniMVC\Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load_model('meta\Model');
+		$this->load_model('meta\model');
+		$this->load_model('meta\user_model');
 		$this->page->build_header();
 	}
 

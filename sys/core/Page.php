@@ -133,6 +133,11 @@ class Page {
 	 */
 	public function __destruct()
 	{
+		if (headers_sent())
+		{
+			die();
+		}
+	
 		if ( ! empty($this->headers))
 		{
 			// Set headers
@@ -151,7 +156,7 @@ class Page {
 
 		if ( ! empty($this->buffer))
 		{
-			ob_start('ob_gzhandler');
+			//ob_start('ob_gzhandler');
 
 			echo $this->buffer;
 
