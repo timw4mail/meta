@@ -12,6 +12,7 @@
  */
 
 // --------------------------------------------------------------------------
+error_reporting(-1);
 
 /**
  * JS Minifier and Cacher
@@ -45,7 +46,7 @@ function get_files()
 
 	$js = '';
 
-	foreach ($groups[$_GET['g']] as &$file)
+	foreach ($groups[$_GET['g']] as $file)
 	{
 		$new_file = realpath($js_root.$file);
 		$js .= file_get_contents($new_file);
@@ -69,9 +70,13 @@ function google_min($new_file)
 	$ch = curl_init('http://closure-compiler.appspot.com/compile');
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($ch, CURLOPT_POST, 1);
+	//curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, 'output_info=compiled_code&output_format=text&compilation_level=SIMPLE_OPTIMIZATIONS&js_code=' . urlencode($new_file));
 	$output = curl_exec($ch);
+	
+	//die(curl_getinfo($ch, CURLINFO_HTTP_CODE));
 	curl_close($ch);
+	
 	return $output;
 }
 
@@ -150,7 +155,8 @@ if ($last_modified === $requested_time)
 //Determine what to do: rebuild cache, send files as is, or send cache.
 if ($cache_modified < $last_modified)
 {
-	$js = google_min(get_files());
+	$js = get_files();
+	$js = google_min($js);
 	$cs = file_put_contents($cache_file, $js);
 
 	//Make sure cache file gets created/updated
@@ -174,7 +180,7 @@ else
 
 //This GZIPs the js for transmission to the user
 //making file size smaller and transfer rate quicker
-ob_start("ob_gzhandler");
+//ob_start("ob_gzhandler");
 
 header("Content-Type: text/javascript; charset=utf8");
 header("Cache-control: public, max-age=691200, must-revalidate");
@@ -183,6 +189,6 @@ header("Expires: ".gmdate('D, d M Y H:i:s', (filemtime($this_file) + 691200))." 
 
 echo $js;
 
-ob_end_flush();
+//ob_end_flush();
 
 //end of js.php

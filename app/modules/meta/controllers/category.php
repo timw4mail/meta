@@ -58,7 +58,7 @@ class category extends meta\controller {
 		}
 
 		// Render the basic page
-		$this->detail(-1);
+		$this->detail($this->model->get_last_id('category'));
 	}
 
 	/**
@@ -78,7 +78,8 @@ class category extends meta\controller {
 
 		$data = array(
 			'category' => $this->model->get_category_by_id($id),
-			'sections' => $this->model->get_sections($id),
+			'sections' => $this->model->get_category_outline_data($id),
+			'genre' => $this->model->get_genre_by_category($id),
 			'category_id' => $id
 		);
 

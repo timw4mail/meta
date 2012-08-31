@@ -1,14 +1,15 @@
-var meta = (function (){
-	"use strict";
+(function() {
 
-	var meta = window.meta || {};
+    "use strict";
 
-	meta.addItem = function() {
+	// Show/hide forms based on use
+	$_("fieldset dl").dom.hide();
+	$_("fieldset legend").event.add('click', function(e){
+		var form = $_("fieldset dl").dom;
 
-	};
+		(form.css('display').trim() == 'none')
+			? form.show()
+			: form.hide();
+	});
 
-
-	// Return the object to the global scope
-	return meta;
-
-)());
+}());

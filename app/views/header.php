@@ -9,4 +9,4 @@
 <?= $head_js ?>
 </head>
 <body<?= (!empty($body_class)) ? "class=\"" . $body_class . "\"" : ""; ?><?= (!empty($body_id)) ? " id=\"" . $body_id . "\"" : ""; ?>>
-<h1>Meta</h1>
+<h1><a href="<?= miniMVC\site_url('') ?>">Meta</a></h1>

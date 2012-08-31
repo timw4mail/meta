@@ -16,8 +16,8 @@
 /**
  * This is the config array for javascript files to concatenate and minify
  */
-return [
-	/*
+return array(
+	/*=
 		For each group create an array like so
 
 		'my_group' => array(
@@ -25,4 +25,9 @@ return [
 			'path/to/css/file2.css'
 		),
 	*/
-];
+	
+	'js' => array(
+		'kis-lite-dom-min.js',
+		'meta.js'
+	),
+);

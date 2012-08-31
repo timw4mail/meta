@@ -156,7 +156,7 @@ class Page {
 
 		if ( ! empty($this->buffer))
 		{
-			//ob_start('ob_gzhandler');
+			(GZ_COMPRESS) ? ob_start('ob_gzhandler') : ob_start();
 
 			echo $this->buffer;
 

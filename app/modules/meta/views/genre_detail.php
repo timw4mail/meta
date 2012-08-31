@@ -1,15 +1,12 @@
-<h3><?= $genre ?></h3>
+<h2><?= $genre ?></h2>
 
-<h4>Genre Categories</h4>
-<ul class="list">
-<?php foreach($categories as $id => $cat): ?>
-	<li><a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a></li>
-<?php endforeach ?>
-</ul>
+<p class="breadcrumbs">
+<a href="<?= miniMVC\site_url('') ?>">Genres</a> > <?= $genre ?>
+</p>
 
 <form action="<?= miniMVC\site_url("category/add") ?>" method="post">
 	<fieldset>
-		<lengend>Add Category</lengend>
+		<legend>Add Category</legend>
 		<dl>
 			<!-- Weird tag wrapping is intentional for display: inline-block -->
 			<dt><label for="category">Category name:</label></dt><dd>
@@ -20,3 +17,10 @@
 		</dl>
 	</fieldset>
 </form>
+
+<ul>
+<?php foreach($categories as $id => $cat): ?>
+	<li><a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a></li>
+<?php endforeach ?>
+</ul>
+

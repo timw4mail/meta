@@ -30,7 +30,27 @@ abstract class Controller extends \miniMVC\Controller {
 		parent::__construct();
 		$this->load_model('meta\model');
 		$this->load_model('meta\user_model');
+
+    	$this->session =& \miniMVC\Session::get_instance();
+
+    	// Check if user is logged in
+    	$this->check_login_status();
+
 		$this->page->build_header();
+	}
+
+	/**
+	 * Require user login for access
+	 */
+	private function check_login_status()
+	{
+		if ( ! isset($this->session->uid))
+		{
+			// Redirect to login
+		}
+
+		return;
+
 	}
 
 	/**
@@ -38,6 +58,7 @@ abstract class Controller extends \miniMVC\Controller {
 	 */
 	public function __destruct()
 	{
+		$this->page->set_foot_js_group('js');
 		$this->page->build_footer();
 	}
 

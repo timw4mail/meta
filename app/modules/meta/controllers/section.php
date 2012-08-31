@@ -31,9 +31,26 @@ class section extends meta\controller {
 	/**
 	 * Default controller method
 	 */
-	public function index()
+	public function index($id=0)
 	{
-		$this->detail();
+		if ($id === 0)
+		{
+			$id = (int) miniMVC\get_last_segment();
+		}
+
+		if ($id === 0)
+		{
+			miniMVC\show_404();
+		}
+
+		$data = array(
+			'section' => $this->model->get_section_by_id($id),
+			'sdata' => $this->model->get_data($id),
+			'p' => $this->model->get_path_by_section($id),
+			'section_id' => $id
+		);
+
+		$this->load_view('section_detail', $data);
 	}
 
 	/**
@@ -58,33 +75,8 @@ class section extends meta\controller {
 		}
 
 		// Render the basic page
-		$this->detail(-1);
+		$this->index($this->model->get_last_id('section'));
 	}
-
-	/**
-	 * Returns the sections / editing options for a category
-	 */
-	public function detail($id = 0)
-	{
-		if ($id === 0)
-		{
-			$id = (int) miniMVC\get_last_segment();
-		}
-
-		if ($id === 0)
-		{
-			miniMVC\show_404();
-		}
-
-		$data = array(
-			'section' => $this->model->get_section_by_id($id),
-			'data' => $this->model->get_data($id),
-			'section_id' => $id
-		);
-
-		$this->load_view('section_detail', $data);
-	}
-
 }
 
 // End of section.php

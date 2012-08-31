@@ -54,9 +54,19 @@ class welcome extends \meta\controller {
 	{
 		$this->page->render('login');
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
+	/**
+	 * Logout
+	 */
+	public function logout()
+	{
+
+	}
+
+	// --------------------------------------------------------------------------
+
 	/**
 	 * Display an outline of the data for a table of contents
 	 */

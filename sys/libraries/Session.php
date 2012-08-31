@@ -44,9 +44,12 @@ class Session {
 	{
 		session_start();
 
+		// Create a re-generatable id using a hash of the user's ip address and user agent
+		$session_id = sha1($_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+
 		// Save a reference to the session for later access
-		$_SESSION['MM_SESSION'] = (isset($_SESSION['MM_SESSION'])) ?: array();
-		$this->sess =& $_SESSION['MM_SESSION'];
+		$_SESSION[$session_id] = (isset($_SESSION[$session_id])) ?: array();
+		$this->sess =& $_SESSION[$session_id];
 	}
 
 	// --------------------------------------------------------------------------

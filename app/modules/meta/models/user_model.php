@@ -35,7 +35,7 @@ class user_model extends \miniMVC\Model {
 	 * @var Bcrypt
 	 */
 	protected $bcrypt;
-	
+
 	/**
 	 * Reference to session
 	 *
@@ -56,7 +56,7 @@ class user_model extends \miniMVC\Model {
 	}
 
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Add a user for access
 	 *
@@ -66,9 +66,29 @@ class user_model extends \miniMVC\Model {
 	 */
 	public function add_user($username, $pass1, $pass2)
 	{
-		
+		// Check for the existing username
+		$query = $this->db->select('username')
+			->from('user')
+			->where('username', $username)
+			->get();
+
+		$res = $query->fetch(\PDO::FETCH_ASSOC);
+
+		if (empty($res)) return FALSE;
+
+		// Verify that passwords match
+		if ($pass1 !== $pass2) return FALSE;
+
+		// Add user
+		$hashed = $this->bcrypt->hash($pass1);
+
+		$this->db->set('username', $username)
+			->set('hash', $hashed)
+			->insert('user');
+
+		return TRUE;
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**

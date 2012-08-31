@@ -48,6 +48,8 @@ class model extends \miniMVC\Model {
 	}
 
 	// --------------------------------------------------------------------------
+	// ! Data Manipulation
+	// --------------------------------------------------------------------------
 
 	/**
 	 * Delete a genre/category/section or data item
@@ -104,7 +106,7 @@ class model extends \miniMVC\Model {
 		// for databases that do not support
 		// grabbing result counts (SQLite / Firebird)
 		$array = $query->fetchAll();
-		if (count($array) === 0)
+		if (count($array)< 1)
 		{
 			$this->db->set('genre', $genre)
 				->insert('genre');
@@ -114,21 +116,6 @@ class model extends \miniMVC\Model {
 
 		return FALSE;
 
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
-	 * Rename a genre
-	 *
-	 * @param int
-	 * @param string
-	 */
-	public function update_genre($genre_id, $genre)
-	{
-		$this->db->set('genre', $genre)
-			->where('id', $genre_id)
-			->update('genre');
 	}
 
 	// --------------------------------------------------------------------------
@@ -146,13 +133,14 @@ class model extends \miniMVC\Model {
 		$query = $this->db->from('category')
 			->where('genre_id', $genre_id)
 			->where('category', $cat)
+			->limit(1)
 			->get();
 
 		// Fetch the data as a workaround
 		// for databases that do not support
 		// grabbing result counts (SQLite / Firebird)
 		$array = $query->fetchAll();
-		if (count($array) === 0)
+		if (count($array)< 1)
 		{
 			$this->db->set('category', $cat)
 				->set('genre_id', $genre_id)
@@ -167,21 +155,6 @@ class model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
-	 * Rename a category
-	 *
-	 * @param int
-	 * @param string
-	 */
-	public function update_category($cat_id, $category)
-	{
-		$this->db->set('category', $category)
-			->where('id', (int) $cat_id)
-			->update('category');
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
 	 * Add a section to a category
 	 *
 	 * @param string
@@ -189,24 +162,27 @@ class model extends \miniMVC\Model {
 	 */
 	public function add_section($section, $category_id)
 	{
-		$this->db->set('section', $section)
-			->set('category_id', (int) $category_id)
-			->insert('section');
-	}
+        // Check if the section exists
+        $q = $this->db->from('section')
+        	->where('category_id', $category_id)
+        	->where('section', $section)
+        	->limit(1)
+        	->get();
 
-	// --------------------------------------------------------------------------
+        // Fetch the data as a workaround
+		// for databases that do not support
+		// grabbing result counts (SQLite / Firebird)
+        $array = $q->fetchAll();
+        if (count($array) < 1)
+        {
+			$this->db->set('section', $section)
+				->set('category_id', (int) $category_id)
+				->insert('section');
 
-	/**
-	 * Rename a section
-	 *
-	 * @param int
-	 * @param string
-	 */
-	public function update_section($section_id, $section)
-	{
-		$this->db->set('section', $section)
-			->where('id', (int) $section_id)
-			->update('section');
+			return TRUE;
+        }
+
+		return FALSE;
 	}
 
 	// --------------------------------------------------------------------------
@@ -219,13 +195,40 @@ class model extends \miniMVC\Model {
 	 */
 	public function add_data($section_id, $data)
 	{
-		// Convert the data to json for storage
-		$data_str = json_encode($data);
+		foreach($data as $key => $val)
+		{
+            // See if the data exists
+        	$q = $this->db->from('data')
+        		->where('section_id', $section_id)
+        		->where('key', $key)
+        		->get();
 
-		// Save the data
-		$this->db->set('data', $data_str)
-			->set('section_id', (int) $section_id)
-			->insert('data');
+        	if ($this->db->num_rows() > 0) return FALSE;
+
+			// Save the data
+			$this->db->set('key', $key)
+				->set('value', $val)
+				->set('section_id', (int) $section_id)
+				->insert('data');
+		}
+
+		return TRUE;
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Rename a genre/category/section
+	 *
+	 * @param string
+	 * @param int
+	 * @param string
+	 */
+	public function update($type, $id, $name)
+	{
+		$this->db->set($type, $name)
+			->where('id', (int) $id)
+			->update('genre');
 	}
 
 	// --------------------------------------------------------------------------
@@ -246,6 +249,49 @@ class model extends \miniMVC\Model {
 			->where('id', (int) $data_id)
 			->update('data');
 
+	}
+
+	// --------------------------------------------------------------------------
+	// ! Data Retrieval
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the id of the last item of the type
+	 *
+	 * @param string $type
+	 * @return int
+	 */
+	public function get_last_id($type)
+	{
+		$query = $this->db->select('id')
+			->from($type)
+			->order_by('id', 'DESC')
+			->limit(1)
+			->get();
+
+		$r = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $r['id'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get breadcrumb data for section
+	 *
+	 * @param section_id
+	 * @return array
+	 */
+	public function get_path_by_section($section_id)
+	{
+		$query = $this->db->select('genre, genre_id, category, category_id')
+			->from('section s')
+			->join('category c', 'c.id=s.category_id')
+			->join('genre g', 'g.id=c.genre_id')
+			->where('s.id', $section_id)
+			->get();
+
+		return $query->fetch(\PDO::FETCH_ASSOC);
 	}
 
 	// --------------------------------------------------------------------------
@@ -309,6 +355,27 @@ class model extends \miniMVC\Model {
 		$row = $query->fetch(\PDO::FETCH_ASSOC);
 
 		return $row['category'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the genre name by category id
+	 *
+	 * @param int
+	 * @return array
+	 */
+	public function get_genre_by_category($cat_id)
+	{
+		$query = $this->db->select('g.id, genre')
+			->from('genre g')
+			->join('category c', 'c.genre_id=g.id', 'inner')
+			->where('c.id', (int)$cat_id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row;
 	}
 
 	// --------------------------------------------------------------------------
@@ -393,21 +460,71 @@ class model extends \miniMVC\Model {
 	{
 		$data = array();
 
-		$query = $this->db->select('id, data')
+		$query = $this->db->select('id, key, value')
 			->from('data')
 			->where('section_id', (int) $section_id)
 			->get();
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
 		{
-			$data[$row['id']] = json_decode($row['data'], TRUE);
+			$data[$row['id']] = array($row['key'] => str_replace("\n", "<br />", $row['value']));
 		}
 
 		return $data;
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
+	/**
+	 * Get sections and data for a general data outline
+	 *
+	 * @param int $category_id
+	 * @return array
+	 */
+	public function get_category_outline_data($category_id)
+	{
+		// Get the sections
+		$s_query = $this->db->from('section')
+			->where('category_id', (int) $category_id)
+			->get();
+
+		$sections = array();
+
+		while($row = $s_query->fetch(\PDO::FETCH_ASSOC))
+		{
+			$sections[$row['id']] = $row['section'];
+		}
+
+		// Get the data for the sections
+		$d_array = array();
+
+		if ( ! empty($sections))
+		{
+			$d_query = $this->db->from('data')
+				->where_in('section_id', array_keys($sections))
+				->get();
+
+			while($row = $d_query->fetch(\PDO::FETCH_ASSOC))
+			{
+				$d_array[$row['section_id']][$row['key']] = str_replace("\n", "<br />", $row['value']);
+			}
+		}
+
+		// Reorganize the data
+		$data = array();
+
+		foreach($sections as $section_id => $section)
+		{
+			$data[$section_id] = (isset($d_array[$section_id]))
+				? array($section, $d_array[$section_id])
+				: $section;
+		}
+
+		return $data;
+	}
+
+	// --------------------------------------------------------------------------
+
 	/**
 	 * Get data for a full outline
 	 *
@@ -418,53 +535,53 @@ class model extends \miniMVC\Model {
 		// Get the genres
 		$g_query = $this->db->from('genre')
 			->get();
-			
+
 		$genres = array();
-			
+
 		while ($row = $g_query->fetch(\PDO::FETCH_ASSOC))
 		{
 			$genres[$row['id']] = $row['genre'];
 		}
-		
+
 		// Get the categories
 		$c_query = $this->db->from('category')
 			->get();
-			
+
 		$categories = array();
-		
+
 		while($row = $c_query->fetch(\PDO::FETCH_ASSOC))
 		{
 			$categories[$row['genre_id']][$row['id']] = $row['category'];
 		}
-		
+
 		// Get the sections
 		$s_query = $this->db->from('section')
 			->get();
-			
+
 		$sections = array();
-		
+
 		while($row = $s_query->fetch(\PDO::FETCH_ASSOC))
 		{
 			$sections[$row['category_id']][$row['id']] = $row['section'];
 		}
-				
-		
-		// Organize into a nested array			
+
+
+		// Organize into a nested array
 		foreach($genres as $genre_id => $genre)
 		{
 			$return[$genre_id][$genre] = array();
 			$g =& $return[$genre_id][$genre];
-			
+
 			// Categories for this genre
 			if (isset($categories[$genre_id]))
 			{
 				$g = $categories[$genre_id];
-			
+
 				foreach($categories[$genre_id] as $category_id => $category)
 				{
 					$g[$category_id] = array($category => array());
 					$c =& $g[$category_id][$category];
-				
+
 					// Sections for this category
 					if (isset($sections[$category_id]))
 					{
@@ -473,7 +590,7 @@ class model extends \miniMVC\Model {
 				}
 			}
 		}
-	
+
 		return $return;
 	}
 

@@ -73,4 +73,4 @@ $path_to = '';
 | The folder where javascript files exist, in relation to the document root
 |
 */
-$js_root = $document_root. '/js/';
+$js_root = $document_root. 'js/';

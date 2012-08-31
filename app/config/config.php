@@ -134,4 +134,14 @@ define('DEFAULT_JS_GROUP', "js");
 */
 define('SHOW_DEBUG_BACKTRACE', TRUE);
 
+/*
+|--------------------------------------------------------------------------
+| Gzip compress
+|--------------------------------------------------------------------------
+|
+| Whether or not use gzip compression on page output
+|
+*/
+define('GZ_COMPRESS', FALSE);
+
 // End of config.php

@@ -1,14 +1,8 @@
-<h3>Genres</h3>
-
-<ul class="list">
-<?php foreach($genres as $id => $name): ?>
-	<li><a href="<?= miniMVC\site_url("genre/{$id}") ?>"><?= $name ?></a></li>
-<?php endforeach ?>
-</ul>
+<h2>Genres</h2>
 
 <form action="<?= miniMVC\site_url("genre/add") ?>" method="post">
 	<fieldset>
-		<lengend>Add Genre</lengend>
+		<legend>Add Genre</legend>
 		<dl>
 			<!-- Weird tag wrapping is intentional for display: inline-block -->
 			<dt><label for="genre">Genre name:</label></dt><dd>
@@ -19,3 +13,9 @@
 		</dl>
 	</fieldset>
 </form>
+
+<ul>
+<?php foreach($genres as $id => $name): ?>
+	<li><a href="<?= miniMVC\site_url("genre/{$id}") ?>"><?= $name ?></a></li>
+<?php endforeach ?>
+</ul>

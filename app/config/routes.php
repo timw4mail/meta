@@ -31,17 +31,18 @@
 
 return array(
 	// Default Paths
-	'default_controller' => 'welcome',
-	'default_module' 	 => 'meta',
-	'genre'	=> 'meta/genre/index',
-	'genre/add' => 'meta/genre/add',
-	'category' => 'meta/category/index',
-	'category/add' => 'meta/category/add',
-	'category/detail' => 'meta/category/detail',
-	'section' => 'meta/section/index',
-	'section/add' => 'meta/section/add',
-	'section/detail' => 'meta/section/detail',
-	'404_route'			 => '',
+	'default_controller'	=>	'welcome',
+	'default_module'		=>	'meta',
+	'genre'					=>	'meta/genre/index',
+	'genre/add'				=>	'meta/genre/add',
+	'category' 				=>	'meta/category/index',
+	'category/add' 			=>	'meta/category/add',
+	'category/detail' 		=>	'meta/category/detail',
+	'section' 				=>	'meta/section/index',
+	'section/add' 			=>	'meta/section/add',
+	'data/add' 				=>	'meta/data/add',
+	'data/update' 			=>	'meta/data/update',
+	'404_route'				=>	'',
 );
 
 // End of routes.php

@@ -6,6 +6,11 @@ html, body {
 	font-weight:200;
 	max-width:800px;
 	margin: 0 auto;
+	color:#312;
+}
+
+button {
+	color:#312;
 }
 
 a {
@@ -14,6 +19,26 @@ a {
 
 a:hover {
 	text-decoration:underline;
+}
+
+legend {
+	display:block;
+}
+
+legend:hover {
+	cursor:pointer;
+}
+
+h1,h2 {
+    display:-moz-inline-box;
+	display:inline-block;
+	vertical-align:middle;
+	width:25%;
+}
+
+/* Hide forms by default */
+fieldset dl {
+	display:none;
 }
 
 /* form styles */
@@ -34,4 +59,53 @@ form dd {
 	margin-left:0;
 	padding-left:.25em;
 }
+
+/* Outline styles */
+.list {
+	padding:0;
+	margin:0;
+}
+
+.list dl {
+	margin-left:0.5em;
+}
+
+.list li {
+	list-style:none;
+}
+
+/* Data listing styles */
+dl.multiline, dl.pair {
+	border-bottom:1px dotted #312;
+}
+
+dl.multiline dt {
+	font-weight:bold;
+	line-height:1.5;
+	font-size:1em;
+	margin:0;
+}
+
+dl.multiline dd {
+	margin:1em;
+	margin-right:0;
+}
+
+dl.pair dt, dl.pair dd {
+	display:-moz-inline-block;
+	display:inline-block;
+	padding:0.25em 0;
+}
+
+dl.pair dt {
+	width:35%;
+}
+
+dl.pair dd {
+	width:64%;
+	margin-left:0;
+	padding-left:0;
+}
+
+
 

@@ -1,15 +1,12 @@
-<h3><?= $category ?></h3>
+<h2><?= $category ?></h2>
 
-<h4>Category Sections</h4>
-<ul class="list">
-<?php foreach($sections as $id => $section): ?>
-	<li><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></li>
-<?php endforeach ?>
-</ul>
+<p class="breadcrumbs">
+<a href="<?= miniMVC\site_url('') ?>">Genres</a> > <a href="<?= miniMVC\site_url('genres/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
+</p>
 
 <form action="<?= miniMVC\site_url("section/add") ?>" method="post">
 	<fieldset>
-		<lengend>Add Section</lengend>
+		<legend>Add Section</legend>
 		<dl>
 			<!-- Weird tag wrapping is intentional for display: inline-block -->
 			<dt><label for="section">Section name:</label></dt><dd>
@@ -20,3 +17,29 @@
 		</dl>
 	</fieldset>
 </form>
+
+<ul class="list">
+<?php foreach($sections as $id => $section): ?>
+	<?php if (is_array($section)) list($section, $d) = $section ?>
+	<li>
+		<h4><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
+
+		<?php if ( ! empty($d)): ?>
+
+		<?php foreach($d as $k => $v): ?>
+		<?php $class = (strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
+		<dl class="<?= $class ?>">
+
+			<dt><?= $k ?></dt>
+			<dd><?= $v ?></dd>
+
+		</dl>
+		<?php endforeach ?>
+
+		<?php endif ?>
+
+		<?php $d = array(); // Don't let data linger ?>
+
+	</li>
+<?php endforeach ?>
+</ul>
