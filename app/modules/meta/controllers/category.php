@@ -29,42 +29,9 @@ class category extends meta\controller {
 	}
 
 	/**
-	 * Default controller method
-	 */
-	public function index()
-	{
-		$this->detail();
-	}
-
-	/**
-	 * Adds a new category
-	 */
-	public function add()
-	{
-		// Strip away tags for the sake of security
-		$name = strip_tags($_POST['category']);
-		$id = (int) $_POST['genre_id'];
-
-		// Make sure the name doesn't already exist. If it does, show an error.
-		$res = $this->model->add_category($name, $id);
-
-		if ($res === TRUE)
-		{
-			$this->page->set_message('success', 'Added new category');
-		}
-		else
-		{
-			$this->page->set_message('error', 'Category already exists for this genre');
-		}
-
-		// Render the basic page
-		$this->detail($this->model->get_last_id('category'));
-	}
-
-	/**
 	 * Returns the sections / editing options for a category
 	 */
-	public function detail($id = 0)
+	public function index($id = 0)
 	{
 		if ($id === 0)
 		{
@@ -84,6 +51,30 @@ class category extends meta\controller {
 		);
 
 		$this->load_view('category_detail', $data);
+	}
+
+	/**
+	 * Adds a section to the current category
+	 */
+	public function add_section()
+	{
+		// Strip away tags for the sake of security
+		$name = strip_tags($_POST['section']);
+		$id = (int) $_POST['category_id'];
+
+		// Make sure the name doesn't already exist. If it does, show an error.
+		$res = $this->model->add_section($name, $id);
+
+		if ($res === TRUE)
+		{
+			$this->page->set_message('success', 'Added new section');
+		}
+		else
+		{
+			$this->page->set_message('error', 'Section already exists for this category');
+		}
+
+		$this->detail($id);
 	}
 }
 

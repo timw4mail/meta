@@ -2,12 +2,12 @@
 
 <p class="breadcrumbs">
 	<a href="<?= miniMVC\site_url('') ?>">Genres</a> >
-	<a href="<?= miniMVC\site_url('genres/detail/'.$p['genre_id']) ?>"><?= $p['genre'] ?></a> > 
+	<a href="<?= miniMVC\site_url('genres/detail/'.$p['genre_id']) ?>"><?= $p['genre'] ?></a> >
 	<a href="<?= miniMVC\site_url('category/detail/'.$p['category_id']) ?>"><?= $p['category'] ?></a> >
 	<?= $section ?>
 </p>
 
-<form action="<?= miniMVC\site_url("data/add") ?>" method="post">
+<form action="<?= miniMVC\site_url("section/add_data") ?>" method="post">
 	<fieldset>
 		<legend>Add Data</legend>
 		<dl>

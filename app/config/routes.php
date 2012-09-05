@@ -29,20 +29,17 @@
 
 // --------------------------------------------------------------------------
 
-return array(
+return [
 	// Default Paths
 	'default_controller'	=>	'welcome',
 	'default_module'		=>	'meta',
 	'genre'					=>	'meta/genre/index',
-	'genre/add'				=>	'meta/genre/add',
+	'genre/add_category'	=>	'meta/genre/add_category',
 	'category' 				=>	'meta/category/index',
-	'category/add' 			=>	'meta/category/add',
-	'category/detail' 		=>	'meta/category/detail',
+	'category/add_section' 	=>	'meta/category/add_section',
 	'section' 				=>	'meta/section/index',
-	'section/add' 			=>	'meta/section/add',
-	'data/add' 				=>	'meta/data/add',
-	'data/update' 			=>	'meta/data/update',
+	'section/add_data'		=>	'meta/section/add_data',
 	'404_route'				=>	'',
-);
+];
 
 // End of routes.php

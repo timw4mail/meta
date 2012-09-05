@@ -31,22 +31,27 @@ class genre extends meta\controller {
 	/**
 	 * Default controller method
 	 */
-	public function index()
+	public function index($id = 0)
 	{
-		// Re-route to detail page if the last segment
-		// is a valid integer
-		$id = (int) miniMVC\get_last_segment();
-
-		if ($id !== 0)
+		if ($id === 0)
 		{
-			return $this->detail($id);
+			// Re-route to detail page if the last segment
+			// is a valid integer
+			$id = (int) miniMVC\get_last_segment();
 		}
 
-		// Otherwise, display list of genres
-		$data = array();
-		$data['genres'] = $this->model->get_genres();
+		if ($id === 0)
+		{
+			// Otherwise, display list of genres
+			$data = array();
+			$data['genres'] = $this->model->get_genres();
 
-		$this->load_view('genres', $data);
+			$this->load_view('genres', $data);
+
+			return;
+		}
+
+		return $this->detail($id);
 	}
 
 	/**
@@ -90,6 +95,27 @@ class genre extends meta\controller {
 		);
 
 		$this->load_view('genre_detail', $data);
+	}
+
+	public function add_category()
+	{
+		// Strip away tags for the sake of security
+		$name = strip_tags($_POST['category']);
+		$id = (int) $_POST['genre_id'];
+
+		// Make sure the name doesn't already exist. If it does, show an error.
+		$res = $this->model->add_category($name, $id);
+
+		if ($res === TRUE)
+		{
+			$this->page->set_message('success', 'Added new category');
+		}
+		else
+		{
+			$this->page->set_message('error', 'Category already exists for this genre');
+		}
+
+		$this->detail($id);
 	}
 }
 

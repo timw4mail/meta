@@ -54,28 +54,27 @@ class section extends meta\controller {
 	}
 
 	/**
-	 * Adds a new category
+	 * Adds a data item to the current section
 	 */
-	public function add()
+	public function add_data()
 	{
-		// Strip away tags for the sake of security
-		$name = strip_tags($_POST['section']);
-		$id = (int) $_POST['category_id'];
+		$section_id = (int) $_POST['section_id'];
 
-		// Make sure the name doesn't already exist. If it does, show an error.
-		$res = $this->model->add_section($name, $id);
 
-		if ($res === TRUE)
-		{
-			$this->page->set_message('success', 'Added new section');
-		}
-		else
-		{
-			$this->page->set_message('error', 'Section already exists for this category');
-		}
+		$keys = filter_var_array($_POST['name'], FILTER_SANITIZE_STRING);
+		$vals = filter_var_array($_POST['val'], FILTER_SANITIZE_STRING);
 
-		// Render the basic page
-		$this->index($this->model->get_last_id('section'));
+
+		$data = array_combine($keys, $vals);
+
+		$res = $this->model->add_data($section_id, $data);
+
+
+		($res)
+			? $this->page->set_message('success', 'Added data')
+			: $this->page->set_message('error', 'Data already exists');
+
+		$this->index($section_id);
 	}
 }
 

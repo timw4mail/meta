@@ -100,13 +100,14 @@ class model extends \miniMVC\Model {
 		// Check for duplicates
 		$query = $this->db->from('genre')
 			->where('genre', $genre)
+			->limit(1)
 			->get();
 
 		// Fetch the data as a workaround
 		// for databases that do not support
 		// grabbing result counts (SQLite / Firebird)
 		$array = $query->fetchAll();
-		if (count($array)< 1)
+		if (empty($array))
 		{
 			$this->db->set('genre', $genre)
 				->insert('genre');
@@ -228,7 +229,7 @@ class model extends \miniMVC\Model {
 	{
 		$this->db->set($type, $name)
 			->where('id', (int) $id)
-			->update('genre');
+			->update($type);
 	}
 
 	// --------------------------------------------------------------------------
@@ -237,15 +238,15 @@ class model extends \miniMVC\Model {
 	 * Update the data
 	 *
 	 * @param int
-	 * @param mixed
+	 * @param string
+	 * @param string
 	 */
-	public function update_data($data_id, $data)
+	public function update_data($data_id, $key, $val)
 	{
-		// Convert the data to json for storage
-		$data_str = json_encode('data', $data_str);
 
 		// Save the data
-		$this->db->set('data', $data_str)
+		$this->db->set('key', $key)
+			->set('value', $val)
 			->where('id', (int) $data_id)
 			->update('data');
 

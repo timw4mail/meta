@@ -4,7 +4,7 @@
 <a href="<?= miniMVC\site_url('') ?>">Genres</a> > <?= $genre ?>
 </p>
 
-<form action="<?= miniMVC\site_url("category/add") ?>" method="post">
+<form action="<?= miniMVC\site_url("genre/add_category") ?>" method="post">
 	<fieldset>
 		<legend>Add Category</legend>
 		<dl>
