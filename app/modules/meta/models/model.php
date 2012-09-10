@@ -594,6 +594,25 @@ class model extends \miniMVC\Model {
 
 		return $return;
 	}
+	
+	// --------------------------------------------------------------------------
+	// ! Miscellaneous methods
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Check if a valid type for editing
+	 *
+	 * @param string
+	 * @return bool
+	 */
+	public function is_valid_type($str)
+	{
+		$valid = array(
+			'genre','category','section','data'
+		);
+		
+		return in_array(str_to_lower($str), $valid);
+	}
 
 }
 
