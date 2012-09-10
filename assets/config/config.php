@@ -13,6 +13,7 @@
 
 // --------------------------------------------------------------------------
 
+
 /**
  * Asset management configuration file
  *
@@ -53,7 +54,7 @@ $css_root = $document_root. 'css/';
 | Path fragment to rewrite in css files
 |
 */
-$path_from = '';
+$path_from = './images/';
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +64,7 @@ $path_from = '';
 | The path fragment replacement for the css files
 |
 */
-$path_to = '';
+$path_to = '//github.timshomepage.net/meta/assets/images/';
 
 /*
 |--------------------------------------------------------------------------

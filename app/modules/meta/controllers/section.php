@@ -62,7 +62,10 @@ class section extends meta\controller {
 
 
 		$keys = filter_var_array($_POST['name'], FILTER_SANITIZE_STRING);
-		$vals = filter_var_array($_POST['val'], FILTER_SANITIZE_STRING);
+
+        // Raw to allow use of HTML formatting
+        // Prepared statements keep the database safe here.
+		$vals = $_POST['val'];
 
 
 		$data = array_combine($keys, $vals);

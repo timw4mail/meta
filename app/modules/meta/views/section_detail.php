@@ -16,10 +16,10 @@
 				<input type="text" name="name[]" id="section" /></dd>
 
 			<dt><label for="val">Value:</label></dt><dd>
-				<textarea name="val[]" rows="5" cols="40"></textarea></dd>
+				<textarea id="input" name="val[]" rows="5" cols="40"></textarea></dd>
 
 			<dt><input type="hidden" name="section_id" value="<?= $section_id ?>" /></dt><dd>
-				<button type="submit">Save Data</button></dd>
+				<button type="submit" class="save">Save Data</button></dd>
 		</dl>
 	</fieldset>
 </form>

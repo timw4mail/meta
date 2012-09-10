@@ -106,8 +106,8 @@ class model extends \miniMVC\Model {
 		// Fetch the data as a workaround
 		// for databases that do not support
 		// grabbing result counts (SQLite / Firebird)
-		$array = $query->fetchAll();
-		if (empty($array))
+		$array = $query->fetchAll(\PDO::FETCH_ASSOC);
+		if (count($array) < 1)
 		{
 			$this->db->set('genre', $genre)
 				->insert('genre');

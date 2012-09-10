@@ -97,6 +97,9 @@ class genre extends meta\controller {
 		$this->load_view('genre_detail', $data);
 	}
 
+	/**
+	 * Adds a category to the current genre
+	 */
 	public function add_category()
 	{
 		// Strip away tags for the sake of security

@@ -74,7 +74,7 @@ class category extends meta\controller {
 			$this->page->set_message('error', 'Section already exists for this category');
 		}
 
-		$this->detail($id);
+		$this->index($id);
 	}
 }
 

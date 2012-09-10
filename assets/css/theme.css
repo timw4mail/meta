@@ -11,6 +11,10 @@ html, body {
 
 button {
 	color:#312;
+	padding:5px;
+	border:1px solid #555;
+	border-radius:5px;
+	box-shadow:1px 1px #a98;
 }
 
 a {
@@ -30,7 +34,6 @@ legend:hover {
 }
 
 h1,h2 {
-    display:-moz-inline-box;
 	display:inline-block;
 	vertical-align:middle;
 	width:25%;
@@ -43,8 +46,8 @@ fieldset dl {
 
 /* form styles */
 form dt, form dd {
-	display:-moz-inline-box; /* For older versions of Mozilla/Firefox */
 	display:inline-block;
+	vertical-align:top;
 	padding:0.25em 0;
 }
 
@@ -60,7 +63,40 @@ form dd {
 	padding-left:.25em;
 }
 
-/* Outline styles */
+/* ! Edit buttons */
+.modify {
+	position:absolute;
+	display:none;
+	margin-left:1em;
+}
+
+li:hover .modify, dt:hover .modify {
+	display:inline-block;
+}
+
+button.save {
+	background:#797;
+	color:#eee;
+}
+
+button.save:hover {
+	background:#595;
+}
+
+button.edit {
+
+}
+
+button.delete {
+	background:#977;
+	color:#eee;
+}
+
+button.delete:hover {
+	background:#955;
+}
+
+/* ! Outline styles */
 .list {
 	padding:0;
 	margin:0;
@@ -74,7 +110,11 @@ form dd {
 	list-style:none;
 }
 
-/* Data listing styles */
+li h4 {
+	display:inline;
+}
+
+/* ! Data listing styles */
 dl.multiline, dl.pair {
 	border-bottom:1px dotted #312;
 }
@@ -92,7 +132,6 @@ dl.multiline dd {
 }
 
 dl.pair dt, dl.pair dd {
-	display:-moz-inline-block;
 	display:inline-block;
 	padding:0.25em 0;
 }

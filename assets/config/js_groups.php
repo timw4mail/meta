@@ -28,6 +28,7 @@ return array(
 	
 	'js' => array(
 		'kis-lite-dom-min.js',
+		'tinyeditor.js',
 		'meta.js'
 	),
 );

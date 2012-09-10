@@ -113,6 +113,10 @@ if ($last_modified === $requested_time)
 	exit();
 }
 
+// Correct paths that have changed due to concatenation
+// based on rules in the config file
+$css = str_replace($path_from, $path_to, $css);
+
 if (!isset($_GET['debug']))
 {
 	$css = compress($css);

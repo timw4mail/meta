@@ -23,7 +23,8 @@ return array(
 	'css' => array(
 		'normalize.css',
 		'message.css',
-		'theme.css'
+		'theme.css',
+		'tinyeditor.css'
 	)
 );
 // End of css_groups.php

@@ -34,6 +34,7 @@ return [
 	'default_controller'	=>	'welcome',
 	'default_module'		=>	'meta',
 	'genre'					=>	'meta/genre/index',
+	'genre/add'				=> 	'meta/genre/add',
 	'genre/add_category'	=>	'meta/genre/add_category',
 	'category' 				=>	'meta/category/index',
 	'category/add_section' 	=>	'meta/category/add_section',

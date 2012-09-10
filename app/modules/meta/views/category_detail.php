@@ -13,7 +13,7 @@
 				<input type="text" name="section" id="section" /></dd>
 
 			<dt><input type="hidden" name="category_id" value="<?= $category_id ?>" /></dt><dd>
-				<button type="submit">Add Section</button></dd>
+				<button type="submit" class="save">Add Section</button></dd>
 		</dl>
 	</fieldset>
 </form>
@@ -23,6 +23,10 @@
 	<?php if (is_array($section)) list($section, $d) = $section ?>
 	<li>
 		<h4><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
+		<span class="modify" id="section_<?=$id ?>">
+			<button class="edit">Edit</button>
+			<button class="delete">Delete</button>
+		</span>
 
 		<?php if ( ! empty($d)): ?>
 
@@ -30,7 +34,10 @@
 		<?php $class = (strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
 		<dl class="<?= $class ?>">
 
-			<dt><?= $k ?></dt>
+			<dt>
+				<?= $k ?>
+
+			</dt>
 			<dd><?= $v ?></dd>
 
 		</dl>
