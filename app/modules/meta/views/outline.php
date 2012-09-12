@@ -1,5 +1,18 @@
 <h2>Outline</h2>
 
+<dl>
+	<dt>Genre</dt>
+	<dd>
+		<ul>
+			<li>Category
+				<ul>
+					<li>Section</li>
+				</ul>
+			</li>
+		</ul>
+	</dd>
+</dl>
+<hr />
 <dl class="outline">
 <?php if (isset($outline)): ?>
 <?php foreach($outline as $genre_id => $genre_array): ?>

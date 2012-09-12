@@ -28,7 +28,7 @@ abstract class Controller extends \miniMVC\Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load_model('meta\model');
+		$this->load_model('meta\data_model');
 		$this->load_model('meta\user_model');
 
     	$this->session =& \miniMVC\Session::get_instance();
@@ -58,7 +58,7 @@ abstract class Controller extends \miniMVC\Controller {
 	 */
 	public function __destruct()
 	{
-		$this->page->set_foot_js_group('js');
+		$this->page->set_foot_js_group('js', TRUE);
 		$this->page->build_footer();
 	}
 

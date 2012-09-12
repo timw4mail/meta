@@ -44,7 +44,7 @@ class genre extends meta\controller {
 		{
 			// Otherwise, display list of genres
 			$data = array();
-			$data['genres'] = $this->model->get_genres();
+			$data['genres'] = $this->data_model->get_genres();
 
 			$this->load_view('genres', $data);
 
@@ -63,7 +63,7 @@ class genre extends meta\controller {
 		$name = strip_tags($_POST['genre']);
 
 		// Make sure the name doesn't already exist. If it does, show an error.
-		$res = $this->model->add_genre($name);
+		$res = $this->data_model->add_genre($name);
 
 		if ($res === TRUE)
 		{
@@ -85,8 +85,8 @@ class genre extends meta\controller {
 	 */
 	public function detail($id)
 	{
-		$genre = $this->model->get_genre_by_id($id);
-		$categories = $this->model->get_categories($id);
+		$genre = $this->data_model->get_genre_by_id($id);
+		$categories = $this->data_model->get_categories($id);
 
 		$data = array(
 			'genre' => $genre,
@@ -107,7 +107,7 @@ class genre extends meta\controller {
 		$id = (int) $_POST['genre_id'];
 
 		// Make sure the name doesn't already exist. If it does, show an error.
-		$res = $this->model->add_category($name, $id);
+		$res = $this->data_model->add_category($name, $id);
 
 		if ($res === TRUE)
 		{

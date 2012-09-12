@@ -25,9 +25,9 @@ return array(
 			'path/to/css/file2.css'
 		),
 	*/
-	
+
 	'js' => array(
-		'kis-lite-dom-min.js',
+		'kis-lite-dom.js',
 		'tinyeditor.js',
 		'meta.js'
 	),

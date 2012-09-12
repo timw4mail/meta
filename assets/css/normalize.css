@@ -30,8 +30,6 @@ audio,
 canvas,
 video {
     display: inline-block;
-    *display: inline;
-    *zoom: 1;
 }
 
 /*
@@ -81,14 +79,6 @@ input,
 select,
 textarea {
     font-family: sans-serif;
-}
-
-/*
- * Addresses margins handled incorrectly in IE6/7
- */
-
-body {
-    margin: 0;
 }
 
 
@@ -193,15 +183,6 @@ mark {
 }
 
 /*
- * Addresses margins set differently in IE6/7
- */
-
-p,
-pre {
-    margin: 1em 0;
-}
-
-/*
  * Corrects font family set oddly in IE6, S4/5, Chrome
  * en.wikipedia.org/wiki/User:Davidgothberg/Test59
  */
@@ -211,7 +192,6 @@ code,
 kbd,
 samp {
     font-family: monospace, serif;
-    _font-family: 'courier new', monospace;
     font-size: 1em;
 }
 
@@ -226,18 +206,8 @@ pre {
 }
 
 /*
- * 1. Addresses CSS quotes not supported in IE6/7
- * 2. Addresses quote property not supported in S4
+ * Addresses quote property not supported in S4
  */
-
-/* 1 */
-
-q {
-    quotes: none;
-}
-
-/* 2 */
-
 q:before,
 q:after {
     content: '';
@@ -271,58 +241,15 @@ sub {
 
 
 /* =============================================================================
-   Lists
-   ========================================================================== */
-
-/*
- * Addresses margins set differently in IE6/7
- */
-
-dl,
-menu,
-ol,
-ul {
-    margin: 1em 0;
-}
-
-dd {
-    margin: 0 0 0 40px;
-}
-
-/*
- * Addresses paddings set differently in IE6/7
- */
-
-menu,
-ol,
-ul {
-    padding: 0 0 0 40px;
-}
-
-/*
- * Corrects list images handled incorrectly in IE7
- */
-
-nav ul,
-nav ol {
-    list-style: none;
-    list-style-image: none;
-}
-
-
-/* =============================================================================
    Embedded content
    ========================================================================== */
 
 /*
- * 1. Removes border when inside 'a' element in IE6/7/8/9, FF3
- * 2. Improves image quality when scaled in IE7
- *    code.flickr.com/blog/2008/11/12/on-ui-quality-the-little-things-client-side-image-resizing/
+ * Removes border when inside 'a' element in IE6/7/8/9, FF3
  */
 
 img {
-    border: 0; /* 1 */
-    -ms-interpolation-mode: bicubic; /* 2 */
+    border: 0;
 }
 
 /*
@@ -352,14 +279,6 @@ figure {
    ========================================================================== */
 
 /*
- * Corrects margin displayed oddly in IE6/7
- */
-
-form {
-    margin: 0;
-}
-
-/*
  * Define consistent border, margin, and padding
  */
 
@@ -372,14 +291,12 @@ fieldset {
 /*
  * 1. Corrects color not being inherited in IE6/7/8/9
  * 2. Corrects text not wrapping in FF3
- * 3. Corrects alignment displayed oddly in IE6/7
  */
 
 legend {
     border: 0; /* 1 */
     padding: 0;
     white-space: normal; /* 2 */
-    *margin-left: -7px; /* 3 */
 }
 
 /*
@@ -395,7 +312,6 @@ textarea {
     font-size: 100%; /* 1 */
     margin: 0; /* 2 */
     vertical-align: baseline; /* 3 */
-    *vertical-align: middle; /* 3 */
 }
 
 /*
@@ -420,7 +336,6 @@ input[type="reset"],
 input[type="submit"] {
     cursor: pointer; /* 1 */
     -webkit-appearance: button; /* 2 */
-    *overflow: visible;  /* 3 */
 }
 
 /*
@@ -435,16 +350,12 @@ input[disabled] {
 /*
  * 1. Addresses box sizing set to content-box in IE8/9
  * 2. Removes excess padding in IE8/9
- * 3. Removes excess padding in IE7
-      Known issue: excess padding remains in IE6
  */
 
 input[type="checkbox"],
 input[type="radio"] {
     box-sizing: border-box; /* 1 */
     padding: 0; /* 2 */
-    *height: 13px; /* 3 */
-    *width: 13px; /* 3 */
 }
 
 /*

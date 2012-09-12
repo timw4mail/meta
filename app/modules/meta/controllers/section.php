@@ -44,9 +44,9 @@ class section extends meta\controller {
 		}
 
 		$data = array(
-			'section' => $this->model->get_section_by_id($id),
-			'sdata' => $this->model->get_data($id),
-			'p' => $this->model->get_path_by_section($id),
+			'section' => $this->data_model->get_section_by_id($id),
+			'sdata' => $this->data_model->get_data($id),
+			'p' => $this->data_model->get_path_by_section($id),
 			'section_id' => $id
 		);
 
@@ -70,7 +70,7 @@ class section extends meta\controller {
 
 		$data = array_combine($keys, $vals);
 
-		$res = $this->model->add_data($section_id, $data);
+		$res = $this->data_model->add_data($section_id, $data);
 
 
 		($res)

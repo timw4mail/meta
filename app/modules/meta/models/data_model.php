@@ -20,7 +20,7 @@ namespace meta;
  *
  * @package meta
  */
-class model extends \miniMVC\Model {
+class data_model extends \miniMVC\Model {
 
 	/**
 	 * Reference to database connection
@@ -56,11 +56,21 @@ class model extends \miniMVC\Model {
 	 *
 	 * @param string $type
 	 * @param int $id
+	 * @return bool
 	 */
 	public function delete($type, $id)
 	{
-		$this->db->where('id', (int) $id)
-			->delete($type);
+		try
+		{
+			$this->db->where('id', (int) $id)
+				->delete($type);
+		}
+		catch (\PDOException $e)
+		{
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------------
@@ -87,6 +97,54 @@ class model extends \miniMVC\Model {
 			->update($type);
 	}
 
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Rename a genre/category/section
+	 *
+	 * @param string
+	 * @param int
+	 * @param string
+	 * @return bool
+	 */
+	public function update($type, $id, $name)
+	{
+		$query = $this->db->set($type, $name)
+			->where('id', (int) $id)
+			->update($type);
+
+		return ( ! empty($query)) ;
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Update the data
+	 *
+	 * @param int
+	 * @param string
+	 * @param string
+	 * @return bool
+	 */
+	public function update_data($data_id, $key, $val)
+	{
+		try{
+			// Save the data
+			$this->db->set('key', $key)
+				->set('value', $val)
+				->where('id', (int) $data_id)
+				->update('data');
+		}
+		catch(\PDOException $e)
+		{
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+
+	// --------------------------------------------------------------------------
+	// ! Adding data
 	// --------------------------------------------------------------------------
 
 	/**
@@ -216,41 +274,7 @@ class model extends \miniMVC\Model {
 		return TRUE;
 	}
 
-	// --------------------------------------------------------------------------
 
-	/**
-	 * Rename a genre/category/section
-	 *
-	 * @param string
-	 * @param int
-	 * @param string
-	 */
-	public function update($type, $id, $name)
-	{
-		$this->db->set($type, $name)
-			->where('id', (int) $id)
-			->update($type);
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
-	 * Update the data
-	 *
-	 * @param int
-	 * @param string
-	 * @param string
-	 */
-	public function update_data($data_id, $key, $val)
-	{
-
-		// Save the data
-		$this->db->set('key', $key)
-			->set('value', $val)
-			->where('id', (int) $data_id)
-			->update('data');
-
-	}
 
 	// --------------------------------------------------------------------------
 	// ! Data Retrieval
@@ -402,6 +426,26 @@ class model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
+	 *  Gets the data for the specified id
+	 *
+	 * @param int $id
+	 * @return array
+	 */
+	public function get_data_by_id($id)
+	{
+		$query = $this->db->select('key, value')
+			->from('data')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row;
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
 	 * Get the categories for the specified genre
 	 *
 	 * @param int
@@ -468,7 +512,7 @@ class model extends \miniMVC\Model {
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
 		{
-			$data[$row['id']] = array($row['key'] => str_replace("\n", "<br />", $row['value']));
+			$data[$row['id']] = array($row['key'] => $row['value']);
 		}
 
 		return $data;
@@ -507,7 +551,7 @@ class model extends \miniMVC\Model {
 
 			while($row = $d_query->fetch(\PDO::FETCH_ASSOC))
 			{
-				$d_array[$row['section_id']][$row['key']] = str_replace("\n", "<br />", $row['value']);
+				$d_array[$row['section_id']][$row['key']] = $row['value'];
 			}
 		}
 
@@ -594,11 +638,11 @@ class model extends \miniMVC\Model {
 
 		return $return;
 	}
-	
+
 	// --------------------------------------------------------------------------
 	// ! Miscellaneous methods
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Check if a valid type for editing
 	 *
@@ -610,10 +654,10 @@ class model extends \miniMVC\Model {
 		$valid = array(
 			'genre','category','section','data'
 		);
-		
-		return in_array(str_to_lower($str), $valid);
+
+		return in_array(strtolower($str), $valid);
 	}
 
 }
 
-// End of model.php
+// End of data_model.php

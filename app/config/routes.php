@@ -29,10 +29,12 @@
 
 // --------------------------------------------------------------------------
 
-return [
+return array(
 	// Default Paths
 	'default_controller'	=>	'welcome',
 	'default_module'		=>	'meta',
+	'delete'				=>	'meta/welcome/delete',
+	'update'				=>	'meta/welcome/update_item',
 	'genre'					=>	'meta/genre/index',
 	'genre/add'				=> 	'meta/genre/add',
 	'genre/add_category'	=>	'meta/genre/add_category',
@@ -41,6 +43,6 @@ return [
 	'section' 				=>	'meta/section/index',
 	'section/add_data'		=>	'meta/section/add_data',
 	'404_route'				=>	'',
-];
+);
 
 // End of routes.php

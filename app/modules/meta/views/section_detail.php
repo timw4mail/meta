@@ -26,12 +26,18 @@
 
 <?php if ( ! empty($sdata)): ?>
 
-	<?php foreach($sdata as $d): ?>
+	<?php foreach($sdata as $d_id => $d): ?>
 		<?php foreach($d as $k => $v): ?>
 		<?php $class = (strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
 		<dl class="<?= $class ?>">
 
-			<dt><?= $k ?></dt>
+			<dt>
+				<?= $k ?>
+				<span class="modify" id="data_<?=$d_id ?>">
+					<button class="edit">Edit</button>
+					<button class="delete">Delete</button>
+				</span>
+			</dt>
 			<dd><?= $v ?></dd>
 
 		</dl>

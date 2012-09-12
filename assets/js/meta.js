@@ -1,6 +1,62 @@
+/**
+ * Extends kis-js to allow centering of absolutely-positioned containers
+ */
+$_.ext('center', function (sel){
+	sel = this.el;
+
+	if (typeof sel === "undefined") return;
+
+	var contHeight,
+		contWidth,
+		xOffset,
+		inH,
+		inW,
+		top,
+		left;
+
+	contHeight = (typeof sel.outerHeight !== "undefined")
+		? sel.outerHeight
+		: sel.offsetHeight;
+
+	contWidth = (typeof sel.outerWidth !== "undefined")
+		? sel.outerWidth
+		: sel.offsetWidth;
+
+	xOffset = (typeof window.pageXOffset !== "undefined")
+		? window.pageXOffset
+		: document.documentElement.scrollLeft;
+
+	inH = (window.innerHeight)
+		? window.innerHeight
+		: document.documentElement.offsetHeight;
+
+	inW = (window.innerWidth)
+		? window.innerWidth
+		: document.documentElement.offsetWidth;
+
+	sel.style.position = "fixed";
+	top = (inH - contHeight) / 2;
+	left = (inW - contWidth) / 2 + xOffset;
+
+	if (sel.style.posTop)
+	{
+		sel.style.posTop = top + "px";
+	}
+	else
+	{
+		sel.style.top = top + "px";
+	}
+
+	sel.style.left = left + "px";
+});
+
 (function() {
 
     "use strict";
+
+    var TINY = window.TINY || {};
+    var $_ = window.$_ || {};
+    var ASSET_URL = APP_URL.replace('index.php/', '') + 'assets/';
 
 	// ! Show/hide forms based on use
 	$_("fieldset dl").dom.hide();
@@ -13,58 +69,199 @@
 	});
 
 	var meta = {};
+	window.meta = meta;
+
+	/**
+	 * Ajax callback for deletion of an item
+	 */
+	meta._delete = function(res){
+		if (res == 1)
+		{
+			$_.get(APP_URL+'message', {
+				type: 'success',
+				message: 'Item successfully deleted'
+			}, function(h) {
+				$_('body').dom.prepend(h);
+			});
+		}
+		else
+		{
+			$_.get(APP_URL+'message', {
+				type: 'error',
+				message: 'There was an error deleting that item'
+			}, function(h) {
+				$_('body').dom.prepend(h);
+			});
+		}
+	};
 
 	/**
 	 * Deletes a genre/category/section/data item
 	 * based on the current page context
 	 */
 	meta.delete_item = function(e) {
+		var item_id, id, type;
+
 		// Get the type/id of the item
-		var item_id = this.parentNode.id;
+		item_id = this.parentNode.id;
 		item_id = item_id.split('_');
 
-		var id = item_id[1];
-		var type = item_id[0];
+		id = item_id[1];
+		type = item_id[0];
 
 		// Confirm deletion
 		var confirm_string = "Are you sure you want to delete this "+type+"? Deleting this item will delete all items under it. There is no undo.";
 
 		var do_delete = confirm(confirm_string);
 
-		// Call the appropriate deletion method
+		var status = false;
 
+		if (do_delete)
+		{
+			// Call the appropriate deletion method
+			switch(type)
+			{
+				case "genre":
+				case "category":
+				case "section":
+				case "data":
+					$_.post(APP_URL+'delete', {'id':id, 'type':type}, meta._delete);
+				break;
 
-		// Show status message
+				default:
+				break;
+			}
+		}
+	};
+
+	/**
+	 * Gets the edit form and displays the overlay for the item
+	 * being edited
+	 */
+	meta.get_edit_form = function(e) {
+		var item_id, id, type;
+
+		// Get the type/id of the item
+		item_id = this.parentNode.id;
+		item_id = item_id.split('_');
+
+		id = item_id[1];
+		type = item_id[0];
+
+		$_('#overlay_bg, #overlay').dom.show();
+
+		//Get the form for the current item
+		$_.get(APP_URL+'edit', {'id':id, 'type':type}, function(res){
+			$_('#overlay').dom.html(res);
+
+			// Center the form
+			$_('#overlay').center();
+		});
+	};
+
+	/**
+	 * Submit the update form via javascript
+	 */
+	meta.update_item = function(e) {
+		var id, type, name, val, txt, data={};
+
+		console.log(arguments);
+
+		// Get the form values
+		data.id = $_.$('#id').value;
+		data.type = $_.$('#type').value;
+		data.name = $_.$('#name').value;
+		txt = document.getElementById('val');
+		if (txt)
+		{
+			data.val = txt.value;
+		}
+
+		// Submit the form
+		$_.post(APP_URL+'update', data, function(res) {
+
+			// Hide the overlay and form
+			$_('#overlay_bg').dom.css('display', '');
+			$_('#overlay').dom.html('');
+			$_('#overlay').dom.hide();
+
+			// Show the appropriate status message
+			if (res == 1)
+			{
+				$_.get(APP_URL+'message', {
+					type: 'success',
+					message: 'Item successfully updated.'
+				}, function(h) {
+					$_('body').dom.prepend(h);
+				});
+			}
+			else
+			{
+				$_.get(APP_URL+'message', {
+					type: 'error',
+					message: 'There was an error updating that item.'
+				}, function(h) {
+					$_('body').dom.prepend(h);
+				});
+			}
+
+		});
 	};
 
 	// -------------------------------------------------
 	// ! Event binding
 	// -------------------------------------------------
 
+
 	// Delete Button functionality
 	$_("button.delete").event.add('click', meta.delete_item);
 
-	// WYSIWYG
-	new TINY.editor.edit('editor',{
-		id:'input',
-		width:450,
-		height:175,
-		cssclass:'te',
-		controlclass:'tecontrol',
-		rowclass:'teheader',
-		dividerclass:'tedivider',
-		controls:['bold','italic','underline','|','subscript','superscript','|',
-				  'orderedlist','unorderedlist','|','leftalign',
-				  'centeralign','rightalign','|','unformat','|','undo','redo','n',
-				  'image','hr','link','unlink','|','cut','copy','paste','print'],
-		footer:true,
-		//fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
-		xhtml:true,
-		cssfile:'//github.timshomepage.net/meta/assets/css.php/g/css',
-		bodyid:'editor',
-		footerclass:'tefooter',
-		toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
-		resize:{cssclass:'resize'}
+	// Edit Button functionality
+	$_("button.edit").event.add('click', meta.get_edit_form);
+
+	// Overlay close
+	$_("#overlay_bg").event.add('click', function(e) {
+		$_('#overlay_bg').dom.css('display', '');
+		$_('#overlay').dom.html('');
+		$_('#overlay').dom.hide();
 	});
+
+	// Edit form submission
+	$_.event.live('#edit_form', 'submit', meta.update_item);
+
+	// WYSIWYG
+	if ($_.$('textarea').length > 0)
+	{
+		TINY.init({
+			id:'input',
+			width:450,
+			height:175,
+			cssclass:'te',
+			controlclass:'tecontrol',
+			rowclass:'teheader',
+			dividerclass:'tedivider',
+			controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
+				'orderedlist','unorderedlist','|','leftalign',
+				'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
+				'image','hr','link','unlink','|'],
+			footer:true,
+			fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+			xhtml:true,
+			cssfile:ASSET_URL+'css.php/g/css',
+			bodyid:'editor',
+			footerclass:'tefooter',
+			toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
+			resize:{cssclass:'resize'}
+		});
+	}
+
+	// Make sure the WYSIWYG submits the text
+	// This just copies the text from the WYSIWYG into the textbox
+	if (window.editor)
+	{
+		document.querySelector('form').onsubmit = function(e) {
+			window.editor.toggle();
+		};
+	}
 
 }());

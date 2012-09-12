@@ -230,7 +230,7 @@ function controller_methods($controller)
  * @param string $segment
  * @return string
  */
-function site_url($segment)
+function site_url($segment='')
 {
 	return $url = BASE_URL . URL_INDEX_FILE . $segment;
 }
@@ -461,7 +461,7 @@ function route()
 	}
 
 	run($module, $controller, $func);
-	
+
 	return;
 }
 
@@ -482,19 +482,19 @@ function run($module, $controller, $func, $args = array())
 	if (is_file($path))
 	{
 		require_once($path);
-		
+
 		// Get the list of valid methods for that controller
 		$methods = controller_methods($controller);
 
 		if (in_array($func, $methods))
 		{
-		
+
 			// Define the name of the current module for file loading
 			if ( ! defined('MM_MOD'))
 			{
 				define('MM_MOD', $module);
 			}
-			
+
 			if (class_exists($controller))
 			{
 				$class = new $controller();
@@ -503,7 +503,7 @@ function run($module, $controller, $func, $args = array())
 			//show_error(to_string(get_declared_classes()));
 			return call_user_func_array(array($class, $func), $args);
 		}
-		
+
 		show_404();
 	}
 

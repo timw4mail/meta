@@ -44,9 +44,9 @@ class category extends meta\controller {
 		}
 
 		$data = array(
-			'category' => $this->model->get_category_by_id($id),
-			'sections' => $this->model->get_category_outline_data($id),
-			'genre' => $this->model->get_genre_by_category($id),
+			'category' => $this->data_model->get_category_by_id($id),
+			'sections' => $this->data_model->get_category_outline_data($id),
+			'genre' => $this->data_model->get_genre_by_category($id),
 			'category_id' => $id
 		);
 
@@ -63,7 +63,7 @@ class category extends meta\controller {
 		$id = (int) $_POST['category_id'];
 
 		// Make sure the name doesn't already exist. If it does, show an error.
-		$res = $this->model->add_section($name, $id);
+		$res = $this->data_model->add_section($name, $id);
 
 		if ($res === TRUE)
 		{

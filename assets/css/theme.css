@@ -1,6 +1,10 @@
 /* ---------------- */
 /* ! General Styles */
 /* ---------------- */
+* {
+	vertical-align:middle;
+}
+
 html, body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight:200;
@@ -11,10 +15,12 @@ html, body {
 
 button {
 	color:#312;
-	padding:5px;
-	border:1px solid #555;
+	padding:0.25em;
+	border:1px solid #888;
 	border-radius:5px;
-	box-shadow:1px 1px #a98;
+	box-shadow:1px 1px #aaa;
+	min-width:65px;
+	vertical-align:middle;
 }
 
 a {
@@ -39,10 +45,25 @@ h1,h2 {
 	width:25%;
 }
 
-/* Hide forms by default */
-fieldset dl {
-	display:none;
+ul {
+	/*padding:auto;*/
+	padding-left:2.5em;
+	margin:0;
 }
+
+li {
+	padding:0.5em 0;
+}
+
+dd {
+	/*margin:auto;*/
+	margin-left:0.5em;
+}
+
+/* Hide forms by default */
+/*fieldset dl {
+	display:none;
+}*/
 
 /* form styles */
 form dt, form dd {
@@ -68,32 +89,62 @@ form dd {
 	position:absolute;
 	display:none;
 	margin-left:1em;
+	vertical-align:middle;
 }
 
-li:hover .modify, dt:hover .modify {
+li:hover > .modify, dt:hover > .modify {
 	display:inline-block;
+	vertical-align:middle;
 }
 
 button.save {
 	background:#797;
-	color:#eee;
+	background:-o-linear-gradient(#797, #595);
+	background:-moz-linear-gradient(#797, #595);
+	background:-webkit-linear-gradient(#797, #595);
+	background:linear-gradient(#797, #595);
+	color:#fff;
 }
 
 button.save:hover {
 	background:#595;
+	background:-o-linear-gradient(#595, #797);
+	background:-moz-linear-gradient(#595, #797);
+	background:-webkit-linear-gradient(#595, #797);
+	background:linear-gradient(#595, #797);
 }
 
 button.edit {
+	background:#fff;
+	background:-o-linear-gradient(#fff, #ddd);
+	background:-moz-linear-gradient(#fff, #ddd);
+	background:-webkit-linear-gradient(#fff, #ddd);
+	background:linear-gradient(#fff, #ddd);
+}
 
+button.edit:hover {
+	background:#ddd;
+	background:-o-linear-gradient(#ddd, #fff);
+	background:-moz-linear-gradient(#ddd, #fff);
+	background:-webkit-linear-gradient(#ddd, #fff);
+	background:linear-gradient(#ddd, #fff);
 }
 
 button.delete {
 	background:#977;
-	color:#eee;
+	background:-o-linear-gradient(#977, #955);
+	background:-moz-linear-gradient(#977, #955);
+	background:-webkit-linear-gradient(#977, #955);
+	background:linear-gradient(#977, #955);
+	color:#fff;
 }
 
 button.delete:hover {
 	background:#955;
+	background:-o-linear-gradient(#955, #977);
+	background:-moz-linear-gradient(#955, #977);
+	background:-webkit-linear-gradient(#955, #977);
+	background:linear-gradient(#955, #977);
 }
 
 /* ! Outline styles */
@@ -105,6 +156,14 @@ button.delete:hover {
 .list dl {
 	margin-left:0.5em;
 }
+
+dl.outline {
+	border-bottom:1px dotted #555;
+}
+	dl.outline dt {
+		display:list-item;
+		list-style:square inside;
+	}
 
 .list li {
 	list-style:none;
@@ -144,6 +203,34 @@ dl.pair dd {
 	width:64%;
 	margin-left:0;
 	padding-left:0;
+}
+
+/* ! Form overlay styles */
+#overlay_bg {
+	background:#777;
+	background:rgba(105,105,220,0.85);
+	position:fixed;
+	display:none;
+	width:900%;
+	height:900%;
+	z-index:5;
+	left:0;
+	top:0;
+}
+
+#overlay {
+	position:absolute;
+	background:#ddd;
+	/*background:rgba(255,255,255,0.85);
+	top:25%;
+	left:25%;
+	width:600px;
+	height:auto;*/
+	min-width:700px;
+	padding:0.5em;
+	border-radius:5px;
+	display:none;
+	z-index:25;
 }
 
 

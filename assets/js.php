@@ -49,7 +49,7 @@ function get_files()
 	foreach ($groups[$_GET['g']] as $file)
 	{
 		$new_file = realpath($js_root.$file);
-		$js .= file_get_contents($new_file);
+		$js .= file_get_contents($new_file)."\n";
 	}
 
 	return $js;
@@ -73,10 +73,10 @@ function google_min($new_file)
 	//curl_setopt($ch, CURLOPT_HEADER, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, 'output_info=compiled_code&output_format=text&compilation_level=SIMPLE_OPTIMIZATIONS&js_code=' . urlencode($new_file));
 	$output = curl_exec($ch);
-	
+
 	//die(curl_getinfo($ch, CURLINFO_HTTP_CODE));
 	curl_close($ch);
-	
+
 	return $output;
 }
 
