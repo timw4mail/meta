@@ -128,7 +128,7 @@ define('DEFAULT_JS_GROUP', "js");
 |--------------------------------------------------------------------------
 |
 | Whether or not to show a backtrace for php errors
-| 
+|
 | Must be defined as TRUE for the backtrace to display.
 |
 */
@@ -142,6 +142,6 @@ define('SHOW_DEBUG_BACKTRACE', TRUE);
 | Whether or not use gzip compression on page output
 |
 */
-define('GZ_COMPRESS', FALSE);
+define('GZ_COMPRESS', TRUE);
 
 // End of config.php

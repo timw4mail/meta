@@ -1,6 +1,6 @@
 <h2>Outline</h2>
 
-<dl>
+<dl class="outline">
 	<dt>Genre</dt>
 	<dd>
 		<ul>

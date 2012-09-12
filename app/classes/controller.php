@@ -58,7 +58,7 @@ abstract class Controller extends \miniMVC\Controller {
 	 */
 	public function __destruct()
 	{
-		$this->page->set_foot_js_group('js', TRUE);
+		$this->page->set_foot_js_group('js');
 		$this->page->build_footer();
 	}
 

@@ -23,6 +23,37 @@
 		</dl>
 	</fieldset>
 </form>
+<script src="<?= SCRIPT_PATH.'wysiwyg'; ?>"></script>
+<script type="text/javascript">
+// WYSIWYG
+new TINY.editor.edit('editor',
+{
+	id:'input',
+	width:450,
+	height:175,
+	cssclass:'te',
+	controlclass:'tecontrol',
+	rowclass:'teheader',
+	dividerclass:'tedivider',
+	controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
+		'orderedlist','unorderedlist','|','leftalign',
+		'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
+		'image','hr','link','unlink','|'],
+	footer:true,
+	fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+	xhtml:true,
+	cssfile:ASSET_URL+'css.php/g/css',
+	bodyid:'editor',
+	footerclass:'tefooter',
+	toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
+	resize:{cssclass:'resize'}
+});
+// Make sure the WYSIWYG submits the text
+// This just copies the text from the WYSIWYG into the textbox
+document.querySelector('form').onsubmit = function(e) {
+	window.editor.toggle();
+};
+</script>
 
 <?php if ( ! empty($sdata)): ?>
 

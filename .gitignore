@@ -1,2 +1,3 @@
 sys/*.sqlite
 docs/*
+assets/js/cache/*

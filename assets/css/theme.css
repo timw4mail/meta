@@ -23,8 +23,9 @@ button {
 	vertical-align:middle;
 }
 
-a {
+a, a:visited {
 	text-decoration:none;
+	color:#558BFF;
 }
 
 a:hover {
@@ -61,9 +62,13 @@ dd {
 }
 
 /* Hide forms by default */
-/*fieldset dl {
+fieldset dl {
 	display:none;
-}*/
+}
+
+#edit_form dl {
+	display:block;
+}
 
 /* form styles */
 form dt, form dd {
@@ -78,7 +83,7 @@ form dt {
 }
 
 form dd {
-	width:59%;
+	width:58%;
 	text-align:left;
 	margin-left:0;
 	padding-left:.25em;
@@ -131,20 +136,20 @@ button.edit:hover {
 }
 
 button.delete {
-	background:#977;
-	background:-o-linear-gradient(#977, #955);
-	background:-moz-linear-gradient(#977, #955);
-	background:-webkit-linear-gradient(#977, #955);
-	background:linear-gradient(#977, #955);
+	background:#f55;
+	background:-o-linear-gradient(#f55, #955);
+	background:-moz-linear-gradient(#f55, #955);
+	background:-webkit-linear-gradient(#f55, #955);
+	background:linear-gradient(#f55, #955);
 	color:#fff;
 }
 
 button.delete:hover {
 	background:#955;
-	background:-o-linear-gradient(#955, #977);
-	background:-moz-linear-gradient(#955, #977);
-	background:-webkit-linear-gradient(#955, #977);
-	background:linear-gradient(#955, #977);
+	background:-o-linear-gradient(#955, #f55);
+	background:-moz-linear-gradient(#955, #f55);
+	background:-webkit-linear-gradient(#955, #f55);
+	background:linear-gradient(#955, #f55);
 }
 
 /* ! Outline styles */
@@ -157,9 +162,15 @@ button.delete:hover {
 	margin-left:0.5em;
 }
 
-dl.outline {
+dl.outline dd {
 	border-bottom:1px dotted #555;
+	margin-bottom:0.5em;
 }
+
+dl.outline dd:last-child {
+	border:0;
+}
+
 	dl.outline dt {
 		display:list-item;
 		list-style:square inside;

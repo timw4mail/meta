@@ -56,7 +56,6 @@ $_.ext('center', function (sel){
 
     var TINY = window.TINY || {};
     var $_ = window.$_ || {};
-    var ASSET_URL = APP_URL.replace('index.php/', '') + 'assets/';
 
 	// ! Show/hide forms based on use
 	$_("fieldset dl").dom.hide();
@@ -77,12 +76,8 @@ $_.ext('center', function (sel){
 	meta._delete = function(res){
 		if (res == 1)
 		{
-			$_.get(APP_URL+'message', {
-				type: 'success',
-				message: 'Item successfully deleted'
-			}, function(h) {
-				$_('body').dom.prepend(h);
-			});
+			// Reload the page
+			window.location = window.location;
 		}
 		else
 		{
@@ -156,6 +151,33 @@ $_.ext('center', function (sel){
 
 			// Center the form
 			$_('#overlay').center();
+
+			if (type == 'data')
+			{
+				// WYSIWYG
+				new TINY.editor.edit('edit_wysiwyg',
+				{
+					id:'val',
+					width:450,
+					height:175,
+					cssclass:'te',
+					controlclass:'tecontrol',
+					rowclass:'teheader',
+					dividerclass:'tedivider',
+					controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
+						'orderedlist','unorderedlist','|','leftalign',
+						'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
+						'image','hr','link','unlink','|'],
+					footer:true,
+					fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+					xhtml:true,
+					cssfile:ASSET_URL+'css.php/g/css',
+					bodyid:'editor',
+					footerclass:'tefooter',
+					toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
+					resize:{cssclass:'resize'}
+				});
+			}
 		});
 	};
 
@@ -165,7 +187,11 @@ $_.ext('center', function (sel){
 	meta.update_item = function(e) {
 		var id, type, name, val, txt, data={};
 
-		console.log(arguments);
+		// Update textarea from WYSIWYG
+		if (window.edit_wysiwyg)
+		{
+			window.edit_wysiwyg.toggle();
+		}
 
 		// Get the form values
 		data.id = $_.$('#id').value;
@@ -188,12 +214,8 @@ $_.ext('center', function (sel){
 			// Show the appropriate status message
 			if (res == 1)
 			{
-				$_.get(APP_URL+'message', {
-					type: 'success',
-					message: 'Item successfully updated.'
-				}, function(h) {
-					$_('body').dom.prepend(h);
-				});
+				// Reload the page
+				window.location = window.location;
 			}
 			else
 			{
@@ -212,7 +234,6 @@ $_.ext('center', function (sel){
 	// ! Event binding
 	// -------------------------------------------------
 
-
 	// Delete Button functionality
 	$_("button.delete").event.add('click', meta.delete_item);
 
@@ -228,40 +249,5 @@ $_.ext('center', function (sel){
 
 	// Edit form submission
 	$_.event.live('#edit_form', 'submit', meta.update_item);
-
-	// WYSIWYG
-	if ($_.$('textarea').length > 0)
-	{
-		TINY.init({
-			id:'input',
-			width:450,
-			height:175,
-			cssclass:'te',
-			controlclass:'tecontrol',
-			rowclass:'teheader',
-			dividerclass:'tedivider',
-			controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
-				'orderedlist','unorderedlist','|','leftalign',
-				'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
-				'image','hr','link','unlink','|'],
-			footer:true,
-			fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
-			xhtml:true,
-			cssfile:ASSET_URL+'css.php/g/css',
-			bodyid:'editor',
-			footerclass:'tefooter',
-			toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
-			resize:{cssclass:'resize'}
-		});
-	}
-
-	// Make sure the WYSIWYG submits the text
-	// This just copies the text from the WYSIWYG into the textbox
-	if (window.editor)
-	{
-		document.querySelector('form').onsubmit = function(e) {
-			window.editor.toggle();
-		};
-	}
 
 }());

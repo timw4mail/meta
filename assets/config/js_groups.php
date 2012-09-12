@@ -28,7 +28,9 @@ return array(
 
 	'js' => array(
 		'kis-lite-dom.js',
-		'tinyeditor.js',
 		'meta.js'
+	),
+	'wysiwyg' => array(
+		'tinyeditor.js',
 	),
 );
