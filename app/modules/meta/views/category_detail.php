@@ -1,10 +1,8 @@
-<h2><?= $category ?></h2>
-
 <p class="breadcrumbs">
 <a href="<?= miniMVC\site_url('') ?>">Genres</a> > <a href="<?= miniMVC\site_url('genres/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
 </p>
 
-<form action="<?= miniMVC\site_url("category/add_section") ?>" method="post">
+<form class="add" action="<?= miniMVC\site_url("category/add_section") ?>" method="post">
 	<fieldset>
 		<legend>Add Section</legend>
 		<dl>
@@ -17,7 +15,8 @@
 		</dl>
 	</fieldset>
 </form>
-
+<script src="<?= SCRIPT_PATH.'wysiwyg'; ?>"></script>
+<h3>Sections</h3>
 <ul class="list">
 <?php foreach($sections as $id => $section): ?>
 	<?php if (is_array($section)) list($section, $d) = $section ?>
@@ -30,16 +29,18 @@
 
 		<?php if ( ! empty($d)): ?>
 
-		<?php foreach($d as $k => $v): ?>
+		<?php foreach($d as $did => $dd): ?>
+		<?php foreach($dd as $k => $v): ?>
 		<?php $class = (strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
 		<dl class="<?= $class ?>">
 
-			<dt>
-				<?= $k ?>
-			</dt>
-			<dd><?= $v ?></dd>
+			<dt><?= $k ?></dt>
+			<dd>
+				<?= $v ?>
+			</dd>
 
 		</dl>
+		<?php endforeach ?>
 		<?php endforeach ?>
 
 		<?php endif ?>

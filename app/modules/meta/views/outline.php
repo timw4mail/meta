@@ -1,4 +1,4 @@
-<h2>Outline</h2>
+<p class="breadcrumbs">Outline</p>
 
 <dl class="outline">
 	<dt>Genre</dt>

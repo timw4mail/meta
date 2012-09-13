@@ -30,9 +30,9 @@
     background-position: 30px 0;
 }
 .tefooter {
-    height: 32px;
     border-top: 1px solid #bbb;
     background: #f5f5f5;
+    overflow:hidden;
 }
 .toggle {
     float: left;

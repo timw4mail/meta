@@ -8,45 +8,22 @@ $_.ext('center', function (sel){
 
 	var contHeight,
 		contWidth,
-		xOffset,
 		inH,
 		inW,
 		top,
 		left;
 
-	contHeight = (typeof sel.outerHeight !== "undefined")
-		? sel.outerHeight
-		: sel.offsetHeight;
+	contHeight = sel.offsetHeight;
+	contWidth = sel.offsetWidth;
 
-	contWidth = (typeof sel.outerWidth !== "undefined")
-		? sel.outerWidth
-		: sel.offsetWidth;
-
-	xOffset = (typeof window.pageXOffset !== "undefined")
-		? window.pageXOffset
-		: document.documentElement.scrollLeft;
-
-	inH = (window.innerHeight)
-		? window.innerHeight
-		: document.documentElement.offsetHeight;
-
-	inW = (window.innerWidth)
-		? window.innerWidth
-		: document.documentElement.offsetWidth;
+	inH = window.innerHeight;
+	inW = window.innerWidth;
 
 	sel.style.position = "fixed";
 	top = (inH - contHeight) / 2;
-	left = (inW - contWidth) / 2 + xOffset;
+	left = (inW - contWidth) / 2;
 
-	if (sel.style.posTop)
-	{
-		sel.style.posTop = top + "px";
-	}
-	else
-	{
-		sel.style.top = top + "px";
-	}
-
+	sel.style.top = top + "px";
 	sel.style.left = left + "px";
 });
 
@@ -172,6 +149,9 @@ $_.ext('center', function (sel){
 					toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
 					resize:{cssclass:'resize'}
 				});
+
+				//Do it again, so it's correct this time!
+				$_('#overlay').center();
 			}
 		});
 	};

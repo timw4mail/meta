@@ -1,10 +1,8 @@
-<h2><?= $genre ?></h2>
-
 <p class="breadcrumbs">
 <a href="<?= miniMVC\site_url('') ?>">Genres</a> > <?= $genre ?>
 </p>
 
-<form action="<?= miniMVC\site_url("genre/add_category") ?>" method="post">
+<form class="add" action="<?= miniMVC\site_url("genre/add_category") ?>" method="post">
 	<fieldset>
 		<legend>Add Category</legend>
 		<dl>
@@ -17,15 +15,27 @@
 		</dl>
 	</fieldset>
 </form>
-
-<ul>
+<h3>Categories</h3>
+<ul class="list">
 <?php foreach($categories as $id => $cat): ?>
 	<li>
-		<a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a>
+		<a href="<?= miniMVC\site_url("category/{$id}") ?>"><?= $cat ?></a>
 		<span class="modify" id="category_<?=$id ?>">
 			<button class="edit">Edit</button>
 			<button class="delete">Delete</button>
 		</span>
+		<ul>
+		<?php /* $sarray = $this->data_model->get_sections($id); ?>
+		<?php foreach($sarray as $sid => $section): ?>
+			<li>
+				<a href="<?= miniMVC\site_url("section/{$sid}") ?>"><?= $section ?></a>
+				<span class="modify" id="section_<?=$id ?>">
+					<button class="edit">Edit</button>
+					<button class="delete">Delete</button>
+				</span>
+			</li>
+		<?php endforeach */ ?>
+		</ul>
 	</li>
 <?php endforeach ?>
 </ul>

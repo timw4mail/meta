@@ -1,5 +1,4 @@
-<div id="overlay_bg"></div>
-<div id="overlay"></div>
+<?php $this->load_view('theme_footer'); ?>
 <?php if ($foot_js != ""): ?>
 	<?= $foot_js ?>
 <?php endif ?>

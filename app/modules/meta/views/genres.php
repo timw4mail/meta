@@ -1,6 +1,6 @@
-<h2>Genres</h2>
+<p class="breadcrumbs">Genres</p>
 
-<form action="<?= miniMVC\site_url("genre/add") ?>" method="post">
+<form class="add" action="<?= miniMVC\site_url("genre/add") ?>" method="post">
 	<fieldset>
 		<legend>Add Genre</legend>
 		<dl>
@@ -14,7 +14,8 @@
 	</fieldset>
 </form>
 
-<ul>
+<h3>Genres</h3>
+<ul class="list">
 <?php foreach($genres as $id => $name): ?>
 	<li>
 		<a href="<?= miniMVC\site_url("genre/{$id}") ?>">

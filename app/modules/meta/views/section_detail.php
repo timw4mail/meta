@@ -1,5 +1,3 @@
-<h2><?= $section ?></h2>
-
 <p class="breadcrumbs">
 	<a href="<?= miniMVC\site_url('') ?>">Genres</a> >
 	<a href="<?= miniMVC\site_url('genres/detail/'.$p['genre_id']) ?>"><?= $p['genre'] ?></a> >
@@ -7,7 +5,7 @@
 	<?= $section ?>
 </p>
 
-<form action="<?= miniMVC\site_url("section/add_data") ?>" method="post">
+<form class="add" action="<?= miniMVC\site_url("section/add_data") ?>" method="post">
 	<fieldset>
 		<legend>Add Data</legend>
 		<dl>
@@ -54,7 +52,7 @@ document.querySelector('form').onsubmit = function(e) {
 	window.editor.toggle();
 };
 </script>
-
+<h3>Data</h3>
 <?php if ( ! empty($sdata)): ?>
 
 	<?php foreach($sdata as $d_id => $d): ?>

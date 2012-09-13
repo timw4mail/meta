@@ -281,27 +281,6 @@ class data_model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
-	 * Get the id of the last item of the type
-	 *
-	 * @param string $type
-	 * @return int
-	 */
-	public function get_last_id($type)
-	{
-		$query = $this->db->select('id')
-			->from($type)
-			->order_by('id', 'DESC')
-			->limit(1)
-			->get();
-
-		$r = $query->fetch(\PDO::FETCH_ASSOC);
-
-		return $r['id'];
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
 	 * Get breadcrumb data for section
 	 *
 	 * @param section_id
@@ -365,26 +344,6 @@ class data_model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
-	 * Gets the name of the category from its id
-	 *
-	 * @param int
-	 * @return string
-	 */
-	public function get_category_by_id($id)
-	{
-		$query = $this->db->select('category')
-			->from('category')
-			->where('id', (int) $id)
-			->get();
-
-		$row = $query->fetch(\PDO::FETCH_ASSOC);
-
-		return $row['category'];
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
 	 * Get the genre name by category id
 	 *
 	 * @param int
@@ -396,46 +355,6 @@ class data_model extends \miniMVC\Model {
 			->from('genre g')
 			->join('category c', 'c.genre_id=g.id', 'inner')
 			->where('c.id', (int)$cat_id)
-			->get();
-
-		$row = $query->fetch(\PDO::FETCH_ASSOC);
-
-		return $row;
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
-	 * Gets the name of the section from its id
-	 *
-	 * @param int
-	 * @return string
-	 */
-	public function get_section_by_id($id)
-	{
-		$query = $this->db->select('section')
-			->from('section')
-			->where('id', (int) $id)
-			->get();
-
-		$row = $query->fetch(\PDO::FETCH_ASSOC);
-
-		return $row['section'];
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
-	 *  Gets the data for the specified id
-	 *
-	 * @param int $id
-	 * @return array
-	 */
-	public function get_data_by_id($id)
-	{
-		$query = $this->db->select('key, value')
-			->from('data')
-			->where('id', (int) $id)
 			->get();
 
 		$row = $query->fetch(\PDO::FETCH_ASSOC);
@@ -471,6 +390,26 @@ class data_model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
+	 * Gets the name of the category from its id
+	 *
+	 * @param int
+	 * @return string
+	 */
+	public function get_category_by_id($id)
+	{
+		$query = $this->db->select('category')
+			->from('category')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row['category'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
 	 * Get the sections for the specified category id
 	 *
 	 * @param int
@@ -496,7 +435,27 @@ class data_model extends \miniMVC\Model {
 	// --------------------------------------------------------------------------
 
 	/**
-	 * Get the data fro the section
+	 * Gets the name of the section from its id
+	 *
+	 * @param int
+	 * @return string
+	 */
+	public function get_section_by_id($id)
+	{
+		$query = $this->db->select('section')
+			->from('section')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row['section'];
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the data from the section
 	 *
 	 * @param int
 	 * @return array
@@ -516,6 +475,26 @@ class data_model extends \miniMVC\Model {
 		}
 
 		return $data;
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 *  Gets the data for the specified id
+	 *
+	 * @param int $id
+	 * @return array
+	 */
+	public function get_data_by_id($id)
+	{
+		$query = $this->db->select('key, value')
+			->from('data')
+			->where('id', (int) $id)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $row;
 	}
 
 	// --------------------------------------------------------------------------
@@ -551,7 +530,7 @@ class data_model extends \miniMVC\Model {
 
 			while($row = $d_query->fetch(\PDO::FETCH_ASSOC))
 			{
-				$d_array[$row['section_id']][$row['key']] = $row['value'];
+				$d_array[$row['section_id']][$row['id']] = array($row['key'] => $row['value']);
 			}
 		}
 
@@ -657,6 +636,29 @@ class data_model extends \miniMVC\Model {
 
 		return in_array(strtolower($str), $valid);
 	}
+
+	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the id of the last item of the type
+	 *
+	 * @param string $type
+	 * @return int
+	 */
+	public function get_last_id($type)
+	{
+		$query = $this->db->select('id')
+			->from($type)
+			->order_by('id', 'DESC')
+			->limit(1)
+			->get();
+
+		$r = $query->fetch(\PDO::FETCH_ASSOC);
+
+		return $r['id'];
+	}
+
+	// --------------------------------------------------------------------------
 
 }
 

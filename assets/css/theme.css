@@ -2,15 +2,19 @@
 /* ! General Styles */
 /* ---------------- */
 * {
-	vertical-align:middle;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 html, body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
 	font-weight:200;
+	color:#312;
+}
+
+body {
+	position:relative;
 	max-width:800px;
 	margin: 0 auto;
-	color:#312;
 }
 
 button {
@@ -43,8 +47,9 @@ legend:hover {
 
 h1,h2 {
 	display:inline-block;
+	margin-right:0.5em;
 	vertical-align:middle;
-	width:25%;
+	/*width:25%;*/
 }
 
 ul {
@@ -52,17 +57,19 @@ ul {
 	margin:0;
 }
 
-li {
+ul > li {
 	padding:0.5em 0;
+}
+
+dt, dd {
+	padding:0.25em 0;
 }
 
 dd {
 	margin-left:0.5em;
 }
 
-fieldset {
-	border-radius:5px;
-}
+
 
 /* Hide forms by default */
 fieldset dl {
@@ -74,6 +81,14 @@ fieldset dl {
 }
 
 /* form styles */
+fieldset {
+	border-radius:5px;
+}
+
+form.add {
+	margin-bottom:0.75em;
+}
+
 form dt, form dd {
 	display:inline-block;
 	vertical-align:top;
@@ -100,10 +115,16 @@ form dd {
 	vertical-align:middle;
 }
 
-li:hover > .modify, dt:hover > .modify {
-	display:inline-block;
-	vertical-align:middle;
+li li, li dt {
+	position:relative;
+	z-index:3;
 }
+
+li:hover > .modify, dt:hover > .modify, dd:hover > .modify {
+	display:inline-block;
+	vertical-align:top;
+}
+
 
 button.save {
 	background:#7c7;
@@ -176,6 +197,12 @@ button.delete:hover {
 	margin-left:0.5em;
 }
 
+#outline {
+	position:absolute;
+	margin:21px 0;
+	right:0;
+}
+
 dl.outline dd {
 	border-bottom:1px dotted #555;
 	margin-bottom:0.5em;
@@ -192,6 +219,7 @@ dl.outline dd:last-child {
 
 .list li {
 	list-style:none;
+
 }
 
 li h4 {
@@ -217,6 +245,7 @@ dl.multiline dd {
 
 dl.pair dt, dl.pair dd {
 	display:inline-block;
+	vertical-align:middle;
 	padding:0.25em 0;
 }
 
@@ -246,12 +275,25 @@ dl.pair dd {
 #overlay {
 	position:absolute;
 	background:#ddd;
-	min-width:700px;
+	width:650px;
 	padding:0.5em;
 	border-radius:5px;
 	display:none;
 	z-index:25;
 }
+
+	#edit_form {
+		position:relative;
+		overflow:hidden;
+	}
+
+		#edit_form dt {
+			width:20%;
+		}
+
+		#edit_form dd {
+			width:78%;
+		}
 
 
 
