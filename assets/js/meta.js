@@ -71,26 +71,6 @@ $_.ext('center', function (sel){
 	window.meta = meta;
 
 	/**
-	 * Ajax callback for deletion of an item
-	 */
-	meta._delete = function(res){
-		if (res == 1)
-		{
-			// Reload the page
-			window.location = window.location;
-		}
-		else
-		{
-			$_.get(APP_URL+'message', {
-				type: 'error',
-				message: 'There was an error deleting that item'
-			}, function(h) {
-				$_('body').dom.prepend(h);
-			});
-		}
-	};
-
-	/**
 	 * Deletes a genre/category/section/data item
 	 * based on the current page context
 	 */
@@ -120,7 +100,22 @@ $_.ext('center', function (sel){
 				case "category":
 				case "section":
 				case "data":
-					$_.post(APP_URL+'delete', {'id':id, 'type':type}, meta._delete);
+					$_.post(APP_URL+'delete', {'id':id, 'type':type}, function(res){
+						if (res == 1)
+						{
+							// Reload the page
+							window.location = window.location;
+						}
+						else
+						{
+							$_.get(APP_URL+'message', {
+								type: 'error',
+								message: 'There was an error deleting that item'
+							}, function(h) {
+								$_('body').dom.prepend(h);
+							});
+						}
+					});
 				break;
 
 				default:

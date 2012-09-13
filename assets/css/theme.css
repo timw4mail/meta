@@ -14,6 +14,7 @@ html, body {
 }
 
 button {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color:#312;
 	padding:0.25em;
 	border:1px solid #888;
@@ -25,7 +26,7 @@ button {
 
 a, a:visited {
 	text-decoration:none;
-	color:#558BFF;
+	color:#1147BB;
 }
 
 a:hover {
@@ -47,7 +48,6 @@ h1,h2 {
 }
 
 ul {
-	/*padding:auto;*/
 	padding-left:2.5em;
 	margin:0;
 }
@@ -57,8 +57,11 @@ li {
 }
 
 dd {
-	/*margin:auto;*/
 	margin-left:0.5em;
+}
+
+fieldset {
+	border-radius:5px;
 }
 
 /* Hide forms by default */
@@ -103,25 +106,30 @@ li:hover > .modify, dt:hover > .modify {
 }
 
 button.save {
-	background:#797;
-	background:-o-linear-gradient(#797, #595);
-	background:-moz-linear-gradient(#797, #595);
-	background:-webkit-linear-gradient(#797, #595);
-	background:linear-gradient(#797, #595);
+	background:#7c7;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#77cc77', EndColorStr='#559955')"; /* IE9 */
+	background:-o-linear-gradient(#7c7, #595);
+	background:-ms-linear-gradient(#7c7, #595);
+	background:-moz-linear-gradient(#7c7, #595);
+	background:-webkit-linear-gradient(#7c7, #595);
+	background:linear-gradient(#7c7, #595);
 	color:#fff;
 }
 
 button.save:hover {
 	background:#595;
-	background:-o-linear-gradient(#595, #797);
-	background:-moz-linear-gradient(#595, #797);
-	background:-webkit-linear-gradient(#595, #797);
-	background:linear-gradient(#595, #797);
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#559955', EndColorStr='#77cc77')"; /* IE9 */
+	background:-o-linear-gradient(#595, #7c7);
+	background:-moz-linear-gradient(#595, #7c7);
+	background:-webkit-linear-gradient(#595, #7c7);
+	background:linear-gradient(#595, #7c7);
 }
 
 button.edit {
 	background:#fff;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#dddddd')"; /* IE9 */
 	background:-o-linear-gradient(#fff, #ddd);
+	background:-ms-linear-gradient(#fff, #ddd);
 	background:-moz-linear-gradient(#fff, #ddd);
 	background:-webkit-linear-gradient(#fff, #ddd);
 	background:linear-gradient(#fff, #ddd);
@@ -129,7 +137,9 @@ button.edit {
 
 button.edit:hover {
 	background:#ddd;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#dddddd', EndColorStr='#ffffff')"; /* IE9 */
 	background:-o-linear-gradient(#ddd, #fff);
+	background:-ms-linear-gradient(#ddd, #fff);
 	background:-moz-linear-gradient(#ddd, #fff);
 	background:-webkit-linear-gradient(#ddd, #fff);
 	background:linear-gradient(#ddd, #fff);
@@ -137,7 +147,9 @@ button.edit:hover {
 
 button.delete {
 	background:#f55;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#ff5555', EndColorStr='#995555')"; /* IE9 */
 	background:-o-linear-gradient(#f55, #955);
+	background:-ms-linear-gradient(#f55, #955);
 	background:-moz-linear-gradient(#f55, #955);
 	background:-webkit-linear-gradient(#f55, #955);
 	background:linear-gradient(#f55, #955);
@@ -146,7 +158,9 @@ button.delete {
 
 button.delete:hover {
 	background:#955;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#995555', EndColorStr='#ff5555')"; /* IE9 */
 	background:-o-linear-gradient(#955, #f55);
+	background:-ms-linear-gradient(#955, #f55);
 	background:-moz-linear-gradient(#955, #f55);
 	background:-webkit-linear-gradient(#955, #f55);
 	background:linear-gradient(#955, #f55);
@@ -219,7 +233,7 @@ dl.pair dd {
 /* ! Form overlay styles */
 #overlay_bg {
 	background:#777;
-	background:rgba(105,105,220,0.85);
+	background:rgba(85,105,255,0.85);
 	position:fixed;
 	display:none;
 	width:900%;
@@ -232,11 +246,6 @@ dl.pair dd {
 #overlay {
 	position:absolute;
 	background:#ddd;
-	/*background:rgba(255,255,255,0.85);
-	top:25%;
-	left:25%;
-	width:600px;
-	height:auto;*/
 	min-width:700px;
 	padding:0.5em;
 	border-radius:5px;

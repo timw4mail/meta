@@ -64,7 +64,12 @@ $path_from = './images/';
 | The path fragment replacement for the css files
 |
 */
-$path_to = '//github.timshomepage.net/meta/assets/images/';
+$sn = $_SERVER['SCRIPT_NAME'];
+$sna = explode('/', $sn);
+array_pop($sna);
+$sn = implode('/', $sna);
+
+$path_to = "//{$_SERVER['SERVER_NAME']}{$sn}/images/";
 
 /*
 |--------------------------------------------------------------------------

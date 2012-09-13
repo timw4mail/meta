@@ -20,3 +20,11 @@ Meta has a four-level hierarchy
 
 
 This basic hierarchy enables keeping track of simple data in a neat fashion.
+
+### Requirements
+* PHP 5.3+
+* SQLite, MySQL, Postgres, or Firebird Database
+* PHP Multibyte extension
+* Browser:
+ 	* Internet Explorer 9+, Chrome, Safari, Firefox, or Opera
+
