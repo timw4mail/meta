@@ -3,7 +3,10 @@
     padding: 0 1px 1px;
     font: 12px Verdana,Arial;
 }
-    .te iframe { border: none }
+    .te iframe {
+    	border: none;
+    	background:#fff;
+    }
 .teheader {
     height: 31px;
     border-bottom: 1px solid #bbb;
