@@ -1,5 +1,5 @@
 <p class="breadcrumbs">
-<a href="<?= miniMVC\site_url('') ?>">Genres</a> > <a href="<?= miniMVC\site_url('genres/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
+<a href="<?= miniMVC\site_url('') ?>">Genres</a> > <a href="<?= miniMVC\site_url('genre/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
 </p>
 
 <form class="add" action="<?= miniMVC\site_url("category/add_section") ?>" method="post">
@@ -22,27 +22,23 @@
 	<?php if (is_array($section)) list($section, $d) = $section ?>
 	<li>
 		<h4><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
-		<span class="modify" id="section_<?=$id ?>">
+		<span class="modify" data-id="<?= $id ?>" data-type="section" data-parent="<?= $category_id ?>">
 			<button class="edit">Edit</button>
 			<button class="delete">Delete</button>
 		</span>
 
 		<?php if ( ! empty($d)): ?>
-
 		<?php foreach($d as $did => $dd): ?>
-		<?php foreach($dd as $k => $v): ?>
-		<?php $class = (strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
-		<dl class="<?= $class ?>">
-
-			<dt><?= $k ?></dt>
-			<dd>
-				<?= $v ?>
-			</dd>
-
-		</dl>
+			<?php foreach($dd as $k => $v): ?>
+			<?php $class = (strpos($v, "<ul>") !== FALSE || strpos($v, "<br />") !== FALSE) ? 'multiline' : 'pair' ?>
+			<dl class="<?= $class ?>">
+				<dt><?= $k ?></dt>
+				<dd>
+					<?= $v ?>
+				</dd>
+			</dl>
+			<?php endforeach ?>
 		<?php endforeach ?>
-		<?php endforeach ?>
-
 		<?php endif ?>
 
 		<?php $d = array(); // Don't let data linger ?>

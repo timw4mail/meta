@@ -1,0 +1,5 @@
+{
+    "require": {
+        "aura/router": "2.0.*@dev"
+    }
+}

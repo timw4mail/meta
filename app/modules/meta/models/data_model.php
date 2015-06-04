@@ -15,6 +15,8 @@
 
 namespace meta;
 
+use \miniMVC\db;
+
 /**
  * Main Model for database interaction
  *
@@ -42,9 +44,7 @@ class data_model extends \miniMVC\Model {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->session =& \miniMVC\Session::get_instance();
-		$this->db =& \miniMVC\db::get_instance();
+		$this->db = db::get_instance();
 	}
 
 	// --------------------------------------------------------------------------
@@ -113,7 +113,7 @@ class data_model extends \miniMVC\Model {
 			->where('id', (int) $id)
 			->update($type);
 
-		return ( ! empty($query)) ;
+		return (bool) $query;
 	}
 
 	// --------------------------------------------------------------------------
@@ -128,19 +128,13 @@ class data_model extends \miniMVC\Model {
 	 */
 	public function update_data($data_id, $key, $val)
 	{
-		try{
-			// Save the data
-			$this->db->set('key', $key)
-				->set('value', $val)
-				->where('id', (int) $data_id)
-				->update('data');
-		}
-		catch(\PDOException $e)
-		{
-			return FALSE;
-		}
+		// Save the data
+		$query = $this->db->set('key', $key)
+			->set('value', $val)
+			->where('id', (int) $data_id)
+			->update('data');
 
-		return TRUE;
+		return (bool) $query;
 	}
 
 	// --------------------------------------------------------------------------
@@ -161,13 +155,13 @@ class data_model extends \miniMVC\Model {
 			->limit(1)
 			->get();
 
-		// Fetch the data as a workaround
-		// for databases that do not support
-		// grabbing result counts (SQLite / Firebird)
-		$array = $query->fetchAll(\PDO::FETCH_ASSOC);
-		if (count($array) < 1)
+		$res = $query->fetch();
+
+		if (count($res) < 1)
 		{
-			$this->db->set('genre', $genre)
+			$id = $this->get_next_id("genre");
+			$this->db->set('id', $id)
+				->set('genre', $genre)
 				->insert('genre');
 
 			return TRUE;
@@ -195,13 +189,13 @@ class data_model extends \miniMVC\Model {
 			->limit(1)
 			->get();
 
-		// Fetch the data as a workaround
-		// for databases that do not support
-		// grabbing result counts (SQLite / Firebird)
-		$array = $query->fetchAll();
-		if (count($array)< 1)
+		$res = $query->fetch();
+
+		if (count($res) < 1)
 		{
-			$this->db->set('category', $cat)
+			$id = $this->get_next_id('category');
+			$this->db->set('id', $id)
+				->set('category', $cat)
 				->set('genre_id', $genre_id)
 				->insert('category');
 
@@ -234,7 +228,9 @@ class data_model extends \miniMVC\Model {
         $array = $q->fetchAll();
         if (count($array) < 1)
         {
-			$this->db->set('section', $section)
+        	$id = $this->get_next_id('section');
+			$this->db->set('id', $id)
+				->set('section', $section)
 				->set('category_id', (int) $category_id)
 				->insert('section');
 
@@ -262,10 +258,14 @@ class data_model extends \miniMVC\Model {
         		->where('key', $key)
         		->get();
 
-        	if ($this->db->num_rows() > 0) return FALSE;
+        	$res = $q->fetch();
+
+        	if (count($res) > 0) return FALSE;
 
 			// Save the data
-			$this->db->set('key', $key)
+			$id = $this->get_next_id('data');
+			$this->db->set('id', $id)
+				->set('key', $key)
 				->set('value', $val)
 				->set('section_id', (int) $section_id)
 				->insert('data');
@@ -273,8 +273,6 @@ class data_model extends \miniMVC\Model {
 
 		return TRUE;
 	}
-
-
 
 	// --------------------------------------------------------------------------
 	// ! Data Retrieval
@@ -290,8 +288,8 @@ class data_model extends \miniMVC\Model {
 	{
 		$query = $this->db->select('genre, genre_id, category, category_id')
 			->from('section s')
-			->join('category c', 'c.id=s.category_id')
-			->join('genre g', 'g.id=c.genre_id')
+			->join('category c', 'c.id=s.category_id', 'inner')
+			->join('genre g', 'g.id=c.genre_id', 'inner')
 			->where('s.id', $section_id)
 			->get();
 
@@ -310,7 +308,7 @@ class data_model extends \miniMVC\Model {
 		$genres = array();
 		$query = $this->db->select('id, genre')
 			->from('genre')
-			->order_by('genre', 'asc')
+			->orderBy('genre', 'asc')
 			->get();
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
@@ -377,6 +375,7 @@ class data_model extends \miniMVC\Model {
 		$query = $this->db->select('id, category')
 			->from('category')
 			->where('genre_id', (int) $genre_id)
+			->orderBy('category', 'asc')
 			->get();
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
@@ -422,6 +421,7 @@ class data_model extends \miniMVC\Model {
 		$query = $this->db->select('id, section')
 			->from('section')
 			->where('category_id', (int) $category_id)
+			->orderBy('section', 'asc')
 			->get();
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
@@ -467,6 +467,7 @@ class data_model extends \miniMVC\Model {
 		$query = $this->db->select('id, key, value')
 			->from('data')
 			->where('section_id', (int) $section_id)
+			->orderBy('key', 'asc')
 			->get();
 
 		while($row = $query->fetch(\PDO::FETCH_ASSOC))
@@ -510,6 +511,7 @@ class data_model extends \miniMVC\Model {
 		// Get the sections
 		$s_query = $this->db->from('section')
 			->where('category_id', (int) $category_id)
+			->orderBy('section', 'asc')
 			->get();
 
 		$sections = array();
@@ -525,7 +527,8 @@ class data_model extends \miniMVC\Model {
 		if ( ! empty($sections))
 		{
 			$d_query = $this->db->from('data')
-				->where_in('section_id', array_keys($sections))
+				->whereIn('section_id', array_keys($sections))
+				->orderBy('key', 'asc')
 				->get();
 
 			while($row = $d_query->fetch(\PDO::FETCH_ASSOC))
@@ -557,62 +560,24 @@ class data_model extends \miniMVC\Model {
 	public function get_outline_data()
 	{
 		// Get the genres
-		$g_query = $this->db->from('genre')
+		$query = $this->db->select('g.id, genre,
+			c.id AS cat_id, category,
+			s.id AS section_id, section')
+			->from('genre g')
+			->join('category c', 'c.genre_id=g.id', 'inner')
+			->join('section s', 's.category_id=c.id', 'inner')
+			->orderBy('genre', 'asc')
+			->orderBy('category', 'asc')
+			->orderBy('section', 'asc')
 			->get();
 
-		$genres = array();
+		$return = array();
 
-		while ($row = $g_query->fetch(\PDO::FETCH_ASSOC))
+		// Create the nested array
+		while ($row = $query->fetch(\PDO::FETCH_ASSOC))
 		{
-			$genres[$row['id']] = $row['genre'];
-		}
-
-		// Get the categories
-		$c_query = $this->db->from('category')
-			->get();
-
-		$categories = array();
-
-		while($row = $c_query->fetch(\PDO::FETCH_ASSOC))
-		{
-			$categories[$row['genre_id']][$row['id']] = $row['category'];
-		}
-
-		// Get the sections
-		$s_query = $this->db->from('section')
-			->get();
-
-		$sections = array();
-
-		while($row = $s_query->fetch(\PDO::FETCH_ASSOC))
-		{
-			$sections[$row['category_id']][$row['id']] = $row['section'];
-		}
-
-
-		// Organize into a nested array
-		foreach($genres as $genre_id => $genre)
-		{
-			$return[$genre_id][$genre] = array();
-			$g =& $return[$genre_id][$genre];
-
-			// Categories for this genre
-			if (isset($categories[$genre_id]))
-			{
-				$g = $categories[$genre_id];
-
-				foreach($categories[$genre_id] as $category_id => $category)
-				{
-					$g[$category_id] = array($category => array());
-					$c =& $g[$category_id][$category];
-
-					// Sections for this category
-					if (isset($sections[$category_id]))
-					{
-						$c = $sections[$category_id];
-					}
-				}
-			}
+			extract($row);
+			$return[$id][$genre][$cat_id][$category][$section_id] = $section;
 		}
 
 		return $return;
@@ -649,7 +614,7 @@ class data_model extends \miniMVC\Model {
 	{
 		$query = $this->db->select('id')
 			->from($type)
-			->order_by('id', 'DESC')
+			->orderBy('id', 'DESC')
 			->limit(1)
 			->get();
 
@@ -659,6 +624,77 @@ class data_model extends \miniMVC\Model {
 	}
 
 	// --------------------------------------------------------------------------
+
+	/**
+	 * Get the next id for database insertion
+	 *
+	 * @param string $table_name
+	 * @param string $field
+	 * @return int
+	 */
+	public function get_next_id($table_name, $field="id")
+	{
+
+		$query = $this->db->select("MAX($field) as last_id")
+			->from($table_name)
+			->limit(1)
+			->get();
+
+		$row = $query->fetch(\PDO::FETCH_ASSOC);
+
+		if (empty($row))
+		{
+			$id = 1;
+		}
+		else
+		{
+			$id = intval($row['last_id']) + 1;
+		}
+
+		return $id;
+	}
+
+	// --------------------------------------------------------------------------
+
+	public function create_tables()
+	{
+		$tables = [
+			'genre' =>  $this->db->util->create_table('genre', [
+				'id' => 'INT NOT NULL PRIMARY KEY',
+				'genre' => 'VARCHAR(255)'
+			]),
+			'category' => $this->db->util->create_table('category', [
+		   		'id' => 'INT NOT NULL PRIMARY KEY',
+		   		'genre_id' => 'INT NOT NULL',
+		   		'category' => 'VARCHAR(255)'
+			],[
+				'genre_id' => ' REFERENCES "genre" '
+			]),
+			'section' => $this->db->util->create_table('section', [
+			   'id' => 'INT NOT NULL PRIMARY KEY',
+			   'category_id' => 'INT NOT NULL',
+			   'section' => 'VARCHAR(255)'
+			],[
+				'category_id' => ' REFERENCES "category" '
+			]),
+			'data' => $this->db->util->create_table('data', [
+				'id' => 'INT NOT NULL PRIMARY KEY',
+				'section_id' => 'INT NOT NULL',
+				'key' => 'VARCHAR(255)',
+				'value' => 'BLOB SUB_TYPE TEXT'
+			],[
+				'section_id' => ' REFERENCES "section"'
+			])
+		];
+
+		foreach($tables as $table => $sql)
+		{
+			// Add the table
+			$this->db->query($sql);
+			echo "{$sql};<br />";
+
+		}
+	}
 
 }
 

@@ -2,24 +2,19 @@
 	Kis JS		Keep It Simple JS Library
 	Copyright	Timothy J. Warren
 	License		Public Domain
-	Version		0.6.0
+	Version		0.9.0
  */
-(function (){
+(function (undefined){
 
 	"use strict";
 
-	// Most functions rely on a string selector
-	// which returns html elements. This requires
-	// document.querySelectorAll or a custom
-	// selector engine. I choose to just use the
-	// browser feature, since it is present in
-	// IE 8+, and all other major browsers
-	if (typeof document.querySelector === "undefined")
-	{
-		return;
-	}
-
-	var $_, $, dcopy, sel;
+	/**
+	 * Current selector object
+	 *
+	 * @memberOf $_
+	 * @name el
+	 */
+	var sel = document.documentElement;
 
 
 	/**
@@ -27,31 +22,32 @@
 	 *
 	 * Constructor function
 	 *
-	 * @constuctor
-	 * @namespace
-	 * @param string selector
-	 * @return object
+	 * @constructor
+	 * @namespace $_
+	 * @param {string} selector - The dom selector string
+	 * @param {Object} [context] - Context of the dom selector string
+	 * @return {Object}
 	 */
-	$_ = function(s)
+	var $_ = function(s, context)
 	{
 		// Have documentElement be default selector, just in case
-		if (typeof s === "undefined")
+		if (s === undefined || s === null)
 		{
 			// Defines a "global" selector for that instance
-			sel = (typeof $_.el !== "undefined")
+			sel = ($_.el !== undefined && $_.el !== null)
 				? $_.el
 				: document.documentElement;
 		}
 		else
 		{
-			sel = (typeof s !== "object") ? $(s) : s;
+			sel = $(s, context);
 		}
 
 		// Add the selector to the prototype
 		$_.prototype.el = sel;
 
 		// Use the $_ object as it's own prototype
-		var self = dcopy($_);
+		var self = Object.create($_);
 
 		// Give sel to each extension.
 		for(var i in self)
@@ -71,81 +67,43 @@
 	 * Simple DOM selector function
 	 *
 	 * @memberOf $_
-	 * @param string selector
-	 * @param object context
-	 * @return object
-	 * @type object
+	 * @param {string} selector
+	 * @param {Object} [context]
+	 * @return {Object}
 	 */
-	$ = function (a, context)
+	var $ = function (selector, context)
 	{
-		var x, c;
+		var elements;
 
-		if (typeof a != "string" || typeof a === "undefined"){ return a;}
+		if (typeof selector != "string" || selector === undefined){ return selector;}
 
 		//Check for a context of a specific element, otherwise, just run on the document
-		c  = (context != null && context.nodeType === 1)
+		context  = (context != null && context.nodeType === 1)
 			? context
 			: document;
 
 		//Pick the quickest method for each kind of selector
-		if (a.match(/^#([\w\-]+$)/))
+		if (selector.match(/^#([\w\-]+$)/))
 		{
-			return document.getElementById(a.split('#')[1]);
+			return document.getElementById(selector.split('#')[1]);
 		}
 		else
 		{
-			x = c.querySelectorAll(a);
+			elements = context.querySelectorAll(selector);
 		}
 
 		//Return the single object if applicable
-		return (x.length === 1) ? x[0] : x;
-	};
-
-	/**
-	 * Deep copy/prototypical constructor function
-	 *
-	 * @param object obj
-	 * @private
-	 * @return object
-	 * @type object
-	 */
-	dcopy = function(obj)
-	{
-		var type, F;
-
-		if(typeof obj === "undefined")
-		{
-			return;
-		}
-
-		if(typeof Object.create !== "undefined")
-		{
-			return Object.create(obj);
-		}
-
-		type = typeof obj;
-
-		if(type !== "object" && type !== "function")
-		{
-			return;
-		}
-
-		/**
-		 * @private
-		 */
-		F = function(){};
-
-		F.prototype = obj;
-
-		return new F();
-
+		return (elements.length === 1) ? elements[0] : elements;
 	};
 
 	/**
 	 * Adds the property `obj` to the $_ object, calling it `name`
 	 *
-	 * @param string name
-	 * @param object obj
+	 * @memberOf $_
+	 * @function ext
+	 * @example $_.ext('foo', {});
+	 * @param {string} name - name of the module
+	 * @param {object} obj - the object to add
 	 */
 	$_.ext = function(name, obj)
 	{
@@ -156,35 +114,16 @@
 	/**
 	 * Iterates over a $_ object, applying a callback to each item
 	 *
-	 * @name $_.each
-	 * @function
-	 * @param function callback
+	 * @memberOf $_
+	 * @function each
+	 * @example $_('form input').each(function(item) { alert(item) });
+	 * @param {function} callback - iteration callback
 	 */
-	$_.ext('each', function (callback)
+	$_.ext('each', function(callback)
 	{
-		if(typeof sel.length !== "undefined" && sel !== window)
+		if(sel.length !== undefined && sel !== window)
 		{
-			// Use the native method, if it exists
-			if(typeof Array.prototype.forEach !== 'undefined')
-			{
-				[].forEach.call(sel, callback);
-				return;
-			}
-
-			// Otherwise, fall back to a for loop
-			var len = sel.length;
-
-			if (len === 0)
-			{
-				return;
-			}
-
-			var selx;
-			for (var x = 0; x < len; x++)
-			{
-				selx = (sel.item(x)) ? sel.item(x) : sel[x];
-				callback.call(selx, selx);
-			}
+			[].forEach.call(sel, callback);
 		}
 		else
 		{
@@ -195,11 +134,13 @@
 	/**
 	 * Retrieves the type of the passed variable
 	 *
-	 * @param mixed obj
-	 * @return string
-	 * @type string
+	 * @memberOf $_
+	 * @function type
+	 * @example $_.type([]); // Returns 'array'
+	 * @param {*} obj
+	 * @return {string}
 	 */
-	$_.type = function(obj)
+	var type = function(obj)
 	{
 		if((function() {return obj && (obj !== this)}).call(obj))
 		{
@@ -214,60 +155,12 @@
 	//Set global variables
 	$_ = window.$_ = window.$_ || $_;
 	$_.$ = $;
-
+	$_.type = type;
 }());
 
 // --------------------------------------------------------------------------
 
-/**
- * A module of various browser polyfills
- * @file polyfill.js
- */
 
-/**
- * String trim function polyfill
- */
-if(typeof String.prototype.trim === "undefined")
-{
-	/**
-	 * @private
-	 */
-	String.prototype.trim = function()
-	{
-		return this.replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, "");
-	};
-}
-
-// --------------------------------------------------------------------------
-
-/**
- * event.preventDefault/e.stopPropagation polyfill
- * @private
- */
-if(typeof Event.preventDefault === "undefined" && typeof window.event !== "undefined")
-{
-	Event.prototype.preventDefault = function()
-	{
-		window.event.returnValue = false;
-	},
-	Event.prototype.stopPropagation = function()
-	{
-		window.event.cancelBubble = true;
-	}
-}
-
-// --------------------------------------------------------------------------
-
-/**
- * Array.isArray polyfill
- */
-if (typeof Array.isArray === "undefined")
-{
-	Array.isArray = function(v)
-	{
-		return Object.prototype.toString.apply(v) === '[object Array]';
-	}
-}
 
 // --------------------------------------------------------------------------
 
@@ -276,23 +169,17 @@ if (typeof Array.isArray === "undefined")
  *
  * Module for making ajax requests
  */
-(function (){
+(function (undefined){
 
 	"use strict";
 
-	// Don't bother even defining the object if the XMLHttpRequest isn't available
-	if(typeof window.XMLHttpRequest === "undefined")
-	{
-		return;
-	}
-
 	var ajax = {
-		_do: function (url, data, success_callback, error_callback, isPost)
+		_do: function (url, data, success_callback, error_callback, type)
 		{
 			var type,
 				request = new XMLHttpRequest();
 
-			if (typeof success_callback === "undefined")
+			if (success_callback === undefined)
 			{
 				/**
 				 * @private
@@ -300,9 +187,12 @@ if (typeof Array.isArray === "undefined")
 				success_callback = function (){};
 			}
 
-			type = (isPost) ? "POST" : "GET";
-
-			url += (type === "GET") ? "?" + this._serialize(data) : '';
+			if (type === "GET")
+			{
+				url += (url.match(/\?/))
+					? this._serialize(data)
+					: "?" + this._serialize(data);
+			}
 
 			request.open(type, url);
 
@@ -316,7 +206,7 @@ if (typeof Array.isArray === "undefined")
 					}
 					else
 					{
-						if (typeof error_callback !== 'undefined')
+						if (error_callback !== undefined)
 						{
 							error_callback.call(request.status, request.status);
 						}
@@ -325,7 +215,7 @@ if (typeof Array.isArray === "undefined")
 				}
 			};
 
-			if (type === "POST")
+			if (type !== "GET")
 			{
 				request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 				request.send(this._serialize(data));
@@ -335,6 +225,13 @@ if (typeof Array.isArray === "undefined")
 				request.send(null);
 			}
 		},
+		/**
+		 * Url encoding for non-get requests
+		 *
+		 * @param data
+		 * @returns {string}
+		 * @private
+		 */
 		_serialize: function (data)
 		{
 			var name,
@@ -343,11 +240,7 @@ if (typeof Array.isArray === "undefined")
 
 			for (name in data)
 			{
-				if (!data.hasOwnProperty(name))
-				{
-					continue;
-				}
-				if (typeof data[name] === "function")
+				if ( ! data.hasOwnProperty(name) || $_.type(data[name]) === "function")
 				{
 					continue;
 				}
@@ -367,59 +260,60 @@ if (typeof Array.isArray === "undefined")
 	/**
 	 * Sends a GET type ajax request
 	 *
-	 * @name get
-	 * @function
+	 * @function get
 	 * @memberOf $_
-	 * @param string url
-	 * @param object data
-	 * @param function success_callback
-	 * @param function error_callback
+	 * @param {string} url - The url to retrieve
+	 * @param {Object} data - get parameters to send
+	 * @param {function} success_callback - callback called on success
+	 * @param {function} [error_callback] - callback called if there is an error
 	 */
 	$_.ext('get', function (url, data, success_callback, error_callback){
-		ajax._do(url, data, success_callback, error_callback, false);
+		ajax._do(url, data, success_callback, error_callback, 'GET');
 	});
 
 	/**
 	 * Sends a POST type ajax request
 	 *
-	 * @name post
-	 * @function
+	 * @function post
 	 * @memberOf $_
-	 * @param string url
-	 * @param object data
-	 * @param function success_callback
-	 * @param function error_callback
+	 * @param {string} url - The url to post to
+	 * @param {Object} data - post parameters to send
+	 * @param {function} success_callback - callback called on success
+	 * @param {function} [error_callback] - callback called if there is an error
 	 */
 	$_.ext('post', function (url, data, success_callback, error_callback){
-		ajax._do(url, data, success_callback, error_callback, true);
+		ajax._do(url, data, success_callback, error_callback, 'POST');
 	});
 
 	/**
-	 * Watches for server-sent events and applies a callback on message
+	 * Sends a PUT type ajax request
 	 *
-	 * @name sse
-	 * @function
+	 * @function put
 	 * @memberOf $_
-	 * @param string url
-	 * @param function callback
+	 * @param {string} url - The url to post to
+	 * @param {Object} data - PUT parameters to send
+	 * @param {function} success_callback - callback called on success
+	 * @param {function} [error_callback] - callback called if there is an error
 	 */
-	$_.ext('sse', function(url, callback, poll_rate){
-
-		var source;
-
-		// Check for server-sent event support
-		if (typeof EventSource !== 'undefined')
-		{
-			source = new EventSource(url);
-
-			// Apply the callback
-			source.onmessage = function(event){
-				callback.call(event.data, event.data);
-			};
-		}
+	$_.ext('put', function (url, data, success_callback, error_callback){
+		ajax._do(url, data, success_callback, error_callback, 'PUT');
 	});
 
+	/**
+	 * Sends a DELETE type ajax request
+	 *
+	 * @function delete
+	 * @memberOf $_
+	 * @param {string} url - The url to post to
+	 * @param {Object} data - delete parameters to send
+	 * @param {function} success_callback - callback called on success
+	 * @param {function} [error_callback] - callback called if there is an error
+	 */
+	$_.ext('delete', function (url, data, success_callback, error_callback){
+		ajax._do(url, data, success_callback, error_callback, 'DELETE');
+	});
 }());
+
 
 // --------------------------------------------------------------------------
 
@@ -429,109 +323,15 @@ if (typeof Array.isArray === "undefined")
  * Event api wrapper
  * @todo Add method for triggering events
  */
-(function (){
+(function (undefined){
 
 	"use strict";
 
-	// Property name for expandos on DOM objects
-	var kis_expando = "KIS_0_6_0";
-
-	var _attach, _remove, _add_remove, e, _attach_delegate;
-
-	// Define the proper _attach and _remove functions
-	// based on browser support
-	if(typeof document.addEventListener !== "undefined")
-	{
-		/**
-		 * @private
-		 */
-		_attach = function (sel, event, callback)
-		{
-			if(typeof sel.addEventListener !== "undefined")
-			{
-				// Duplicated events are dropped, per the specification
-				sel.addEventListener(event, callback, false);
-			}
-		};
-		/**
-		 * @private
-		 */
-		_remove = function (sel, event, callback)
-		{
-			if(typeof sel.removeEventListener !== "undefined")
-			{
-				sel.removeEventListener(event, callback, false);
-			}
-		};
-	}
-	// typeof function doesn't work in IE where attachEvent is available: brute force it
-	else if(typeof document.attachEvent !== "undefined")
-	{
-		/**
-		 * @private
-		 */
-		_attach = function (sel, event, callback)
-		{
-			function _listener () {
-				// Internet Explorer fails to correctly set the 'this' object
-				// for event listeners, so we need to set it ourselves.
-				callback.apply(arguments[0]);
-			}
-
-			if (typeof sel.attachEvent !== "undefined")
-			{
-				_remove(event, callback); // Make sure we don't have duplicate listeners
-
-				sel.attachEvent("on" + event, _listener);
-				// Store our listener so we can remove it later
-				var expando = sel[kis_expando] = sel[kis_expando] || {};
-				expando.listeners = expando.listeners || {};
-				expando.listeners[event] = expando.listeners[event] || [];
-				expando.listeners[event].push({
-					callback: callback,
-					_listener: _listener
-				});
-			}
-		};
-		/**
-		 * @private
-		 */
-		_remove = function (sel, event, callback)
-		{
-			if(typeof sel.detachEvent !== "undefined")
-			{
-				var expando = sel[kis_expando];
-				if (expando && expando.listeners
-						&& expando.listeners[event])
-				{
-					var listeners = expando.listeners[event];
-					var len = listeners.length;
-					for (var i=0; i<len; i++)
-					{
-						if (listeners[i].callback === callback)
-						{
-							sel.detachEvent("on" + event, listeners[i]._listener);
-							listeners.splice(i, 1);
-							if(listeners.length === 0)
-							{
-								delete expando.listeners[event];
-							}
-							return;
-						}
-					}
-				}
-			}
-		};
-	}
+	var _add_remove, e, _attach_delegate;
 
 	_add_remove = function (sel, event, callback, add)
 	{
 		var i, len;
-
-		if(typeof sel === "undefined")
-		{
-			return null;
-		}
 
 		// Multiple events? Run recursively!
 		if ( ! event.match(/^([\w\-]+)$/))
@@ -548,15 +348,10 @@ if (typeof Array.isArray === "undefined")
 			return;
 		}
 
-
-		if(add === true)
-		{
-			_attach(sel, event, callback);
-		}
-		else
-		{
-			_remove(sel, event, callback);
-		}
+		// Bind the event
+		(add === true)
+			? sel.addEventListener(event, callback, false)
+			: sel.removeEventListener(event, callback, false);
 	};
 
 	_attach_delegate = function(sel, target, event, callback)
@@ -564,10 +359,7 @@ if (typeof Array.isArray === "undefined")
 		// attach the listener to the parent object
 		_add_remove(sel, event, function(e){
 
-			var elem, t, tar;
-
-			// IE 8 doesn't have event bound to element
-			e = e || window.event;
+			var elem, t;
 
 			// Get the live version of the target selector
 			t = $_.$(target, sel);
@@ -575,11 +367,8 @@ if (typeof Array.isArray === "undefined")
 			// Check each element to see if it matches the target
 			for(elem in t)
 			{
-				// IE 8 doesn't have target in the event object
-				tar = e.target || e.srcElement;
-
 				// Fire target callback when event bubbles from target
-				if(tar == t[elem])
+				if(e.target == t[elem])
 				{
 					// Trigger the event callback
 					callback.call(t[elem], e);
@@ -603,15 +392,36 @@ if (typeof Array.isArray === "undefined")
 	 */
 	e = {
 		/**
+		 * Create a custom event
+		 *
+		 * @memberOf $_.event
+		 * @name create
+		 * @function
+		 * @example var event = $_("#selector").event.create('foo', {});
+		 * @param {string} name
+		 * @param {object} [data]
+		 * @return {Object}
+		 */
+		create: function(name, data)
+		{
+			data = data || {};
+
+			// Okay, I guess we have to do this the hard way... :(
+			var e = document.createEvent('CustomEvent');
+			e.initCustomEvent(name, true, true, data);
+
+			return e;
+		},
+		/**
 		 * Adds an event that returns a callback when triggered on the selected
 		 * event and selector
 		 *
 		 * @memberOf $_.event
 		 * @name add
 		 * @function
-		 * @example Eg. $_("#selector").event.add("click", do_something());
-		 * @param string event
-		 * @param function callback
+		 * @example $_("#selector").event.add("click", do_something());
+		 * @param {string} event
+		 * @param {function} callback
 		 */
 		add: function (event, callback)
 		{
@@ -625,9 +435,9 @@ if (typeof Array.isArray === "undefined")
 		 * @memberOf $_.event
 		 * @name remove
 		 * @function
-		 * @example Eg. $_("#selector").event.remove("click", do_something());
-		 * @param string event
-		 * @param string callback
+		 * @example $_("#selector").event.remove("click", do_something());
+		 * @param {string} event
+		 * @param {string} callback
 		 */
 		remove: function (event, callback)
 		{
@@ -641,10 +451,10 @@ if (typeof Array.isArray === "undefined")
 		 * @memberOf $_.event
 		 * @name live
 		 * @function
-		 * @example Eg. $_.event.live(".button", "click", do_something());
-		 * @param string target
-		 * @param string event
-		 * @param function callback
+		 * @example $_.event.live(".button", "click", do_something());
+		 * @param {string} target
+		 * @param {string} event
+		 * @param {function} callback
 		 */
 		live: function (target, event, callback)
 		{
@@ -656,16 +466,30 @@ if (typeof Array.isArray === "undefined")
 		 * @memberOf $_.event
 		 * @name delegate
 		 * @function
-		 * @example Eg. $_("#parent").delegate(".button", "click", do_something());
-		 * @param string target
-		 * @param string event_type
-		 * @param function callback
+		 * @example $_("#parent").delegate(".button", "click", do_something());
+		 * @param {string} target
+		 * @param {string} event
+		 * @param {function} callback
 		 */
 		delegate: function (target, event, callback)
 		{
 			$_.each(function(e){
 				_attach_delegate(e, target, event, callback);
 			});
+		},
+		/**
+		 * Trigger an event to fire
+		 *
+		 * @memberOf $_.event
+		 * @name trigger
+		 * @function
+		 * @example $_("#my_id").trigger('click');
+		 * @param {object} event
+		 * @return {boolean}
+		 */
+		trigger: function(event)
+		{
+			return this.el.dispatchEvent(event);
 		}
 	};
 
@@ -675,178 +499,12 @@ if (typeof Array.isArray === "undefined")
 
 // --------------------------------------------------------------------------
 
-//This is used so IE can use the classList api
-/*
- * classList.js: Cross-browser full element.classList implementation.
- * 2011-06-15
- *
- * By Eli Grey, http://eligrey.com
- * Public Domain.
- * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
- */
-if (typeof document !== "undefined" && !("classList" in document.createElement("a")))
-{
-	(function (view){
-
-		var classListProp = "classList",
-			protoProp = "prototype",
-			elemCtrProto = (view.HTMLElement || view.Element)[protoProp],
-			objCtr = Object,
-			strTrim = String[protoProp].trim ||
-			function ()
-			{
-				return this.replace(/^\s+|\s+$/g, "");
-			},
-			arrIndexOf = Array[protoProp].indexOf ||
-			function (item)
-			{
-				var
-				i = 0,
-					len = this.length;
-				for (; i < len; i++)
-				{
-					if (i in this && this[i] === item)
-					{
-						return i;
-					}
-				}
-				return -1;
-			}
-			// Vendors: please allow content code to instantiate DOMExceptions
-			,
-			/**
-			 * @private
-			 */
-			DOMEx = function (type, message)
-			{
-				this.name = type;
-				this.code = DOMException[type];
-				this.message = message;
-			},
-			/**
-			 * @private
-			 */
-			checkTokenAndGetIndex = function (classList, token)
-			{
-				if (token === "")
-				{
-					throw new DOMEx("SYNTAX_ERR", "An invalid or illegal string was specified");
-				}
-				if (/\s/.test(token))
-				{
-					throw new DOMEx("INVALID_CHARACTER_ERR", "String contains an invalid character");
-				}
-				return arrIndexOf.call(classList, token);
-			},
-			/**
-			 * @private
-			 */
-			ClassList = function (elem)
-			{
-				var
-				trimmedClasses = strTrim.call(elem.className),
-					classes = trimmedClasses ? trimmedClasses.split(/\s+/) : [],
-					i = 0,
-					len = classes.length;
-				for (; i < len; i++)
-				{
-					this.push(classes[i]);
-				}
-				this._updateClassName = function ()
-				{
-					elem.className = this.toString();
-				};
-			},
-			classListProto = ClassList[protoProp] = [],
-			/**
-			 * @private
-			 */
-			classListGetter = function ()
-			{
-				return new ClassList(this);
-			};
-		// Most DOMException implementations don't allow calling DOMException's toString()
-		// on non-DOMExceptions. Error's toString() is sufficient here.
-		DOMEx[protoProp] = Error[protoProp];
-		classListProto.item = function (i)
-		{
-			return this[i] || null;
-		};
-		classListProto.contains = function (token)
-		{
-			token += "";
-			return checkTokenAndGetIndex(this, token) !== -1;
-		};
-		classListProto.add = function (token)
-		{
-			token += "";
-			if (checkTokenAndGetIndex(this, token) === -1)
-			{
-				this.push(token);
-				this._updateClassName();
-			}
-		};
-		classListProto.remove = function (token)
-		{
-			token += "";
-			var index = checkTokenAndGetIndex(this, token);
-			if (index !== -1)
-			{
-				this.splice(index, 1);
-				this._updateClassName();
-			}
-		};
-		classListProto.toggle = function (token)
-		{
-			token += "";
-			if (checkTokenAndGetIndex(this, token) === -1)
-			{
-				this.add(token);
-			}
-			else
-			{
-				this.remove(token);
-			}
-		};
-		classListProto.toString = function ()
-		{
-			return this.join(" ");
-		};
-
-		if (objCtr.defineProperty)
-		{
-			var classListPropDesc = {
-				get: classListGetter,
-				enumerable: true,
-				configurable: true
-			};
-			try
-			{
-				objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-			}
-			catch (ex)
-			{ // IE 8 doesn't support enumerable:true
-				if (ex.number === -0x7FF5EC54)
-				{
-					classListPropDesc.enumerable = false;
-					objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
-				}
-			}
-		}
-		else if (objCtr[protoProp].__defineGetter__)
-		{
-			elemCtrProto.__defineGetter__(classListProp, classListGetter);
-		}
-
-	}(self));
-}
-
 /**
  * DOM
  *
  * Dom manipulation module
  */
-(function (){
+(function (undefined){
 
 	"use strict";
 
@@ -855,70 +513,37 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 	//Private function for getting/setting attributes/properties
 	function _attr(sel, name, value)
 	{
-		var oldVal, doAttr;
+		var oldVal;
 
 		//Get the value of the attribute, if it exists
-		if (typeof sel.hasAttribute !== "undefined")
+		if (sel.hasAttribute(name))
 		{
-			if (sel.hasAttribute(name))
-			{
-				oldVal = sel.getAttribute(name);
-			}
-
-			doAttr = true;
-		}
-		else if (typeof sel[name] !== "undefined")
-		{
-			oldVal = sel[name];
-			doAttr = false;
-		}
-		else if (name === "class" && typeof sel.className !== "undefined") //className attribute
-		{
-			name = "className";
-			oldVal = sel.className;
-			doAttr = false;
+			oldVal = sel.getAttribute(name);
 		}
 
 		//Well, I guess that attribute doesn't exist
-		if (typeof oldVal === "undefined" && (typeof value === "undefined" || value === null))
+		if (oldVal === undefined && (value === undefined || value === null))
 		{
-			/*console.log(value);
-			console.log(sel);
-			console.log("Element does not have the selected attribute");*/
 			return null;
 		}
 
 		//No value to set? Return the current value
-		if (typeof value === "undefined")
+		if (value === undefined)
 		{
 			return oldVal;
 		}
 
 		//Determine what to do with the attribute
-		if (typeof value !== "undefined" && value !== null)
+		if (value !== undefined && value !== null)
 		{
-			if(doAttr === true)
-			{
-				sel.setAttribute(name, value);
-			}
-			else
-			{
-				sel[name] = value;
-			}
+			sel.setAttribute(name, value);
 		}
 		else if (value === null)
 		{
-			if(doAttr === true)
-			{
-				sel.removeAttribute(name);
-			}
-			else
-			{
-				delete sel[name];
-			}
+			sel.removeAttribute(name);
 		}
 
-		return (typeof value !== "undefined") ? value : oldVal;
+		return (value !== undefined) ? value : oldVal;
 	}
 
 	/**
@@ -927,47 +552,27 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 	 */
 	function _toCamel(s)
 	{
-		return s.replace(/(\-[a-z])/g, function($1){
+		return String(s).replace(/(\-[a-z])/g, function($1){
 			return $1.toUpperCase().replace('-','');
 		});
 	}
 
 	function _css(sel, prop, val)
 	{
-		var equi;
-
 		//Camel-case
 		prop = _toCamel(prop);
 
-		//Equivalent properties for 'special' browsers
-		equi = {
-			outerHeight: "offsetHeight",
-			outerWidth: "offsetWidth",
-			top: "posTop"
-		};
-
-
 		//If you don't define a value, try returning the existing value
-		if(typeof val === "undefined" && sel.style[prop] !== "undefined")
+		if(val === undefined && sel.style[prop] !== undefined)
 		{
 			return sel.style[prop];
 		}
-		else if(typeof val === "undefined" && sel.style[equi[prop]] !== "undefined")
-		{
-			return sel.style[equi[prop]];
-		}
 
-		//Let's try the easy way first
-		if(typeof sel.style[prop] !== "undefined")
+		// Let's set a value instead
+		if(sel.style[prop] !== undefined)
 		{
 			sel.style[prop] = val;
 
-			//Short circuit
-			return null;
-		}
-		else if(sel.style[equi[prop]])
-		{
-			sel.style[equi[prop]] = val;
 			return null;
 		}
 	}
@@ -990,7 +595,7 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name addClass
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string class
+		 * @param {string} class
 		 */
 		addClass: function (c)
 		{
@@ -1005,7 +610,7 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name removeClass
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string class
+		 * @param {string} class
 		 */
 		removeClass: function (c)
 		{
@@ -1033,11 +638,11 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name  show
 		 * @memberOf $_.dom
 		 * @function
-		 * @param [string] type
+		 * @param {string} [type]
 		 */
 		show: function (type)
 		{
-			if (typeof type === "undefined")
+			if (type === undefined)
 			{
 				type = "block";
 			}
@@ -1053,21 +658,20 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name attr
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string name
-		 * @param [string] value
-		 * @return string
-		 * @type string
+		 * @param {string} name
+		 * @param {?string}[value]
+		 * @return {?string}
 		 */
 		attr: function (name, value)
 		{
 			var sel = this.el;
 
 			//Make sure you don't try to get a bunch of elements
-			if (sel.length > 1 && typeof value === "undefined")
+			if (sel.length > 1 && value === undefined)
 			{
 				return null;
 			}
-			else if (sel.length > 1 && typeof value !== "undefined") //You can set a bunch, though
+			else if (sel.length > 1 && value !== undefined) //You can set a bunch, though
 			{
 				$_.each(function (e){
 					return _attr(e, name, value);
@@ -1087,29 +691,22 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name text
 		 * @memberOf $_.dom
 		 * @function
-		 * @param [string] value
-		 * @return string
-		 * @type string
+		 * @param {?string} [value]
+		 * @return {?string}
 		 */
 		text: function (value)
 		{
-			var oldValue, set, type, sel;
+			var oldValue, set, sel;
 
 			sel = this.el;
 
-			set = (typeof value !== "undefined") ? true : false;
+			set = (value !== undefined) ? true : false;
 
-			type = (typeof sel.textContent !== "undefined")
-				? "textContent"
-				: (typeof sel.innerText !== "undefined")
-					? "innerText"
-					: "innerHTML";
-
-			oldValue = sel[type];
+			oldValue = sel.textContent;
 
 			if(set)
 			{
-				sel[type] = value;
+				sel.textContent = value;
 				return value;
 			}
 			else
@@ -1122,20 +719,35 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * specified by the current selector. If a value is
 		 * passed, it will set that value on the current element,
 		 * otherwise it will return the value of the css property
-		 * on the current element
+		 * on the current element.
 		 *
+		 * Accepts either key/value arguments, or an object with
+		 * multiple key/value pairs.
+		 *
+		 * @example $_('#foo').dom.css('border', 0);
+		 * @example $_('#foo').dom.css({background:'#000', color:'#fff'});
 		 * @name css
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string property
-		 * @param [string] value
-		 * @return string
-		 * @type string
+		 * @param {(string|Object)} property
+		 * @param {?string} [value]
+		 * @return {?string}
 		 */
 		css: function (prop, val)
 		{
+			var prop_key = null;
+
+			// If passed an object, recurse!
+			if($_.type(prop) === 'object')
+			{
+				Object.keys(prop).forEach(function(prop_key) {
+					$_.each(function (e){
+						_css(e, prop_key, prop[prop_key]);
+					});
+				});
+			}
 			//Return the current value if a value is not set
-			if(typeof val === "undefined")
+			else if(val === undefined && $_.type(prop) !== 'object')
 			{
 				return _css(this.el, prop);
 			}
@@ -1147,41 +759,28 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		/**
 		 * Adds to the innerHTML of the current element, after the last child.
 		 *
-		 * @example $_("ul").dom.append("&lt;li&gt;&lt;/li&gt;") adds an li element to the end of the selected ul element
+		 * @example $_("ul").dom.append("<li></li>"); // Adds an li element to the end of the selected ul element
 		 * @name append
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string htm
+		 * @param {string} htm
 		 */
 		append: function(htm)
 		{
-			if(typeof document.insertAdjacentHTML !== "undefined")
-			{
-				this.el.insertAdjacentHTML('beforeend', htm);
-			}
-			else
-			{
-				this.el.innerHTML += htm;
-			}
+			this.el.insertAdjacentHTML('beforeend', htm);
 		},
 		/**
 		 * Adds to the innerHTML of the selected element, before the current children
 		 *
+		 * @example $_("ul").dom.append("<li></li>"); // Adds an li element to the beginning of the selected ul element
 		 * @name prepend
 		 * @memberOf $_.dom
 		 * @function
-		 * @param string htm
+		 * @param {string} htm
 		 */
 		 prepend: function(htm)
 		 {
-		 	if(typeof document.insertAdjacentHTML !== "undefined")
-		 	{
-		 		this.el.insertAdjacentHTML('afterbegin', htm);
-		 	}
-		 	else
-		 	{
-		 		this.el.innerHTML = htm + this.el.innerHTML;
-		 	}
+			this.el.insertAdjacentHTML('afterbegin', htm);
 		 },
 		/**
 		 * Sets or gets the innerHTML propery of the element(s) passed
@@ -1189,14 +788,13 @@ if (typeof document !== "undefined" && !("classList" in document.createElement("
 		 * @name html
 		 * @memberOf $_.dom
 		 * @function
-		 * @param [string] htm
-		 * @return string
-		 * @type string
+		 * @param {?string} [htm]
+		 * @return {?string}
 		 */
 		html: function(htm)
 		{
 
-			if(typeof htm !== "undefined")
+			if(htm !== undefined)
 			{
 				this.el.innerHTML = htm;
 			}

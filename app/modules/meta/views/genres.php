@@ -18,10 +18,10 @@
 <ul class="list">
 <?php foreach($genres as $id => $name): ?>
 	<li>
-		<a href="<?= miniMVC\site_url("genre/{$id}") ?>">
+		<a href="<?= miniMVC\site_url("genre/detail/{$id}") ?>">
 			<?= $name ?>
 		</a>
-		<span class="modify" id="genre_<?=$id ?>">
+		<span class="modify" data-id="<?= $id ?>" data-type="genre" data-parent="<?=$id ?>">
 			<button class="edit">Edit</button>
 			<button class="delete">Delete</button>
 		</span>

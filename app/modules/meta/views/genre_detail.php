@@ -19,23 +19,11 @@
 <ul class="list">
 <?php foreach($categories as $id => $cat): ?>
 	<li>
-		<a href="<?= miniMVC\site_url("category/{$id}") ?>"><?= $cat ?></a>
-		<span class="modify" id="category_<?=$id ?>">
+		<a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a>
+		<span class="modify" data-type="category" data-id="<?=$id ?>" data-parent="<?=$genre_id ?>">
 			<button class="edit">Edit</button>
 			<button class="delete">Delete</button>
 		</span>
-		<ul>
-		<?php /* $sarray = $this->data_model->get_sections($id); ?>
-		<?php foreach($sarray as $sid => $section): ?>
-			<li>
-				<a href="<?= miniMVC\site_url("section/{$sid}") ?>"><?= $section ?></a>
-				<span class="modify" id="section_<?=$id ?>">
-					<button class="edit">Edit</button>
-					<button class="delete">Delete</button>
-				</span>
-			</li>
-		<?php endforeach */ ?>
-		</ul>
 	</li>
 <?php endforeach ?>
 </ul>

@@ -31,12 +31,7 @@
 | slash.
 |
 */
-// Determine the default site url
-$ri = $_SERVER['REQUEST_URI'];
-$ind_pos = stripos($ri, "index.php");
-$default_path = ($ind_pos !== FALSE) ? substr($ri, 0, $ind_pos) : $ri;
-$default_baseurl = "//" . str_replace("//", "/", $_SERVER['HTTP_HOST']. $default_path);
-define('BASE_URL', $default_baseurl);
+define('BASE_URL', '//' . $_SERVER['HTTP_HOST'] . '/');
 
 /*
 |--------------------------------------------------------------------------
@@ -46,7 +41,7 @@ define('BASE_URL', $default_baseurl);
 | This determines whether "index.php" is in generated urls
 |
 */
-define('URL_INDEX_FILE', 'index.php/');
+define('URL_INDEX_FILE', '');
 
 /*
 |--------------------------------------------------------------------------

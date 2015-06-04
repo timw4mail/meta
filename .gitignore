@@ -1,3 +1,5 @@
 sys/*.sqlite
 docs/*
 assets/js/cache/*
+vendor/*
+composer.lock

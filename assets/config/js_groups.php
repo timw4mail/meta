@@ -27,6 +27,7 @@ return array(
 	*/
 
 	'js' => array(
+		'prism.js',
 		'kis-lite-dom.js',
 		'meta.js'
 	),

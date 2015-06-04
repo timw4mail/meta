@@ -32,11 +32,17 @@ define('MM_SYS_PATH', __DIR__.'/sys/');
 define('MM_APP_PATH', __DIR__.'/app/');
 define('MM_MOD_PATH', MM_APP_PATH.'modules/');
 
+// Autoload vendors
+require(MM_BASE_PATH . '/vendor/autoload.php');
+
 // Require the basic configuration file
-require(MM_APP_PATH .'config/config.php');
+require(MM_APP_PATH . 'config/config.php');
 
 // Require the most important files
 require(MM_SYS_PATH . 'common.php');
+
+// Start the autoloader
+spl_autoload_register('miniMVC\autoload');
 
 // And away we go!
 init();

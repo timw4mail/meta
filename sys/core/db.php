@@ -21,7 +21,7 @@ namespace miniMVC;
  * @package miniMVC
  * @subpackage System
  */
-class db extends \Query_Builder {
+class db extends \Query\Query_Builder {
 
 	/**
 	 * DB connection instances
@@ -56,7 +56,7 @@ class db extends \Query_Builder {
 			}
 
 			//echo 'Creating new instance of db class.';
-			self::$instance[$dbname] = new DB($db_conf[$dbname]);
+			self::$instance[$dbname] = Query($db_conf[$dbname]);
 		}
 
 		return self::$instance[$dbname];
@@ -81,10 +81,8 @@ class db extends \Query_Builder {
 		{
 			$error = $this->errorInfo();
 		}
-
-		$code = $error[0];
-		$driver_code = $error[1];
-		$message = $error[2];
+		
+		list($code, $driver_code, $message) = $error;
 
 		// Contain the content for buffering
 		ob_start();

@@ -20,7 +20,7 @@
 	<!-- Genres -->
 	<?php foreach($genre_array as $genre => $cat_array): ?>
 	<dt>
-		<a href="<?= \miniMVC\site_url("genre/{$genre_id}") ?>"><?= $genre ?></a>
+		<a href="<?= \miniMVC\site_url("genre/detail/{$genre_id}") ?>"><?= $genre ?></a>
 	</dt>
 	<dd>
 
@@ -29,14 +29,14 @@
 			<!-- Categories -->
 			<?php foreach($cname_array as $category => $sect_array): ?>
 			<li>
-				<a href="<?= \miniMVC\site_url("category/{$cat_id}") ?>"><?= $category ?></a>
+				<a href="<?= \miniMVC\site_url("category/detail/{$cat_id}") ?>"><?= $category ?></a>
 
 				<?php if ( ! empty($sect_array)): ?>
 				<ul>
 					<!-- Sections -->
 					<?php foreach($sect_array as $section_id => $section): ?>
 					<li>
-						<a href="<?= \miniMVC\site_url("section/{$section_id}") ?>">
+						<a href="<?= \miniMVC\site_url("section/detail/{$section_id}") ?>">
 							<?= $section ?>
 						</a>
 					</li>

@@ -166,12 +166,6 @@ class Page {
 			{
 				ob_end_flush();
 			}
-
-
-		}
-		else
-		{
-			echo 'No content';
 		}
 	}
 
@@ -452,7 +446,7 @@ class Page {
 		$this->_headers($html5);
 
 		//Output Header
-		$this->load_view('header', $data);
+		$this->append_output($this->load_view('header', $data, TRUE));
 
 		return $this;
 	}
@@ -468,7 +462,7 @@ class Page {
 
 		$data['foot_js'] = ($this->foot_js != "") ? $this->foot_js : '';
 
-		$this->load_view('footer', $data);
+		$this->append_output($this->load_view('footer', $data, TRUE));
 	}
 
 	// --------------------------------------------------------------------------
@@ -543,6 +537,7 @@ class Page {
 	{
 		$this->build_header();
 		$this->load_view($view, $data);
+		$this->set_foot_js_group('js');
 		$this->build_footer();
 	}
 

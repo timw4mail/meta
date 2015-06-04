@@ -21,6 +21,7 @@
  */
 
 namespace miniMVC;
+use \Aura\Router\RouterFactory;
 
 // --------------------------------------------------------------------------
 // ! Autoloading
@@ -58,9 +59,6 @@ function autoload($name)
 		require_once($class_path);
 	}
 }
-
-// Start the autoloader
-spl_autoload_register('miniMVC\autoload');
 
 // --------------------------------------------------------------------------
 // ! Error handling / messages
@@ -362,107 +360,50 @@ function get_segments()
  */
 function route()
 {
+	$router_factory = new RouterFactory;
+	$router = $router_factory->newInstance();
 
-	// Get the path info
-	$pi = $_SERVER['PATH_INFO'];
-	$ru = $_SERVER['REQUEST_URI'];
-	$sn = $_SERVER['SCRIPT_NAME'];
-	$qs = $_SERVER['QUERY_STRING'];
+	// Load the routes config file to add additional routes
+	$routes = [];
+	require_once(MM_APP_PATH . 'config/routes.php');
 
-	// Make sure the home page works when in a sub_directory
-	if (strlen($sn) > strlen($ru))
-	{
-		$pi = '/';
-	}
+	// get the incoming request URL path
+	$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-	// Load the routes config file
-	$routes = require_once(MM_APP_PATH . 'config/routes.php');
+	// get the route based on the path and server
+	$route = $router->match($path, $_SERVER);
 
-	// Set the default route
-	$module = $routes['default_module'];
+	// Set default controller/function
 	$controller = $routes['default_controller'];
-	$func = "index";
-	$route_set = FALSE;
+	$action = 'index';
 
-	// If it isn't the index page
-	if ( ! empty($pi) && $pi !== "/")
+	// 404 Condition
+	if (empty($route))
 	{
-		//Remove trailing slash and begining slash
-		$pi = trim($pi, '/');
-		$segments = explode("/", $pi);
+		show_404();
+		return;
+	}
 
-		// URL matches the route exactly? Cool, that was easy
-		if (isset($routes[$pi]))
+	// Home
+	if (isset($route->name) && $route->name === 'home')
+	{
+		run($controller, $action);
+		return;
+	}
+
+	// Gather route parts
+	foreach(array('controller', 'action', 'id') as $param)
+	{
+		if (isset($route->params[$param]))
 		{
-			list($module, $controller, $func) = explode("/", $routes[$pi]);
-			run($module, $controller, $func);
-			return;
-		}
-		else
-		{
-			$custom_routes = $routes;
-
-			// Skip required routes
-			unset($custom_routes['default_module']);
-			unset($custom_routes['default_controller']);
-			unset($custom_routes['404_handler']);
-
-			foreach($custom_routes as $uri => $map)
-			{
-				if (preg_match("`{$uri}`i", $pi))
-				{
-					list($module, $controller, $func) = explode("/", $map);
-					run($module, $controller, $func);
-					return;
-				}
-			}
-		}
-
-		// Doesn't match a predefined route?
-		// Match on module/controller/method, module/controller, controller/method, or method
-		if ( ! $route_set)
-		{
-			$num_segments = 0;
-
-			if (strpos($pi, '/') === FALSE  &&  ! empty($pi))
-			{
-				$num_segments = 1;
-			}
-			else
-			{
-				$segments = explode('/', $pi);
-				$num_segments = count($segments);
-			}
-
-			// Determine route based on uri segments
-			if ($num_segments === 1)
-			{
-				$func = $pi;
-			}
-			elseif ($num_segments === 2)
-			{
-
-				list($module, $controller) = $segments;
-
-				// If it's just controller/function
-				if ($controller == 'index')
-				{
-					$controller = $module;
-					$module = $routes['default_module'];
-					$func = 'index';
-				}
-
-			}
-			else
-			{
-				list($module, $controller, $func) = $segments;
-			}
+			$$param = $route->params[$param];
 		}
 	}
 
-	run($module, $controller, $func);
+	if ( ! isset($id)) $id = array();
 
-	return;
+	// Dispatch to the appropriate controller
+	run($controller, $action, array($id));
 }
 
 // --------------------------------------------------------------------------
@@ -470,14 +411,14 @@ function route()
 /**
  * Instantiate the appropriate controller
  *
- * @param string
- * @param string
- * @param string
- * @param array
+ * @param string $controller
+ * @param string $func
+ * @param array $args
+ * @return void
  */
-function run($module, $controller, $func, $args = array())
+function run($controller, $func, $args = array())
 {
-	$path = MM_MOD_PATH . "{$module}/controllers/{$controller}.php";
+	$path = MM_MOD_PATH . "meta/controllers/{$controller}.php";
 
 	if (is_file($path))
 	{
@@ -492,7 +433,7 @@ function run($module, $controller, $func, $args = array())
 			// Define the name of the current module for file loading
 			if ( ! defined('MM_MOD'))
 			{
-				define('MM_MOD', $module);
+				define('MM_MOD', 'meta');
 			}
 
 			if (class_exists($controller))
@@ -500,11 +441,9 @@ function run($module, $controller, $func, $args = array())
 				$class = new $controller();
 			}
 
-			//show_error(to_string(get_declared_classes()));
-			return call_user_func_array(array($class, $func), $args);
+			call_user_func_array(array($class, $func), $args);
+			return;
 		}
-
-		show_404();
 	}
 
 	// Function doesn't exist...404

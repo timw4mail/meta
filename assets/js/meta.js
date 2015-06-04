@@ -27,39 +27,71 @@ $_.ext('center', function (sel){
 	sel.style.left = left + "px";
 });
 
-(function() {
+(function(w, $_) {
 
-    "use strict";
+	"use strict";
 
-    var TINY = window.TINY || {};
-    var $_ = window.$_ || {};
+	var TINY = w.TINY || {};
+	var $_ = w.$_ || {};
+
+	var parent_map = {
+		"data":"section",
+		"section":"category",
+		"category":"genre",
+		"genre":"genre"
+	};
 
 	// ! Show/hide forms based on use
 	$_("fieldset dl").dom.hide();
 	$_("fieldset legend").event.add('click', function(e){
-		var form = $_("fieldset dl").dom;
-
-		(form.css('display').trim() == 'none')
-			? form.show()
-			: form.hide();
+		($_("fieldset dl").dom.css('display').trim() == 'none')
+			? $_("fieldset dl").dom.show()
+			: $_("fieldset dl").dom.hide();
 	});
 
 	var meta = {};
-	window.meta = meta;
+	w.meta = meta;
+	
+	/**
+	 * Create the WYSIWYG editor box
+	 */
+	meta.initTINY = function(id) {
+		// WYSIWYG
+		new TINY.editor.edit('edit_wysiwyg',
+		{
+			id:id,
+			width:450,
+			height:175,
+			cssclass:'te',
+			controlclass:'tecontrol',
+			rowclass:'teheader',
+			dividerclass:'tedivider',
+			controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
+				'orderedlist','unorderedlist','|','leftalign',
+				'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
+				'image','hr','link','unlink','|'],
+			footer:true,
+			fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
+			xhtml:true,
+			cssfile:ASSET_URL+'css.php/g/css',
+			bodyid:'editor',
+			footerclass:'tefooter',
+			toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
+			resize:{cssclass:'resize'}
+		});
+	},
 
 	/**
 	 * Deletes a genre/category/section/data item
 	 * based on the current page context
 	 */
 	meta.delete_item = function(e) {
-		var item_id, id, type;
+		var id, type, parent_id;
 
 		// Get the type/id of the item
-		item_id = this.parentNode.id;
-		item_id = item_id.split('_');
-
-		id = item_id[1];
-		type = item_id[0];
+		id = this.parentNode.dataset['id'];
+		type = this.parentNode.dataset.type;
+		parent_id = this.parentNode.dataset.parent;
 
 		// Confirm deletion
 		var confirm_string = "Are you sure you want to delete this "+type+"? Deleting this item will delete all items under it. There is no undo.";
@@ -70,34 +102,25 @@ $_.ext('center', function (sel){
 
 		if (do_delete)
 		{
-			// Call the appropriate deletion method
-			switch(type)
-			{
-				case "genre":
-				case "category":
-				case "section":
-				case "data":
-					$_.post(APP_URL+'delete', {'id':id, 'type':type}, function(res){
-						if (res == 1)
-						{
-							// Reload the page
-							window.location = window.location;
-						}
-						else
-						{
-							$_.get(APP_URL+'message', {
-								type: 'error',
-								message: 'There was an error deleting that item'
-							}, function(h) {
-								$_('body').dom.prepend(h);
-							});
-						}
+			$_.post(APP_URL+'delete', {'id':id, 'type':type}, function(res){
+				if (res == 1)
+				{
+					// Redirect to previous page
+					var redir_url = APP_URL+parent_map[type]+'/detail/'+parent_id;
+					w.location = (type !== 'genre')
+						? redir_url
+						: APP_URL;
+				}
+				else
+				{
+					$_.get(APP_URL+'message', {
+						type: 'error',
+						message: 'There was an error deleting that item'
+					}, function(h) {
+						$_('body').dom.prepend(h);
 					});
-				break;
-
-				default:
-				break;
-			}
+				}
+			});
 		}
 	};
 
@@ -106,14 +129,10 @@ $_.ext('center', function (sel){
 	 * being edited
 	 */
 	meta.get_edit_form = function(e) {
-		var item_id, id, type;
+		var id, type;
 
-		// Get the type/id of the item
-		item_id = this.parentNode.id;
-		item_id = item_id.split('_');
-
-		id = item_id[1];
-		type = item_id[0];
+		id = this.parentNode.dataset['id'];
+		type = this.parentNode.dataset.type;
 
 		$_('#overlay_bg, #overlay').dom.show();
 
@@ -126,29 +145,7 @@ $_.ext('center', function (sel){
 
 			if (type == 'data')
 			{
-				// WYSIWYG
-				new TINY.editor.edit('edit_wysiwyg',
-				{
-					id:'val',
-					width:450,
-					height:175,
-					cssclass:'te',
-					controlclass:'tecontrol',
-					rowclass:'teheader',
-					dividerclass:'tedivider',
-					controls:['bold','italic','underline','strikethrough','|','subscript','superscript','|',
-						'orderedlist','unorderedlist','|','leftalign',
-						'centeralign','rightalign','blockjustify','|','unformat','n','undo','redo','|',
-						'image','hr','link','unlink','|'],
-					footer:true,
-					fonts:['Verdana','Arial','Georgia','Trebuchet MS'],
-					xhtml:true,
-					cssfile:ASSET_URL+'css.php/g/css',
-					bodyid:'editor',
-					footerclass:'tefooter',
-					toggle:{text:'source',activetext:'wysiwyg',cssclass:'toggle'},
-					resize:{cssclass:'resize'}
-				});
+				meta.initTINY('val');
 
 				//Do it again, so it's correct this time!
 				$_('#overlay').center();
@@ -190,7 +187,7 @@ $_.ext('center', function (sel){
 			if (res == 1)
 			{
 				// Reload the page
-				window.location = window.location;
+				w.location = w.location;
 			}
 			else
 			{
@@ -217,12 +214,17 @@ $_.ext('center', function (sel){
 
 	// Overlay close
 	$_("#overlay_bg").event.add('click', function(e) {
-		$_('#overlay_bg').dom.css('display', '');
+		$_('#overlay_bg').dom.css('display', 'none');
 		$_('#overlay').dom.html('');
 		$_('#overlay').dom.hide();
 	});
 
 	// Edit form submission
 	$_.event.live('#edit_form', 'submit', meta.update_item);
-
-}());
+	
+	// WYSIWYG on section/data pages
+	if (document.getElementById('textarea') != null)
+	{
+		meta.initTINY('textarea');
+	}
+}(window, $_));

@@ -24,7 +24,8 @@ return array(
 		'normalize.css',
 		'message.css',
 		'theme.css',
-		'tinyeditor.css'
+		'tinyeditor.css',
+		'prism.css'
 	)
 );
 // End of css_groups.php

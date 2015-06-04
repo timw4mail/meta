@@ -31,7 +31,7 @@ class section extends meta\controller {
 	/**
 	 * Default controller method
 	 */
-	public function index($id=0)
+	public function detail($id=0)
 	{
 		if ($id === 0)
 		{
@@ -50,7 +50,7 @@ class section extends meta\controller {
 			'section_id' => $id
 		);
 
-		$this->load_view('section_detail', $data);
+		$this->render('section_detail', $data);
 	}
 
 	/**
@@ -77,7 +77,7 @@ class section extends meta\controller {
 			? $this->page->set_message('success', 'Added data')
 			: $this->page->set_message('error', 'Data already exists');
 
-		$this->index($section_id);
+		$this->detail($section_id);
 	}
 }
 

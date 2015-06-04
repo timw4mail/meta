@@ -217,7 +217,7 @@ dl.outline dd:last-child {
 		list-style:square inside;
 	}
 
-.list li {
+.list > li {
 	list-style:none;
 
 }
@@ -230,6 +230,10 @@ li h4 {
 dl.multiline, dl.pair {
 	border-bottom:1px dotted #312;
 }
+
+	li dl.multiline:last-of-type {
+		border-bottom:0;
+	}
 
 dl.multiline dt {
 	font-weight:bold;

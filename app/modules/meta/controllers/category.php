@@ -31,7 +31,7 @@ class category extends meta\controller {
 	/**
 	 * Returns the sections / editing options for a category
 	 */
-	public function index($id = 0)
+	public function detail($id = 0)
 	{
 		if ($id === 0)
 		{
@@ -50,7 +50,7 @@ class category extends meta\controller {
 			'category_id' => $id
 		);
 
-		$this->load_view('category_detail', $data);
+		$this->render('category_detail', $data);
 	}
 
 	/**
@@ -74,7 +74,7 @@ class category extends meta\controller {
 			$this->page->set_message('error', 'Section already exists for this category');
 		}
 
-		$this->index($id);
+		$this->detail($id);
 	}
 }
 

@@ -92,6 +92,21 @@ class Controller {
 	{
 		return $this->page->load_view($file, $data, $return);
 	}
+	
+	// --------------------------------------------------------------------------
+	
+	/**
+	 * Automate loading of header and footer
+	 *
+	 * @param string $file
+	 * @param array $data
+	 * @param bool $return
+	 * @return mixed
+	 */
+	public function render($file, array $data=array(), $return=FALSE)
+	{
+		return $this->page->render($file, $data, $return);
+	}
 }
 
 // End of controller.php

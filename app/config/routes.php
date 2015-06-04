@@ -29,20 +29,22 @@
 
 // --------------------------------------------------------------------------
 
-return array(
+$routes = [
 	// Default Paths
-	'default_controller'	=>	'welcome',
-	'default_module'		=>	'meta',
-	'delete'				=>	'meta/welcome/delete',
-	'update'				=>	'meta/welcome/update_item',
-	'genre'					=>	'meta/genre/index',
-	'genre/add'				=> 	'meta/genre/add',
-	'genre/add_category'	=>	'meta/genre/add_category',
-	'category' 				=>	'meta/category/index',
-	'category/add_section' 	=>	'meta/category/add_section',
-	'section' 				=>	'meta/section/index',
-	'section/add_data'		=>	'meta/section/add_data',
+	'default_controller'	=>	'genre',
 	'404_route'				=>	'',
-);
+];
+
+// Add default routes
+$router->add('home', '/');
+$router->add(null, '/{controller}/{action}/{id}');
+$router->add('no_id', '/{controller}/{action}');
+
+// Custom routes
+$router->add('outline', '/outline');
+$router->add('edit', '/edit');
+$router->add('delete', '/delete');
+$router->addPost('data_add', '/section/add_data');
+$router->addPost('update', '/update');
 
 // End of routes.php

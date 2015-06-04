@@ -12,13 +12,10 @@
     </transformations>
 	<files>
 		<directory>.</directory>
-		<directory>tests</directory>
-		<directory>assets</directory>
-		<directory>app/config</directory>
-		<directory>app/views</directory>
-		<directory>sys/db</directory>
+		<directory>app/modules/</directory>
 		<ignore>tests/*</ignore>
 		<ignore>assets/*</ignore>
+		<ignore>vendor/*</ignore>
 		<ignore>sys/db/*</ignore>
 		<ignore>app/config/*</ignore>
 		<ignore>app/views/*</ignore>
