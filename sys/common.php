@@ -225,9 +225,6 @@ if ( ! function_exists('do_include'))
  */
 function init()
 {
-	// Load Database classes
-	require_once(MM_SYS_PATH . 'db/autoload.php');
-
 	// Map to the appropriate module/controller/function
 	route();
 }
