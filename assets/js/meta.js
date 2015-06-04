@@ -223,7 +223,7 @@ $_.ext('center', function (sel){
 	$_.event.live('#edit_form', 'submit', meta.update_item);
 
 	// WYSIWYG on section/data pages
-	if (document.getElementsByTagName('textarea') != null)
+	if (document.getElementsByTagName('textarea').length > 0)
 	{
 		meta.initTINY('val');
 	}

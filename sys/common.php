@@ -286,6 +286,8 @@ function route()
 
 	// get the incoming request URL path
 	$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$path = str_replace(URL_INDEX_FILE, '', $path);
+	$path = str_replace(BASE_PATH, '', $path);
 
 	// get the route based on the path and server
 	$route = $router->match($path, $_SERVER);

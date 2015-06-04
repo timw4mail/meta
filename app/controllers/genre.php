@@ -25,6 +25,8 @@ class genre extends \miniMVC\Controller {
 	 */
 	public function index()
 	{
+		//$this->data_model->create_tables();
+
 		$data = array();
 		$data['genres'] = $this->data_model->get_genres();
 

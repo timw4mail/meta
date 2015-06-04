@@ -27,11 +27,22 @@
 | Base Url
 |--------------------------------------------------------------------------
 |
-| This is the url path where the framework is located. Requires trailing
+| This is the url path of the domain. Requires trailing
 | slash.
 |
 */
 define('BASE_URL', '//' . $_SERVER['HTTP_HOST'] . '/');
+
+/*
+|--------------------------------------------------------------------------
+| Base Path
+|--------------------------------------------------------------------------
+|
+| This is the url path where the framework is located. Requires trailing
+| slash.
+|
+*/
+define('BASE_PATH', 'meta/');
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +52,7 @@ define('BASE_URL', '//' . $_SERVER['HTTP_HOST'] . '/');
 | This determines whether "index.php" is in generated urls
 |
 */
-define('URL_INDEX_FILE', '');
+define('URL_INDEX_FILE',  BASE_PATH . 'index.php/');
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +62,7 @@ define('URL_INDEX_FILE', '');
 | This is the domain used for serving content, such as css, javascript.
 |
 */
-define('CONTENT_DOMAIN', BASE_URL);
+define('CONTENT_DOMAIN', BASE_URL . BASE_PATH);
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +84,7 @@ define('STATIC_LIB_PATH', CONTENT_DOMAIN.'assets/');
 | stylesheet minifier. This should not need to be changed.
 |
 */
-define('STYLE_PATH', STATIC_LIB_PATH . 'css.php/g/');
+define('STYLE_PATH', STATIC_LIB_PATH . 'css.php?g=');
 
 /*
 |--------------------------------------------------------------------------
@@ -84,7 +95,7 @@ define('STYLE_PATH', STATIC_LIB_PATH . 'css.php/g/');
 | javascript minifier. This should not need to be changed.
 |
 */
-define('SCRIPT_PATH', STATIC_LIB_PATH . 'js.php/g/');
+define('SCRIPT_PATH', STATIC_LIB_PATH . 'js.php?g=');
 
 
 /*
