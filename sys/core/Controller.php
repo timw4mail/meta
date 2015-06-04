@@ -42,6 +42,11 @@ class Controller {
 		{
 			$this->page = new Page();
 		}
+
+		$this->load_model('meta\data_model');
+		$db = \miniMVC\db::get_instance();
+
+		$this->page->queries =& $db->queries;
 	}
 
 	// --------------------------------------------------------------------------
@@ -59,8 +64,7 @@ class Controller {
 		$file_name = end($segments);
 
 		// The module is set via the router
-		$module = strtolower(MM_MOD);
-		$path = MM_MOD_PATH . "{$module}/models/{$file_name}.php";
+		$path = MM_APP_PATH . "models/{$file_name}.php";
 
 		if (is_file($path))
 		{
@@ -92,9 +96,9 @@ class Controller {
 	{
 		return $this->page->load_view($file, $data, $return);
 	}
-	
+
 	// --------------------------------------------------------------------------
-	
+
 	/**
 	 * Automate loading of header and footer
 	 *

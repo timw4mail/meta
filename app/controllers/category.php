@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class category extends meta\controller {
+class category extends \miniMVC\Controller {
 
 	/**
 	 * Initialize the Controller

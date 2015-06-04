@@ -61,77 +61,7 @@ function autoload($name)
 }
 
 // --------------------------------------------------------------------------
-// ! Error handling / messages
-// --------------------------------------------------------------------------
-
-/**
- * Function to run on script shutdown
- * -used to catch most fatal errors, and
- * display them cleanly
- *
- * @return void
- */
-function shutdown()
-{
-    // Catch the last error
-    $error = error_get_last();
-
-    // types of errors that are fatal
-    $fatal = array(E_ERROR, E_PARSE, E_RECOVERABLE_ERROR);
-
-    // Display pretty error page
-    if (in_array($error['type'], $fatal))
-    {
-        $file = str_replace(MM_BASE_PATH, "", $error['file']);
-
-        $err_msg = "<h2>Fatal Error: </h2>
-		{$error['message']}<br /><br />
-		<strong>File:</strong> {$file}<br /><br />
-		<strong>Line:</strong> {$error['line']}";
-
-        show_error($err_msg);
-    }
-}
-
-// --------------------------------------------------------------------------
-
-/**
- * Custom error handler
- *
- * @param int $severity
- * @param string $message
- * @param string $filepath
- * @param int $line
- * @return ErrorException
- */
-function on_error($severity, $message, $filepath, $line)
-{
-    throw new \ErrorException($message, 0, $severity, $filepath, $line);
-}
-
-// --------------------------------------------------------------------------
-
-/**
- * Custom exception handlererror_get_last
- *
- * @param Exception $exception
- * @return void
- */
-function on_exception($exception)
-{
-	// This is passed to the error template
-	$message = $exception->getMessage();
-
-	// Contain the content for buffering
-	ob_start();
-
-	include(MM_APP_PATH . '/views/errors/error_php_exception.php');
-
-	$buffer = ob_get_contents();
-	ob_end_clean();
-	echo $buffer;
-}
-
+// ! Messages
 // --------------------------------------------------------------------------
 
 /**
@@ -295,16 +225,6 @@ if ( ! function_exists('do_include'))
  */
 function init()
 {
-	// Catch fatal errors, don't show them
-	if (function_exists('error_get_last'))
-	{
-		register_shutdown_function('miniMVC\shutdown');
-	}
-
-	//Set error handlers
-	set_error_handler('miniMVC\on_error');
-	set_exception_handler('miniMVC\on_exception');
-
 	// Load Database classes
 	require_once(MM_SYS_PATH . 'db/autoload.php');
 
@@ -418,7 +338,7 @@ function route()
  */
 function run($controller, $func, $args = array())
 {
-	$path = MM_MOD_PATH . "meta/controllers/{$controller}.php";
+	$path = MM_APP_PATH . "controllers/{$controller}.php";
 
 	if (is_file($path))
 	{

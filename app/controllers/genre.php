@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class genre extends meta\controller {
+class genre extends \miniMVC\Controller {
 
 	/**
 	 * Default controller method
@@ -32,7 +32,7 @@ class genre extends meta\controller {
 
 		return;
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -58,7 +58,7 @@ class genre extends meta\controller {
 		// Render the basic page
 		$this->index();
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -74,7 +74,7 @@ class genre extends meta\controller {
 			// is a valid integer
 			$id = (int) miniMVC\get_last_segment();
 		}
-	
+
 		$genre = $this->data_model->get_genre_by_id($id);
 		$categories = $this->data_model->get_categories($id);
 
@@ -86,7 +86,7 @@ class genre extends meta\controller {
 
 		$this->render('genre_detail', $data);
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -112,7 +112,7 @@ class genre extends meta\controller {
 
 		$this->detail($id);
 	}
-	
+
 	// --------------------------------------------------------------------------
 
 	/**
@@ -144,10 +144,10 @@ class genre extends meta\controller {
 	public function delete()
 	{
 		$type = strip_tags($_POST['type']);
-		
+
 		$valid_types = ['genre', 'category', 'section', 'data'];
-		
-		$res = (in_array($type, $valid_types)) 
+
+		$res = (in_array($type, $valid_types))
 			? $this->data_model->delete($type, (int) $_POST['id'])
 			: 0;
 
@@ -184,7 +184,7 @@ class genre extends meta\controller {
 		$type = strip_tags($_POST['type']);
 		$name = strip_tags($_POST['name']);
 		$val = (isset($_POST['val'])) ? $_POST['val'] : NULL;
-		
+
 		if ($this->data_model->is_valid_type($type))
 		{
 			if ($type != 'data')
@@ -195,12 +195,12 @@ class genre extends meta\controller {
 			{
 				$res = $this->data_model->update_data($id, $name, $val);
 			}
-			
+
 			$res = (int) $res;
-			
+
 			exit(mb_trim($res));
 		}
-		
+
 		exit(0);
 	}
 }

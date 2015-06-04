@@ -18,7 +18,7 @@
  *
  * @package meta
  */
-class section extends meta\controller {
+class section extends \miniMVC\Controller {
 
 	/**
 	 * Constructor

@@ -137,7 +137,7 @@ class Page {
 		{
 			die();
 		}
-	
+
 		if ( ! empty($this->headers))
 		{
 			// Set headers
@@ -614,18 +614,7 @@ class Page {
 	 */
 	public function load_view($file, array $data=array(), $return=FALSE)
 	{
-		$path = "";
-
-		// The module is set via the router
-		$module = strtolower(MM_MOD);
-		$path = MM_MOD_PATH . "{$module}/views/{$file}.php";
-
-		// If it's not a module, or doesn't exist in the module view folder
-		// look in the app view folder
-		if ( ! is_file($path))
-		{
-			$path = MM_APP_PATH . "views/{$file}.php";
-		}
+		$path = MM_APP_PATH . "views/{$file}.php";
 
 		// Contain the content for buffering
 		ob_start();

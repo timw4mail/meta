@@ -24,13 +24,15 @@
 
 namespace miniMVC;
 
+use \Whoops\Handler\PrettyPageHandler;
+use \Whoops\Handler\JsonResponseHandler;
+
 error_reporting(-1);
 
 // Set the default paths
 define('MM_BASE_PATH', __DIR__);
 define('MM_SYS_PATH', __DIR__.'/sys/');
 define('MM_APP_PATH', __DIR__.'/app/');
-define('MM_MOD_PATH', MM_APP_PATH.'modules/');
 
 // Autoload vendors
 require(MM_BASE_PATH . '/vendor/autoload.php');
@@ -43,6 +45,11 @@ require(MM_SYS_PATH . 'common.php');
 
 // Start the autoloader
 spl_autoload_register('miniMVC\autoload');
+
+// Setup error handling
+$whoops = new \Whoops\Run();
+$defaultHandler = new PrettyPageHandler();
+$whoops->pushHandler($defaultHandler);
 
 // And away we go!
 init();

@@ -4,7 +4,6 @@
 	<a href="<?= miniMVC\site_url('category/detail/'.$p['category_id']) ?>"><?= $p['category'] ?></a> >
 	<?= $section ?>
 </p>
-<script src="<?= SCRIPT_PATH.'wysiwyg'; ?>"></script>
 <form class="add" action="<?= miniMVC\site_url("section/add_data") ?>" method="post" onsubmit="window.edit_wysiwyg.toggle()">
 	<fieldset>
 		<legend>Add Data</legend>
