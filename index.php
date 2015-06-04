@@ -37,6 +37,12 @@ define('MM_APP_PATH', __DIR__.'/app/');
 // Autoload vendors
 require(MM_BASE_PATH . '/vendor/autoload.php');
 
+// Setup error handling
+$whoops = new \Whoops\Run();
+$defaultHandler = new PrettyPageHandler();
+$whoops->pushHandler($defaultHandler);
+$whoops->register();
+
 // Require the basic configuration file
 require(MM_APP_PATH . 'config/config.php');
 
@@ -45,11 +51,6 @@ require(MM_SYS_PATH . 'common.php');
 
 // Start the autoloader
 spl_autoload_register('miniMVC\autoload');
-
-// Setup error handling
-$whoops = new \Whoops\Run();
-$defaultHandler = new PrettyPageHandler();
-$whoops->pushHandler($defaultHandler);
 
 // And away we go!
 init();

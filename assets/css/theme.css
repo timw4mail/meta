@@ -120,6 +120,10 @@ li li, li dt {
 	z-index:3;
 }
 
+form dd input {
+	width:90%;
+}
+
 li:hover > .modify, dt:hover > .modify, dd:hover > .modify {
 	display:inline-block;
 	vertical-align:top;

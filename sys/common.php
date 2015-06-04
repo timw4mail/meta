@@ -300,7 +300,8 @@ function route()
 	// 404 Condition
 	if (empty($route))
 	{
-		show_404();
+		throw new \Exception("404: Page not found.");
+		//show_404();
 		return;
 	}
 

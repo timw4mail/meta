@@ -544,6 +544,23 @@ class Page {
 	// --------------------------------------------------------------------------
 
 	/**
+	 * Render Message
+	 *
+	 * Render a full page message
+	 * @param string $type
+	 * @param string $message
+	 */
+	public function render_message($type, $message)
+	{
+		$this->render('message', [
+			'stat_class' => $type,
+			'message' => $message
+		]);
+	}
+
+	// --------------------------------------------------------------------------
+
+	/**
 	 * Output String
 	 *
 	 * Similar to render(), this is a shortcut

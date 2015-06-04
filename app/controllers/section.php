@@ -38,17 +38,18 @@ class section extends \miniMVC\Controller {
 			$id = (int) miniMVC\get_last_segment();
 		}
 
-		if ($id === 0)
-		{
-			miniMVC\show_404();
-		}
-
 		$data = array(
 			'section' => $this->data_model->get_section_by_id($id),
 			'sdata' => $this->data_model->get_data($id),
 			'p' => $this->data_model->get_path_by_section($id),
 			'section_id' => $id
 		);
+
+		if (empty($data['section']))
+		{
+			$this->page->render_message('error', "Section doesn't exist.");
+			return;
+		}
 
 		$this->render('section_detail', $data);
 	}

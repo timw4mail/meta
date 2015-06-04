@@ -13,7 +13,7 @@
 				<input type="text" name="name[]" id="section" /></dd>
 
 			<dt><label for="val">Value:</label></dt><dd>
-				<textarea id="input" name="val[]" rows="5" cols="40"></textarea></dd>
+				<textarea id="val" name="val[]" rows="5" cols="40"></textarea></dd>
 
 			<dt><input type="hidden" name="section_id" value="<?= $section_id ?>" /></dt><dd>
 				<button type="submit" class="save">Save Data</button></dd>
@@ -30,8 +30,8 @@
 			<dt>
 				<?= $k ?>
 				<span class="modify" data-type="data" data-id="<?=$d_id ?>" data-parent="<?= $section_id ?>">
-					<button class="edit">Edit</button>
-					<button class="delete">Delete</button>
+					<button class="edit">Edit Data</button>
+					<button class="delete">Delete Data</button>
 				</span>
 			</dt>
 			<dd><?= $v ?></dd>

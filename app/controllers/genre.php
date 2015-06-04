@@ -78,6 +78,14 @@ class genre extends \miniMVC\Controller {
 		$genre = $this->data_model->get_genre_by_id($id);
 		$categories = $this->data_model->get_categories($id);
 
+		if (empty($genre))
+		{
+
+			$this->page->render_message('error', "Genre doesn't exist.");
+			return;
+			return;
+		}
+
 		$data = array(
 			'genre' => $genre,
 			'categories' => $categories,

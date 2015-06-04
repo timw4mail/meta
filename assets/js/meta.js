@@ -51,7 +51,7 @@ $_.ext('center', function (sel){
 
 	var meta = {};
 	w.meta = meta;
-	
+
 	/**
 	 * Create the WYSIWYG editor box
 	 */
@@ -221,10 +221,10 @@ $_.ext('center', function (sel){
 
 	// Edit form submission
 	$_.event.live('#edit_form', 'submit', meta.update_item);
-	
+
 	// WYSIWYG on section/data pages
-	if (document.getElementById('textarea') != null)
+	if (document.getElementsByTagName('textarea') != null)
 	{
-		meta.initTINY('textarea');
+		meta.initTINY('val');
 	}
 }(window, $_));

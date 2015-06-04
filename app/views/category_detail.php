@@ -23,8 +23,8 @@
 	<li>
 		<h4><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
 		<span class="modify" data-id="<?= $id ?>" data-type="section" data-parent="<?= $category_id ?>">
-			<button class="edit">Edit</button>
-			<button class="delete">Delete</button>
+			<button class="edit">Edit Section</button>
+			<button class="delete">Delete Section</button>
 		</span>
 
 		<?php if ( ! empty($d)): ?>

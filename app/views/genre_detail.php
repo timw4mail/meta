@@ -21,8 +21,8 @@
 	<li>
 		<a href="<?= miniMVC\site_url("category/detail/{$id}") ?>"><?= $cat ?></a>
 		<span class="modify" data-type="category" data-id="<?=$id ?>" data-parent="<?=$genre_id ?>">
-			<button class="edit">Edit</button>
-			<button class="delete">Delete</button>
+			<button class="edit">Edit Category</button>
+			<button class="delete">Delete Category</button>
 		</span>
 	</li>
 <?php endforeach ?>

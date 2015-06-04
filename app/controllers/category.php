@@ -38,17 +38,18 @@ class category extends \miniMVC\Controller {
 			$id = (int) miniMVC\get_last_segment();
 		}
 
-		if ($id === 0)
-		{
-			miniMVC\show_404();
-		}
-
 		$data = array(
 			'category' => $this->data_model->get_category_by_id($id),
 			'sections' => $this->data_model->get_category_outline_data($id),
 			'genre' => $this->data_model->get_genre_by_category($id),
 			'category_id' => $id
 		);
+
+		if (empty($data['category']))
+		{
+			$this->page->render_message('error', "Category doesn't exist.");
+			return;
+		}
 
 		$this->render('category_detail', $data);
 	}

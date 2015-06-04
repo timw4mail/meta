@@ -22,8 +22,8 @@
 			<?= $name ?>
 		</a>
 		<span class="modify" data-id="<?= $id ?>" data-type="genre" data-parent="<?=$id ?>">
-			<button class="edit">Edit</button>
-			<button class="delete">Delete</button>
+			<button class="edit">Edit Genre</button>
+			<button class="delete">Delete Genre</button>
 		</span>
 	</li>
 <?php endforeach ?>
