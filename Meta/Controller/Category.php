@@ -13,20 +13,14 @@
 
 // --------------------------------------------------------------------------
 
+namespace Meta\Controller;
+
 /**
  * Category controller
  *
  * @package meta
  */
-class category extends \miniMVC\Controller {
-
-	/**
-	 * Initialize the Controller
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+class Category extends \Meta\Base\Controller {
 
 	/**
 	 * Returns the sections / editing options for a category
@@ -79,4 +73,4 @@ class category extends \miniMVC\Controller {
 	}
 }
 
-// End of genre.php
+// End of category.php

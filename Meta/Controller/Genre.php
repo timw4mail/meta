@@ -13,12 +13,14 @@
 
 // --------------------------------------------------------------------------
 
+namespace Meta\Controller;
+
 /**
  * Genre controller
  *
  * @package meta
  */
-class genre extends \miniMVC\Controller {
+class Genre extends \Meta\Base\Controller {
 
 	/**
 	 * Default controller method

@@ -13,16 +13,13 @@
 
 // --------------------------------------------------------------------------
 
-namespace meta;
-
-use \miniMVC\db;
+namespace Meta\Model;
+use \Meta\Base\db;
 
 /**
- * Main Model for database interaction
- *
- * @package meta
+ * Main Model for DB interaction
  */
-class data_model extends \miniMVC\Model {
+class Data extends \Meta\Base\Model {
 
 	/**
 	 * Reference to database connection
@@ -695,7 +692,5 @@ class data_model extends \miniMVC\Model {
 
 		}
 	}
-
 }
-
-// End of data_model.php
+// End of data.php

@@ -1,28 +1,25 @@
 <?php
 /**
- * MiniMVC
+ * meta
  *
- * Convention-based micro-framework for PHP
+ * Hierarchial data tool
  *
- * @package		miniMVC
+ * @package		meta
  * @author 		Timothy J. Warren
- * @copyright	Copyright (c) 2011 - 2012
- * @link 		https://github.com/aviat4ion/miniMVC
+ * @copyright	Copyright (c) 2012 - 2015
+ * @link 		https://github.com/aviat4ion/meta
  * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-namespace miniMVC;
+namespace Meta\Base;
 
 /**
  * Class for building pages
  *
  * All methods are chainable, with the exception of the constructor,
  * build_header(), build_footer(), and _headers() methods.
- *
- * @package miniMVC
- * @subpackage System
  */
 class Page {
 

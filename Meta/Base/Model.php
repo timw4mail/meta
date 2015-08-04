@@ -1,25 +1,22 @@
 <?php
 /**
- * MiniMVC
+ * meta
  *
- * Convention-based micro-framework for PHP
+ * Hierarchial data tool
  *
- * @package		miniMVC
+ * @package		meta
  * @author 		Timothy J. Warren
- * @copyright	Copyright (c) 2011 - 2012
- * @link 		https://github.com/aviat4ion/miniMVC
+ * @copyright	Copyright (c) 2012
+ * @link 		https://github.com/aviat4ion/meta
  * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-namespace miniMVC;
+namespace Meta\Base;
 
 /**
  * Base Model Class
- *
- * @package miniMVC
- * @subpackage System
  */
 class Model extends \ArrayObject {
 

@@ -1,64 +1,21 @@
 <?php
 /**
- * MiniMVC
+ * meta
  *
- * Convention-based micro-framework for PHP
+ * Simple hierarchial data management
  *
- * @package		miniMVC
+ * @package		meta
  * @author 		Timothy J. Warren
- * @copyright	Copyright (c) 2011 - 2012
- * @link 		https://github.com/aviat4ion/miniMVC
+ * @copyright	Copyright (c) 2012
+ * @link 		https://github.com/aviat4ion/meta
  * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-/**
- * File including common framework-wide functions
- *
- * @package miniMVC
- * @subpackage System
- */
+namespace Meta\Base;
 
-namespace miniMVC;
 use \Aura\Router\RouterFactory;
-
-// --------------------------------------------------------------------------
-// ! Autoloading
-// --------------------------------------------------------------------------
-
-/**
- * Function to autoload system libraries
- *
- * @param string
- */
-function autoload($name)
-{
-	if ($name == '') return;
-
-	// strip off namespaces - they all go to the same folder
-	$names = explode('\\', trim($name));
-	$name = end($names);
-
-	// Paths to load from
-	$sys_path = MM_SYS_PATH . "core/{$name}.php";
-	$lib_path =  MM_SYS_PATH . "libraries/{$name}.php";
-	$class_path = MM_APP_PATH . "classes/{$name}.php";
-
-	if (is_file($sys_path))
-	{
-		require_once($sys_path);
-	}
-	elseif (is_file($lib_path))
-	{
-		require_once($lib_path);
-	}
-
-	if (is_file($class_path))
-	{
-		require_once($class_path);
-	}
-}
 
 // --------------------------------------------------------------------------
 // ! Messages
@@ -144,7 +101,7 @@ function controller_methods($controller)
 	$methods = \get_class_methods($controller);
 
 	// Eliminate methods from Controller and Model classes
-	$skip_methods = array_merge(\get_class_methods('miniMVC\Controller'), \get_class_methods('miniMVC\Model'));
+	$skip_methods = array_merge(\get_class_methods('\Meta\Base\Controller'), \get_class_methods('\Meta\Base\Model'));
 	$methods = array_diff($methods, $skip_methods);
 
 	return $methods;
@@ -216,19 +173,6 @@ if ( ! function_exists('do_include'))
 
 // --------------------------------------------------------------------------
 // ! Bootstrap functions
-// --------------------------------------------------------------------------
-
-/**
- * Load required classes for bootstraping
- *
- * @return void
- */
-function init()
-{
-	// Map to the appropriate module/controller/function
-	route();
-}
-
 // --------------------------------------------------------------------------
 
 /**
@@ -338,32 +282,21 @@ function route()
  */
 function run($controller, $func, $args = array())
 {
-	$path = MM_APP_PATH . "controllers/{$controller}.php";
+	$controller_class = ucfirst($controller);
+	$controller = "Meta\\Controller\\{$controller_class}";
 
-	if (is_file($path))
+	// Get the list of valid methods for that controller
+	$methods = controller_methods($controller);
+
+	if (in_array($func, $methods))
 	{
-		require_once($path);
-
-		// Get the list of valid methods for that controller
-		$methods = controller_methods($controller);
-
-		if (in_array($func, $methods))
+		if (class_exists($controller))
 		{
-
-			// Define the name of the current module for file loading
-			if ( ! defined('MM_MOD'))
-			{
-				define('MM_MOD', 'meta');
-			}
-
-			if (class_exists($controller))
-			{
-				$class = new $controller();
-			}
-
-			call_user_func_array(array($class, $func), $args);
-			return;
+			$class = new $controller();
 		}
+
+		call_user_func_array(array($class, $func), $args);
+		return;
 	}
 
 	// Function doesn't exist...404

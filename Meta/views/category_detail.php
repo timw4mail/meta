@@ -1,8 +1,8 @@
 <p class="breadcrumbs">
-<a href="<?= miniMVC\site_url('') ?>">Genres</a> > <a href="<?= miniMVC\site_url('genre/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
+<a href="<?= \Meta\Base\site_url('') ?>">Genres</a> > <a href="<?= \Meta\Base\site_url('genre/detail/'.$genre['id']) ?>"><?= $genre['genre'] ?></a> > <?= $category ?>
 </p>
 
-<form class="add" action="<?= miniMVC\site_url("category/add_section") ?>" method="post">
+<form class="add" action="<?= \Meta\Base\site_url("category/add_section") ?>" method="post">
 	<fieldset>
 		<legend>Add Section</legend>
 		<dl>
@@ -21,7 +21,7 @@
 <?php foreach($sections as $id => $section): ?>
 	<?php if (is_array($section)) list($section, $d) = $section ?>
 	<li>
-		<h4><a href="<?= miniMVC\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
+		<h4><a href="<?= \Meta\Base\site_url("section/detail/{$id}") ?>"><?= $section ?></a></h4>
 		<span class="modify" data-id="<?= $id ?>" data-type="section" data-parent="<?= $category_id ?>">
 			<button class="edit">Edit Section</button>
 			<button class="delete">Delete Section</button>

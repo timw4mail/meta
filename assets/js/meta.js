@@ -226,5 +226,6 @@ $_.ext('center', function (sel){
 	if (document.getElementsByTagName('textarea').length > 0)
 	{
 		meta.initTINY('val');
+		meta.initTINY('val2');
 	}
 }(window, $_));

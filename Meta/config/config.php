@@ -42,7 +42,7 @@ define('BASE_URL', '//' . $_SERVER['HTTP_HOST'] . '/');
 | slash.
 |
 */
-define('BASE_PATH', 'meta/');
+define('BASE_PATH', '');
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ define('BASE_PATH', 'meta/');
 | This determines whether "index.php" is in generated urls
 |
 */
-define('URL_INDEX_FILE',  BASE_PATH . 'index.php/');
+define('URL_INDEX_FILE',  BASE_PATH . '');
 
 /*
 |--------------------------------------------------------------------------

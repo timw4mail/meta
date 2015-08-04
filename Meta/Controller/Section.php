@@ -13,20 +13,14 @@
 
 // --------------------------------------------------------------------------
 
+namespace Meta\Controller;
+
 /**
  * Section Controller
  *
  * @package meta
  */
-class section extends \miniMVC\Controller {
-
-	/**
-	 * Constructor
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
+class Section extends \Meta\Base\Controller {
 
 	/**
 	 * Default controller method

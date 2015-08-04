@@ -11,14 +11,8 @@
         <template name="responsive" />
     </transformations>
 	<files>
-		<directory>.</directory>
-		<directory>app/modules/</directory>
-		<ignore>tests/*</ignore>
-		<ignore>assets/*</ignore>
-		<ignore>vendor/*</ignore>
-		<ignore>sys/db/*</ignore>
-		<ignore>app/config/*</ignore>
-		<ignore>app/views/*</ignore>
-		<ignore>*/views/*</ignore>
+		<directory>Meta/*</directory>
+		<ignore>Meta/views/*</ignore>
+		<ignore>Meta/config/*</ignore>
 	</files>
 </phpdoc>

@@ -1,10 +1,10 @@
 <p class="breadcrumbs">
-	<a href="<?= miniMVC\site_url('') ?>">Genres</a> >
-	<a href="<?= miniMVC\site_url('genres/detail/'.$p['genre_id']) ?>"><?= $p['genre'] ?></a> >
-	<a href="<?= miniMVC\site_url('category/detail/'.$p['category_id']) ?>"><?= $p['category'] ?></a> >
+	<a href="<?= \Meta\Base\site_url('') ?>">Genres</a> >
+	<a href="<?= \Meta\Base\site_url('genres/detail/'.$p['genre_id']) ?>"><?= $p['genre'] ?></a> >
+	<a href="<?= \Meta\Base\site_url('category/detail/'.$p['category_id']) ?>"><?= $p['category'] ?></a> >
 	<?= $section ?>
 </p>
-<form class="add" action="<?= miniMVC\site_url("section/add_data") ?>" method="post" onsubmit="window.edit_wysiwyg.toggle()">
+<form class="add" action="<?= \Meta\Base\site_url("section/add_data") ?>" method="post" onsubmit="window.edit_wysiwyg.toggle()">
 	<fieldset>
 		<legend>Add Data</legend>
 		<dl>
@@ -13,7 +13,7 @@
 				<input type="text" name="name[]" id="section" /></dd>
 
 			<dt><label for="val">Value:</label></dt><dd>
-				<textarea id="val" name="val[]" rows="5" cols="40"></textarea></dd>
+				<textarea id="val2" name="val[]" rows="5" cols="40"></textarea></dd>
 
 			<dt><input type="hidden" name="section_id" value="<?= $section_id ?>" /></dt><dd>
 				<button type="submit" class="save">Save Data</button></dd>

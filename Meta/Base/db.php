@@ -1,25 +1,23 @@
 <?php
 /**
- * MiniMVC
+ * meta
  *
- * Convention-based micro-framework for PHP
+ * Simple hierarchial data management
  *
- * @package		miniMVC
+ * @package		meta
  * @author 		Timothy J. Warren
- * @copyright	Copyright (c) 2011 - 2012
- * @link 		https://github.com/aviat4ion/miniMVC
+ * @copyright	Copyright (c) 2012
+ * @link 		https://github.com/aviat4ion/meta
  * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-namespace miniMVC;
+namespace Meta\Base;
 
 /**
  * Extend PHP's PDO class to add some more functionality
  *
- * @package miniMVC
- * @subpackage System
  */
 class db extends \Query\Query_Builder {
 
@@ -81,7 +79,7 @@ class db extends \Query\Query_Builder {
 		{
 			$error = $this->errorInfo();
 		}
-		
+
 		list($code, $driver_code, $message) = $error;
 
 		// Contain the content for buffering

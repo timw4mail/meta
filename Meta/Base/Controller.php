@@ -1,25 +1,23 @@
 <?php
 /**
- * MiniMVC
+ * meta
  *
- * Convention-based micro-framework for PHP
+ * Hierarchial data tool
  *
- * @package		miniMVC
+ * @package		meta
  * @author 		Timothy J. Warren
- * @copyright	Copyright (c) 2011 - 2012
- * @link 		https://github.com/aviat4ion/miniMVC
+ * @copyright	Copyright (c) 2012 - 2015
+ * @link 		https://github.com/aviat4ion/meta
  * @license 	http://philsturgeon.co.uk/code/dbad-license
  */
 
 // --------------------------------------------------------------------------
 
-namespace miniMVC;
+namespace Meta\Base;
+use Meta\Model\Data as Data_Model;
 
 /**
  * Base Controller Class
- *
- * @package miniMVC
- * @subpackage System
  */
 class Controller {
 
@@ -43,43 +41,12 @@ class Controller {
 			$this->page = new Page();
 		}
 
-		$this->load_model('meta\data_model');
-		$db = \miniMVC\db::get_instance();
+
+		$this->data_model = new Data_Model();
+
+		$db = \Meta\Base\db::get_instance();
 
 		$this->page->queries =& $db->queries;
-	}
-
-	// --------------------------------------------------------------------------
-
-	/**
-	 * Function for loading a model into the current class
-	 *
-	 * @param string $file
-	 * @param array $args
-	 * @return void
-	 */
-	public function load_model($file, $args=array())
-	{
-		$segments = explode('\\', $file);
-		$file_name = end($segments);
-
-		// The module is set via the router
-		$path = MM_APP_PATH . "models/{$file_name}.php";
-
-		if (is_file($path))
-		{
-			require_once($path);
-		}
-
-		if ( ! empty($args))
-		{
-
-			$this->$file_name = new $file($args);
-		}
-		else
-		{
-			$this->$file_name = new $file;
-		}
 	}
 
 	// --------------------------------------------------------------------------
